@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # Mental Mantra 🧠✨
 
 > An AI-powered, production-ready personalized mental wellness platform designed for holistic well-being, habit tracking, mood analytics, meditation, and crisis safety.
@@ -43,3 +44,6 @@ Run the complete test suite (Unit, Widget, Integration, API, Security & Performa
 flutter analyze
 flutter test
 ```
+=======
+# mental-mantra-backend
+>>>>>>> 2a1a5c5f215b3394e5dab35e458348e5fb770a3f
