@@ -1,0 +1,20 @@
+schema: spec-driven
+
+context: |
+  App: Mental Mantra — A holistic mental wellness companion for Android/iOS
+  Tech stack: Flutter/Dart, Firebase (Auth, Firestore, Crashlytics, Analytics), Provider for state management
+  Styling: Custom dark teal theme with glassmorphism, Google Fonts (Lato + Merriweather), flutter_animate
+  Key features: AI chatbot, meditation, music therapy, yoga, journaling, habit tracking, sleep tracking,
+    gratitude, breathing exercises, water intake, nutrition, Bhagavad Gita wisdom, gamification & rewards,
+    PDF export, recovery/addiction support, emergency SOS resources
+  Domain: Mental health, wellness, addiction recovery, mindfulness
+  Conventions: ChangeNotifier + Provider pattern, Firestore for persistence, rule-based AI (no external LLM calls)
+
+rules:
+  proposal:
+    - Keep proposals under 500 words
+    - Always include a "Non-goals" section
+    - Highlight security-sensitive changes
+  tasks:
+    - Break tasks into chunks of max 2 hours
+    - Include verification steps for each task

@@ -1,0 +1,76 @@
+version: "3.8"
+
+services:
+  api:
+    build:
+      context: ./server
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+    environment:
+      NODE_ENV: development
+      PORT: 3000
+      DATABASE_URL: postgresql://mental_mantra_user:${POSTGRES_PASSWORD:-changeme_in_prod}@postgres:5432/mental_mantra_db?schema=public
+      REDIS_URL: redis://redis:6379
+      JWT_ACCESS_SECRET: ${JWT_ACCESS_SECRET:-0650143e225a9bd4838740a9ddb172ff560a9b5813bb7dba96661a7342e7b28521689790bfa5ff7967a23633f7e9ce73}
+      JWT_REFRESH_SECRET: ${JWT_REFRESH_SECRET:-1dff90f336c97c6ccd1155e58ca73eadf9ec34d0cc0a00f973139e3437188ae092ce8e6a1f632e86e214d82fd3322524}
+      JWT_ACCESS_EXPIRES_IN: 15m
+      JWT_REFRESH_EXPIRES_IN: 7d
+      GOOGLE_CLIENT_ID: ${GOOGLE_CLIENT_ID:-your_google_client_id_here}
+      ALLOWED_ORIGINS: ${ALLOWED_ORIGINS:-*}
+      AUTH_RATE_LIMIT_MAX: 10
+      RATE_LIMIT_MAX_REQUESTS: 100
+      RATE_LIMIT_WINDOW_MS: 900000
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    restart: unless-stopped
+    networks:
+      - mental_mantra_net
+    volumes:
+      - ./server:/usr/src/app
+      - /usr/src/app/node_modules
+
+  postgres:
+    image: postgres:16-alpine
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: mental_mantra_user
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-changeme_in_prod}
+      POSTGRES_DB: mental_mantra_db
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U mental_mantra_user -d mental_mantra_db"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    networks:
+      - mental_mantra_net
+    restart: unless-stopped
+
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+    networks:
+      - mental_mantra_net
+    restart: unless-stopped
+
+volumes:
+  postgres_data:
+  redis_data:
+
+networks:
+  mental_mantra_net:
+    driver: bridge

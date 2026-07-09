@@ -1,0 +1,32 @@
+{
+  "flutter": {
+    "platforms": {
+      "android": {
+        "default": {
+          "projectId": "mental-mantra-2024",
+          "appId": "1:209321341979:android:2d16a51772ca2150fc74be",
+          "fileOutput": "android/app/google-services.json"
+        }
+      },
+      "dart": {
+        "lib/firebase_options.dart": {
+          "projectId": "mental-mantra-2024",
+          "configurations": {
+            "android": "1:209321341979:android:2d16a51772ca2150fc74be",
+            "ios": "1:209321341979:ios:19e0b3c85fca53c1fc74be",
+            "macos": "1:209321341979:ios:19e0b3c85fca53c1fc74be",
+            "web": "1:209321341979:web:11ea1572d0e5b2e9fc74be",
+            "windows": "1:209321341979:web:62cddc2d577855e1fc74be"
+          }
+        }
+      }
+    }
+  },
+  "firestore": {
+    "rules": "firestore.rules",
+    "indexes": "firestore.indexes.json"
+  },
+  "functions": {
+    "source": "functions"
+  }
+}

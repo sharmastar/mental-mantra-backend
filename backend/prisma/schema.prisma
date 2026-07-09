@@ -1,0 +1,638 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id                  String   @id @default(uuid())
+  email               String   @unique
+  passwordHash        String?
+  name                String
+  nickname            String?
+  displayName         String?
+  photoUrl            String?
+  role                String   @default("USER")
+  emailVerified       Boolean  @default(false)
+  onboardingCompleted Boolean  @default(false)
+  age                 Int?
+  gender              String?
+  country             String?
+  primaryChallenge    String?
+  goalTags            String?
+  relationshipStatus  String?
+  bio                 String?
+  streakDays          Int      @default(0)
+  longestStreak       Int      @default(0)
+  totalPoints         Int      @default(0)
+  level               Int      @default(1)
+  lastActiveAt        DateTime @default(now())
+  fcmToken            String?
+  googleId            String?  @unique
+  appleId             String?  @unique
+  isActive            Boolean  @default(true)
+  isPremium           Boolean  @default(false)
+  passwordResetToken  String?
+  passwordResetExpiresAt DateTime?
+  deletedAt           DateTime?
+  createdAt           DateTime @default(now())
+  updatedAt           DateTime @updatedAt
+
+  refreshTokens      RefreshToken[]
+  sessions           Session[]
+  devices            Device[]
+  moodEntries        MoodEntry[]
+  moodHistory        MoodHistory[]
+  journalEntries     JournalEntry[]
+  journalImages      JournalImage[]
+  journalVoiceNotes  JournalVoiceNote[]
+  habits             Habit[]
+  habitLogs          HabitLog[]
+  meditationSessions MeditationSession[]
+  meditationHistory  MeditationHistory[]
+  goals              Goal[]
+  goalProgress       GoalProgress[]
+  aiChats            AIChat[]
+  aiChatMessages     AIChatMessage[]
+  notifications      Notification[]
+  musicHistory       MusicHistory[]
+  playlist           Playlist[]
+  favorites          Favorite[]
+  subscriptions      Subscription[]
+  payments           Payment[]
+  assessments        Assessment[]
+  sleepLogs          SleepLog[]
+  achievements       Achievement[]
+  rewards            Reward[]
+  feedback           Feedback[]
+  supportTickets     SupportTicket[]
+  reports            Report[]
+  analytics          Analytics[]
+  urgeLogs           UrgeLog[]
+  detoxSessions      DetoxSession[]
+  recoveryGoals      RecoveryGoal[]
+
+  @@index([email])
+  @@index([role])
+  @@index([isActive])
+  @@index([isPremium])
+  @@map("users")
+}
+
+model RefreshToken {
+  id        String   @id @default(uuid())
+  token     String   @unique
+  userId    String
+  expiresAt DateTime
+  revoked   Boolean  @default(false)
+  createdAt DateTime @default(now())
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([token])
+  @@index([userId])
+  @@map("refresh_tokens")
+}
+
+model Session {
+  id            String   @id @default(uuid())
+  userId        String
+  deviceInfo    String?
+  ipAddress     String?
+  isActive      Boolean  @default(true)
+  lastActiveAt  DateTime @default(now())
+  createdAt     DateTime @default(now())
+  user          User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([userId, isActive])
+  @@map("sessions")
+}
+
+model Device {
+  id        String   @id @default(uuid())
+  userId    String
+  deviceId  String
+  platform  String?
+  model     String?
+  osVersion String?
+  appVersion String?
+  isActive  Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, deviceId])
+  @@map("devices")
+}
+
+model Assessment {
+  id          String   @id @default(uuid())
+  userId      String
+  name        String?
+  lifestyle   String?
+  reasons     String?
+  duration    String?
+  overwhelmedFrequency String?
+  sleepQuality String?
+  affectingHabits String?
+  stressCoping String?
+  improvementGoals String?
+  desiredSupport String?
+  completed   Boolean  @default(false)
+  domain      String?
+  score       Int?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  answers     AssessmentAnswer[]
+
+  @@index([userId])
+  @@map("assessments")
+}
+
+model AssessmentAnswer {
+  id           String   @id @default(uuid())
+  assessmentId String
+  questionId   String
+  answer       String
+  score        Int?
+  createdAt    DateTime @default(now())
+  assessment   Assessment @relation(fields: [assessmentId], references: [id], onDelete: Cascade)
+
+  @@index([assessmentId])
+  @@map("assessment_answers")
+}
+
+model MoodEntry {
+  id        String   @id @default(uuid())
+  userId    String
+  mood      Int
+  emoji     String
+  label     String
+  note      String?
+  tags      String?
+  loggedAt  DateTime @default(now())
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, loggedAt])
+  @@map("mood_entries")
+}
+
+model MoodHistory {
+  id        String   @id @default(uuid())
+  userId    String
+  mood      Int
+  emoji     String
+  label     String
+  date      DateTime
+  note      String?
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, date])
+  @@index([userId, date])
+  @@map("mood_history")
+}
+
+model JournalEntry {
+  id          String    @id @default(uuid())
+  userId      String
+  title       String?
+  content     String
+  mood        Int?
+  moodEmoji   String?
+  tags        String?
+  aiSummary   String?
+  aiSentiment String?
+  wordCount   Int       @default(0)
+  isPrivate   Boolean   @default(true)
+  deletedAt   DateTime?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  images      JournalImage[]
+  voiceNotes  JournalVoiceNote[]
+
+  @@index([userId, createdAt])
+  @@map("journal_entries")
+}
+
+model JournalImage {
+  id        String @id @default(uuid())
+  journalId String
+  userId    String
+  imageUrl  String
+  caption   String?
+  createdAt DateTime @default(now())
+  journal   JournalEntry @relation(fields: [journalId], references: [id], onDelete: Cascade)
+  user      User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([journalId])
+  @@map("journal_images")
+}
+
+model JournalVoiceNote {
+  id        String   @id @default(uuid())
+  journalId String
+  userId    String
+  audioUrl  String
+  durationSec Int?
+  createdAt DateTime @default(now())
+  journal   JournalEntry @relation(fields: [journalId], references: [id], onDelete: Cascade)
+  user      User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([journalId])
+  @@map("journal_voice_notes")
+}
+
+model Habit {
+  id          String    @id @default(uuid())
+  userId      String
+  name        String
+  description String?
+  icon        String?
+  color       String?
+  frequency   String    @default("daily")
+  targetCount Int       @default(1)
+  streak      Int       @default(0)
+  bestStreak  Int       @default(0)
+  isActive    Boolean   @default(true)
+  deletedAt   DateTime?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  logs        HabitLog[]
+
+  @@index([userId])
+  @@map("habits")
+}
+
+model HabitLog {
+  id        String   @id @default(uuid())
+  userId    String
+  habitId   String
+  date      DateTime
+  count     Int      @default(1)
+  note      String?
+  createdAt DateTime @default(now())
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  habit     Habit    @relation(fields: [habitId], references: [id], onDelete: Cascade)
+
+  @@unique([habitId, date])
+  @@index([userId, date])
+  @@map("habit_logs")
+}
+
+model MeditationSession {
+  id          String   @id @default(uuid())
+  userId      String
+  sessionName String
+  category    String
+  durationMin Int
+  completedAt DateTime @default(now())
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@map("meditation_sessions")
+}
+
+model MeditationHistory {
+  id           String   @id @default(uuid())
+  userId       String
+  sessionName  String
+  category     String
+  durationMin  Int
+  totalSessions Int     @default(1)
+  totalMinutes Int      @default(0)
+  lastPracticed DateTime?
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, sessionName])
+  @@map("meditation_history")
+}
+
+model Goal {
+  id           String    @id @default(uuid())
+  userId       String
+  title        String
+  description  String?
+  category     String
+  targetValue  Int
+  currentValue Int       @default(0)
+  deadline     DateTime?
+  completed    Boolean   @default(false)
+  deletedAt    DateTime?
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+  user         User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  progress     GoalProgress[]
+
+  @@index([userId])
+  @@map("goals")
+}
+
+model GoalProgress {
+  id        String   @id @default(uuid())
+  goalId    String
+  userId    String
+  value     Int
+  note      String?
+  date      DateTime @default(now())
+  createdAt DateTime @default(now())
+  goal      Goal     @relation(fields: [goalId], references: [id], onDelete: Cascade)
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([goalId])
+  @@index([userId])
+  @@map("goal_progress")
+}
+
+model AIChat {
+  id        String   @id @default(uuid())
+  userId    String
+  title     String?
+  context   String?
+  isActive  Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  messages  AIChatMessage[]
+
+  @@index([userId])
+  @@map("ai_chats")
+}
+
+model AIChatMessage {
+  id        String   @id @default(uuid())
+  chatId    String?
+  userId    String
+  role      String
+  content   String
+  tokens    Int?
+  sentiment String?
+  createdAt DateTime @default(now())
+  chat      AIChat?  @relation(fields: [chatId], references: [id], onDelete: Cascade)
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([chatId, createdAt])
+  @@index([userId, createdAt])
+  @@map("ai_chat_messages")
+}
+
+model Notification {
+  id        String   @id @default(uuid())
+  userId    String
+  title     String
+  body      String
+  type      String
+  isRead    Boolean  @default(false)
+  data      String?
+  sentAt    DateTime @default(now())
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, isRead])
+  @@map("notifications")
+}
+
+model MusicHistory {
+  id          String   @id @default(uuid())
+  userId      String
+  trackName   String
+  category    String
+  durationSec Int
+  playedAt    DateTime @default(now())
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@map("music_history")
+}
+
+model Playlist {
+  id        String   @id @default(uuid())
+  userId    String
+  name      String
+  description String?
+  tracks    String?
+  isPublic  Boolean  @default(false)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@map("playlists")
+}
+
+model Favorite {
+  id        String   @id @default(uuid())
+  userId    String
+  itemId    String
+  itemType  String
+  createdAt DateTime @default(now())
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, itemId, itemType])
+  @@map("favorites")
+}
+
+model SleepLog {
+  id          String   @id @default(uuid())
+  userId      String
+  bedtime     DateTime
+  wakeTime    DateTime
+  durationMin Int
+  quality     Int?
+  notes       String?
+  date        DateTime
+  createdAt   DateTime @default(now())
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, date])
+  @@map("sleep_logs")
+}
+
+model Achievement {
+  id          String   @id @default(uuid())
+  userId      String
+  title       String
+  description String?
+  icon        String?
+  category    String?
+  unlockedAt  DateTime @default(now())
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@map("achievements")
+}
+
+model Reward {
+  id          String   @id @default(uuid())
+  userId      String
+  type        String
+  title       String
+  description String?
+  points      Int      @default(0)
+  claimed     Boolean  @default(false)
+  claimedAt   DateTime?
+  createdAt   DateTime @default(now())
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@map("rewards")
+}
+
+model Subscription {
+  id            String   @id @default(uuid())
+  userId        String   @unique
+  plan          String
+  status        String
+  startDate     DateTime @default(now())
+  endDate       DateTime?
+  autoRenew     Boolean  @default(true)
+  provider      String?
+  providerId    String?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+  user          User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("subscriptions")
+}
+
+model Payment {
+  id             String   @id @default(uuid())
+  userId         String
+  amount         Decimal
+  currency       String   @default("INR")
+  status         String
+  provider       String?
+  providerPaymentId String?
+  description    String?
+  createdAt      DateTime @default(now())
+  user           User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@map("payments")
+}
+
+model Admin {
+  id        String   @id @default(uuid())
+  email     String   @unique
+  name      String
+  passwordHash String
+  role      String   @default("ADMIN")
+  isActive  Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("admins")
+}
+
+model Report {
+  id          String   @id @default(uuid())
+  userId      String
+  type        String
+  title       String
+  content     String
+  periodStart DateTime?
+  periodEnd   DateTime?
+  data        String?
+  createdAt   DateTime @default(now())
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@map("reports")
+}
+
+model Analytics {
+  id        String   @id @default(uuid())
+  userId    String
+  event     String
+  properties String?
+  sessionId String?
+  createdAt DateTime @default(now())
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, createdAt])
+  @@index([event])
+  @@map("analytics")
+}
+
+model UrgeLog {
+  id              String   @id @default(uuid())
+  userId          String
+  trigger         String
+  intensity       Int
+  urgeType        String
+  resisted        Boolean  @default(false)
+  copingStrategy  String?
+  notes           String?
+  createdAt       DateTime @default(now())
+  user            User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, createdAt])
+  @@map("urge_logs")
+}
+
+model DetoxSession {
+  id              String   @id @default(uuid())
+  userId          String
+  sessionType     String
+  durationMin     Int
+  completedMinutes Int     @default(0)
+  completed       Boolean  @default(false)
+  startedAt       DateTime
+  completedAt     DateTime?
+  notes           String?
+  user            User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, startedAt])
+  @@map("detox_sessions")
+}
+
+model RecoveryGoal {
+  id              String   @id @default(uuid())
+  userId          String
+  targetType      String
+  targetValue     Int
+  currentValue    Int      @default(0)
+  startDate       DateTime
+  endDate         DateTime?
+  isActive        Boolean  @default(true)
+  createdAt       DateTime @default(now())
+  user            User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, isActive])
+  @@map("recovery_goals")
+}
+
+model Feedback {
+  id        String   @id @default(uuid())
+  userId    String
+  type      String
+  message   String
+  rating    Int?
+  createdAt DateTime @default(now())
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@map("feedback")
+}
+
+model SupportTicket {
+  id        String   @id @default(uuid())
+  userId    String
+  subject   String
+  message   String
+  status    String   @default("OPEN")
+  priority  String   @default("NORMAL")
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([status])
+  @@map("support_tickets")
+}

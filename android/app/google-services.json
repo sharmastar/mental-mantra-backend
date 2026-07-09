@@ -1,0 +1,62 @@
+{
+  "project_info": {
+    "project_number": "209321341979",
+    "project_id": "mental-mantra-2024",
+    "storage_bucket": "mental-mantra-2024.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:209321341979:android:2d16a51772ca2150fc74be",
+        "android_client_info": {
+          "package_name": "com.mentalmantra.mental_mantra"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "209321341979-4jhi22ker5omku4485bmct5sr5fbbl27.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.mentalmantra.mental_mantra",
+            "certificate_hash": "970ad72813c60752607058e78482bb0e9c4f2969"
+          }
+        },
+        {
+          "client_id": "209321341979-d9u7h89ars7osj6gvtmkfuaa2emjur3i.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.mentalmantra.mental_mantra",
+            "certificate_hash": "1495d70a8e586ed8734c034c80b68e85d8821b2f"
+          }
+        },
+        {
+          "client_id": "209321341979-m1rj7jn5b73b9gk0saiqumi393o52n1n.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCtSbvSfxvX4foTlPtDW1R-OGSGoBn0n4A"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "209321341979-m1rj7jn5b73b9gk0saiqumi393o52n1n.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "209321341979-ng1446bslmp3icgeuh8hlk2o254qt0o7.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.mentalmantra.mentalMantra"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

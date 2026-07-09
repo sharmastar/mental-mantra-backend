@@ -1,0 +1,289 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+// -----------------------------------------------------------------------------
+// Authentication & Users
+// -----------------------------------------------------------------------------
+
+enum Role {
+  USER
+  ADMIN
+  THERAPIST
+}
+
+model User {
+  id              String    @id @default(uuid())
+  email           String    @unique
+  passwordHash    String?
+  googleId        String?   @unique
+  appleId         String?   @unique
+  isEmailVerified Boolean   @default(false)
+  role            Role      @default(USER)
+  refreshToken    String?
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+  deletedAt       DateTime? // Soft delete
+
+  profile           Profile?
+  assessments       Assessment[]
+  chatSessions      ChatSession[]
+  journalEntries    JournalEntry[]
+  meditationLogs    MeditationLog[]
+  musicLogs         MusicLog[]
+  recoveryGoals     RecoveryGoal[]
+  goals             Goal[]
+  achievements      UserAchievement[]
+  sleepLogs         SleepLog[]
+  moodLogs          MoodLog[]
+  nutritionLogs     NutritionLog[]
+  notifications     Notification[]
+  emergencyContacts EmergencyContact[]
+  feedbacks         Feedback[]
+  dailyStreaks      DailyStreak?
+}
+
+model Profile {
+  id             String    @id @default(uuid())
+  userId         String    @unique
+  user           User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  firstName      String?
+  lastName       String?
+  avatarUrl      String?
+  bio            String?
+  timezone       String?
+  dateOfBirth    DateTime?
+  preferredTheme String    @default("system")
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
+}
+
+// -----------------------------------------------------------------------------
+// Assessments
+// -----------------------------------------------------------------------------
+
+model Assessment {
+  id          String   @id @default(uuid())
+  userId      String
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  score       Int?
+  type        String   @default("INITIAL") // INITIAL, WEEKLY, etc.
+  completedAt DateTime @default(now())
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  answers AssessmentAnswer[]
+}
+
+model AssessmentQuestion {
+  id       String @id @default(uuid())
+  text     String
+  category String
+  type     String // e.g., SLIDER, MULTIPLE_CHOICE, SINGLE_SELECT
+  options  Json? // Stored as JSON array
+
+  answers AssessmentAnswer[]
+}
+
+model AssessmentAnswer {
+  id           String             @id @default(uuid())
+  assessmentId String
+  assessment   Assessment         @relation(fields: [assessmentId], references: [id], onDelete: Cascade)
+  questionId   String
+  question     AssessmentQuestion @relation(fields: [questionId], references: [id], onDelete: Cascade)
+  value        String // Stringified value or answer
+
+  @@unique([assessmentId, questionId])
+}
+
+// -----------------------------------------------------------------------------
+// AI Chat
+// -----------------------------------------------------------------------------
+
+model ChatSession {
+  id        String   @id @default(uuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  title     String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  messages ChatMessage[]
+}
+
+model ChatMessage {
+  id            String      @id @default(uuid())
+  chatSessionId String
+  chatSession   ChatSession @relation(fields: [chatSessionId], references: [id], onDelete: Cascade)
+  role          String // USER, SYSTEM, ASSISTANT
+  content       String
+  createdAt     DateTime    @default(now())
+}
+
+// -----------------------------------------------------------------------------
+// Core Features: Journal, Meditation, Music
+// -----------------------------------------------------------------------------
+
+model JournalEntry {
+  id        String   @id @default(uuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  title     String?
+  content   String
+  mood      String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model MeditationLog {
+  id              String   @id @default(uuid())
+  userId          String
+  user            User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  durationSeconds Int
+  type            String?
+  createdAt       DateTime @default(now())
+}
+
+model MusicLog {
+  id              String   @id @default(uuid())
+  userId          String
+  user            User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  trackId         String
+  durationSeconds Int
+  createdAt       DateTime @default(now())
+}
+
+// -----------------------------------------------------------------------------
+// Recovery, Goals & Streaks
+// -----------------------------------------------------------------------------
+
+model RecoveryGoal {
+  id          String    @id @default(uuid())
+  userId      String
+  user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  title       String
+  description String?
+  startDate   DateTime  @default(now())
+  targetDate  DateTime?
+  status      String    @default("ACTIVE") // ACTIVE, COMPLETED, FAILED
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+}
+
+model Goal {
+  id        String    @id @default(uuid())
+  userId    String
+  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  title     String
+  completed Boolean   @default(false)
+  dueDate   DateTime?
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+}
+
+model DailyStreak {
+  id            String   @id @default(uuid())
+  userId        String   @unique
+  user          User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  currentStreak Int      @default(0)
+  longestStreak Int      @default(0)
+  lastActiveAt  DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+}
+
+model Achievement {
+  id          String  @id @default(uuid())
+  name        String
+  description String
+  icon        String?
+
+  userAchievements UserAchievement[]
+}
+
+model UserAchievement {
+  id            String      @id @default(uuid())
+  userId        String
+  user          User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  achievementId String
+  achievement   Achievement @relation(fields: [achievementId], references: [id], onDelete: Cascade)
+  unlockedAt    DateTime    @default(now())
+
+  @@unique([userId, achievementId])
+}
+
+// -----------------------------------------------------------------------------
+// Tracking: Sleep, Mood, Nutrition
+// -----------------------------------------------------------------------------
+
+model SleepLog {
+  id        String   @id @default(uuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  startTime DateTime
+  endTime   DateTime
+  quality   Int? // 1-5 scale
+  notes     String?
+  createdAt DateTime @default(now())
+}
+
+model MoodLog {
+  id        String   @id @default(uuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  score     Int // e.g. 1-10
+  notes     String?
+  createdAt DateTime @default(now())
+}
+
+model NutritionLog {
+  id         String   @id @default(uuid())
+  userId     String
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  mealType   String // BREAKFAST, LUNCH, DINNER, SNACK
+  details    String
+  calories   Int?
+  waterGlass Int? // Number of glasses of water
+  createdAt  DateTime @default(now())
+}
+
+// -----------------------------------------------------------------------------
+// Support: Notifications, Emergency, Feedback
+// -----------------------------------------------------------------------------
+
+model Notification {
+  id        String   @id @default(uuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  title     String
+  body      String
+  isRead    Boolean  @default(false)
+  type      String   @default("SYSTEM")
+  createdAt DateTime @default(now())
+}
+
+model EmergencyContact {
+  id           String   @id @default(uuid())
+  userId       String
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  name         String
+  phoneNumber  String
+  relationship String?
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+}
+
+model Feedback {
+  id        String   @id @default(uuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  content   String
+  rating    Int?
+  createdAt DateTime @default(now())
+}

@@ -1,0 +1,48 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    
+    // Helper function to check if request is authenticated
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+
+    // Helper function to check if requesting user is document owner
+    function isOwner(userId) {
+      return isAuthenticated() && request.auth.uid == userId;
+    }
+
+    // Users Collection
+    match /users/{userId} {
+      allow read, write: if isOwner(userId);
+      
+      // Subcollections for user private data
+      match /journals/{journalId} {
+        allow read, write: if isOwner(userId);
+      }
+      
+      match /mood_logs/{logId} {
+        allow read, write: if isOwner(userId);
+      }
+      
+      match /ai_chats/{chatId} {
+        allow read, write: if isOwner(userId);
+      }
+      
+      match /settings/{settingId} {
+        allow read, write: if isOwner(userId);
+      }
+    }
+
+    // Public / Shared content (e.g. meditations, exercises)
+    match /content/{contentId} {
+      allow read: if isAuthenticated();
+      allow write: if false; // Only admin via backend SDK
+    }
+
+    // Default deny all
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}
