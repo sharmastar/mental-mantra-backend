@@ -49,39 +49,43 @@ class AIInsight {
   }
 
   Map<String, dynamic> toJson() => {
-    'id': id,
-    'type': type.name,
-    'title': title,
-    'message': message,
-    'confidence': confidence,
-    'evidence': evidence.map((e) => e.toJson()).toList(),
-    'recommendation': recommendation?.toJson(),
-    'expectedImpact': expectedImpact,
-    'expiresAt': expiresAt?.toIso8601String(),
-    'domain': domain,
-    'category': category,
-  };
+        'id': id,
+        'type': type.name,
+        'title': title,
+        'message': message,
+        'confidence': confidence,
+        'evidence': evidence.map((e) => e.toJson()).toList(),
+        'recommendation': recommendation?.toJson(),
+        'expectedImpact': expectedImpact,
+        'expiresAt': expiresAt?.toIso8601String(),
+        'domain': domain,
+        'category': category,
+      };
 
   factory AIInsight.fromJson(Map<String, dynamic> json) => AIInsight(
-    id: json['id'] as String? ?? '',
-    type: InsightType.values.firstWhere(
-      (t) => t.name == json['type'],
-      orElse: () => InsightType.trend,
-    ),
-    title: json['title'] as String? ?? '',
-    message: json['message'] as String? ?? '',
-    confidence: (json['confidence'] as num?)?.toDouble() ?? 0.0,
-    evidence: (json['evidence'] as List<dynamic>?)
-        ?.map((e) => Evidence.fromJson(e as Map<String, dynamic>))
-        .toList() ?? [],
-    recommendation: json['recommendation'] != null
-        ? Recommendation.fromJson(json['recommendation'] as Map<String, dynamic>)
-        : null,
-    expectedImpact: (json['expectedImpact'] as num?)?.toDouble() ?? 0.0,
-    expiresAt: json['expiresAt'] != null ? DateTime.parse(json['expiresAt'] as String) : null,
-    domain: json['domain'] as String? ?? '',
-    category: json['category'] as String? ?? '',
-  );
+        id: json['id'] as String? ?? '',
+        type: InsightType.values.firstWhere(
+          (t) => t.name == json['type'],
+          orElse: () => InsightType.trend,
+        ),
+        title: json['title'] as String? ?? '',
+        message: json['message'] as String? ?? '',
+        confidence: (json['confidence'] as num?)?.toDouble() ?? 0.0,
+        evidence: (json['evidence'] as List<dynamic>?)
+                ?.map((e) => Evidence.fromJson(e as Map<String, dynamic>))
+                .toList() ??
+            [],
+        recommendation: json['recommendation'] != null
+            ? Recommendation.fromJson(
+                json['recommendation'] as Map<String, dynamic>)
+            : null,
+        expectedImpact: (json['expectedImpact'] as num?)?.toDouble() ?? 0.0,
+        expiresAt: json['expiresAt'] != null
+            ? DateTime.parse(json['expiresAt'] as String)
+            : null,
+        domain: json['domain'] as String? ?? '',
+        category: json['category'] as String? ?? '',
+      );
 }
 
 class AIInsightCollection {
@@ -95,7 +99,8 @@ class AIInsightCollection {
     required this.totalCount,
   });
 
-  List<AIInsight> byType(InsightType type) => insights.where((i) => i.type == type).toList();
+  List<AIInsight> byType(InsightType type) =>
+      insights.where((i) => i.type == type).toList();
 
   List<AIInsight> get predictions => byType(InsightType.prediction);
   List<AIInsight> get recommendations => byType(InsightType.recommendation);
@@ -104,7 +109,8 @@ class AIInsightCollection {
   List<AIInsight> get trends => byType(InsightType.trend);
   List<AIInsight> get celebrations => byType(InsightType.celebration);
   List<AIInsight> get reminders => byType(InsightType.reminder);
-  List<AIInsight> get actionable => insights.where((i) => i.actionable).toList();
+  List<AIInsight> get actionable =>
+      insights.where((i) => i.actionable).toList();
   List<AIInsight> get all => insights;
 
   List<AIInsight> get sortedByConfidence =>

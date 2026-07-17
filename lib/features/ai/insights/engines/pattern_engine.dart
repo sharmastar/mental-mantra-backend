@@ -19,7 +19,8 @@ class DetectedPattern {
 }
 
 class PatternEngine {
-  List<DetectedPattern> detectDayOfWeekPatterns(List<Map<String, dynamic>> moodHistory) {
+  List<DetectedPattern> detectDayOfWeekPatterns(
+      List<Map<String, dynamic>> moodHistory) {
     if (moodHistory.length < 7) return [];
 
     final dayMoods = <int, List<double>>{};
@@ -46,7 +47,8 @@ class PatternEngine {
         patterns.add(DetectedPattern(
           id: 'low_mood_${entry.key}',
           name: 'Low mood on $dayName',
-          description: '$dayName consistently shows lower mood (avg ${avg.toStringAsFixed(1)}/5)',
+          description:
+              '$dayName consistently shows lower mood (avg ${avg.toStringAsFixed(1)}/5)',
           strength: (1 - avg / 5).clamp(0.0, 1.0),
           category: 'day_of_week',
           metadata: {'day': entry.key, 'average': avg},
@@ -55,7 +57,8 @@ class PatternEngine {
         patterns.add(DetectedPattern(
           id: 'high_mood_${entry.key}',
           name: 'High mood on $dayName',
-          description: '$dayName consistently shows elevated mood (avg ${avg.toStringAsFixed(1)}/5)',
+          description:
+              '$dayName consistently shows elevated mood (avg ${avg.toStringAsFixed(1)}/5)',
           strength: (avg / 5).clamp(0.0, 1.0),
           category: 'day_of_week',
           metadata: {'day': entry.key, 'average': avg},
@@ -76,32 +79,42 @@ class PatternEngine {
     final meditationDays = <DateTime>[];
     if (meditationMinutes > 0) {
       for (final entry in entries) {
-        final day = DateTime(entry.createdAt.year, entry.createdAt.month, entry.createdAt.day);
+        final day = DateTime(
+            entry.createdAt.year, entry.createdAt.month, entry.createdAt.day);
         meditationDays.add(day);
       }
     }
 
     if (meditationDays.isNotEmpty) {
-      final afterMeditationMoods = moodHistory.where((m) {
-        final ts = m['timestamp'];
-        if (ts == null) return false;
-        DateTime dt;
-        try { dt = (ts as dynamic).toDate(); } catch (_) { dt = DateTime.parse(ts.toString()); }
-        return meditationDays.any((d) =>
-          dt.isAfter(d) && dt.difference(d).inHours <= 48);
-      }).map((m) => (m['mood'] as num?)?.toDouble() ?? 3.0).toList();
+      final afterMeditationMoods = moodHistory
+          .where((m) {
+            final ts = m['timestamp'];
+            if (ts == null) return false;
+            DateTime dt;
+            try {
+              dt = (ts as dynamic).toDate();
+            } catch (_) {
+              dt = DateTime.parse(ts.toString());
+            }
+            return meditationDays
+                .any((d) => dt.isAfter(d) && dt.difference(d).inHours <= 48);
+          })
+          .map((m) => (m['mood'] as num?)?.toDouble() ?? 3.0)
+          .toList();
 
       if (afterMeditationMoods.isNotEmpty) {
         final allMoods = moodHistory
             .map((m) => (m['mood'] as num?)?.toDouble() ?? 3.0)
             .toList();
-        final avgAfter = afterMeditationMoods.fold(0.0, (a, b) => a + b) / afterMeditationMoods.length;
+        final avgAfter = afterMeditationMoods.fold(0.0, (a, b) => a + b) /
+            afterMeditationMoods.length;
         final avgAll = allMoods.fold(0.0, (a, b) => a + b) / allMoods.length;
         if (avgAfter > avgAll) {
           patterns.add(DetectedPattern(
             id: 'meditation_improves_mood',
             name: 'Meditation improves mood',
-            description: 'Mood averages ${avgAfter.toStringAsFixed(1)}/5 after meditation vs $avgAll/5 overall',
+            description:
+                'Mood averages ${avgAfter.toStringAsFixed(1)}/5 after meditation vs $avgAll/5 overall',
             strength: ((avgAfter - avgAll) / 5).clamp(0.0, 1.0),
             category: 'correlation',
             metadata: {'afterAverage': avgAfter, 'overallAverage': avgAll},
@@ -196,10 +209,15 @@ class PatternEngine {
       patterns.add(DetectedPattern(
         id: '${metric}_reversing',
         name: '$metric showing signs of reversal',
-        description: '$metric was declining but recent data suggests improvement',
+        description:
+            '$metric was declining but recent data suggests improvement',
         strength: (recentSlope / 5).clamp(0.0, 1.0),
         category: 'trend',
-        metadata: {'metric': metric, 'overallChange': diff, 'recentChange': recentSlope},
+        metadata: {
+          'metric': metric,
+          'overallChange': diff,
+          'recentChange': recentSlope
+        },
       ));
     }
 
@@ -230,13 +248,24 @@ class PatternEngine {
         anxiety: anxiety,
         consecutiveBadSleep: consecutiveBadSleep,
       ),
-      ...detectTrends(recentValues: recentMoodValues, metric: 'mood', minPoints: 3),
-      ...detectTrends(recentValues: recentSleepValues, metric: 'sleep', minPoints: 3),
+      ...detectTrends(
+          recentValues: recentMoodValues, metric: 'mood', minPoints: 3),
+      ...detectTrends(
+          recentValues: recentSleepValues, metric: 'sleep', minPoints: 3),
     ];
   }
 
   String _dayName(int weekday) {
-    const names = ['', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
+    const names = [
+      '',
+      'Monday',
+      'Tuesday',
+      'Wednesday',
+      'Thursday',
+      'Friday',
+      'Saturday',
+      'Sunday'
+    ];
     return names[weekday.clamp(1, 7)];
   }
 }

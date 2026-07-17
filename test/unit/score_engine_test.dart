@@ -36,7 +36,9 @@ void main() {
       expect(score.needsAttention, isEmpty);
     });
 
-    test('computes wellness score and identifies needsAttention for poor inputs', () {
+    test(
+        'computes wellness score and identifies needsAttention for poor inputs',
+        () {
       final score = scoreEngine.compute(
         ctx,
         recentEntries: [],

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:fl_chart/fl_chart.dart';
 import '../../../../core/theme/app_theme.dart';
+import '../../../../core/widgets/premium_bounce_interaction.dart';
 import '../../data/models/fitness_record.dart';
 import '../providers/fitness_provider.dart';
 import '../widgets/log_workout_sheet.dart';
@@ -17,7 +18,8 @@ class FitnessPage extends ConsumerWidget {
     ref.listen(fitnessProvider, (prev, next) {
       if (next.error != null && context.mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(next.error!), backgroundColor: AppTheme.errorColor),
+          SnackBar(
+              content: Text(next.error!), backgroundColor: AppTheme.errorColor),
         );
         ref.read(fitnessProvider.notifier).clearError();
       }
@@ -30,14 +32,13 @@ class FitnessPage extends ConsumerWidget {
           SliverAppBar(
             pinned: true,
             expandedHeight: 160,
+            backgroundColor: isDark ? AppTheme.darkSurface : AppTheme.lightBg,
+            elevation: 0,
             flexibleSpace: FlexibleSpaceBar(
               background: Container(
-                decoration: const BoxDecoration(
-                  gradient: LinearGradient(
-                    colors: [Color(0xFF0C2425), Color(0xFF1E6C64)],
-                    begin: Alignment.topLeft,
-                    end: Alignment.bottomRight,
-                  ),
+                decoration: BoxDecoration(
+                  gradient:
+                      isDark ? AppTheme.nightGradient : AppTheme.calmGradient,
                 ),
                 child: SafeArea(
                   child: Padding(
@@ -46,13 +47,29 @@ class FitnessPage extends ConsumerWidget {
                       mainAxisAlignment: MainAxisAlignment.end,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        const Icon(Icons.fitness_center, color: Color(0xFF42C8B7), size: 36),
+                        const Icon(Icons.fitness_center,
+                            color: Colors.white, size: 36),
                         const SizedBox(height: 8),
-                        const Text('Fitness Tracker',
-                            style: TextStyle(fontSize: 26, fontWeight: FontWeight.w700, color: Colors.white)),
-                        if (state.todayRecord != null)
-                          Text('${state.todayRecord!.steps} steps today',
-                              style: const TextStyle(color: Colors.white60, fontSize: 14)),
+                        const Text(
+                          'Fitness Tracker',
+                          style: TextStyle(
+                            fontFamily: 'Playfair Display',
+                            fontSize: 32,
+                            fontWeight: FontWeight.w700,
+                            color: Colors.white,
+                          ),
+                        ),
+                        if (state.todayRecord != null) ...[
+                          const SizedBox(height: 4),
+                          Text(
+                            '${state.todayRecord!.steps} steps today',
+                            style: const TextStyle(
+                              fontFamily: 'Outfit',
+                              color: Colors.white70,
+                              fontSize: 14,
+                            ),
+                          ),
+                        ],
                       ],
                     ),
                   ),
@@ -62,37 +79,60 @@ class FitnessPage extends ConsumerWidget {
             bottom: PreferredSize(
               preferredSize: const Size.fromHeight(4),
               child: state.isLoading
-                  ? const LinearProgressIndicator(color: Color(0xFF42C8B7))
+                  ? const LinearProgressIndicator(color: AppTheme.primaryColor)
                   : const SizedBox(height: 4),
             ),
           ),
           SliverToBoxAdapter(
             child: Padding(
-              padding: const EdgeInsets.all(20),
+              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 24),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   _buildStepsCard(context, state),
-                  const SizedBox(height: 20),
+                  const SizedBox(height: 24),
                   _buildStatsRow(state),
-                  const SizedBox(height: 24),
+                  const SizedBox(height: 28),
                   _buildWeeklyChart(context, state, isDark),
-                  const SizedBox(height: 24),
+                  const SizedBox(height: 28),
                   _buildWorkoutHistory(context, state, isDark),
-                  const SizedBox(height: 16),
+                  const SizedBox(height: 20),
                   Semantics(
                     label: 'Log a new workout',
                     hint: 'Opens a form to record your exercise',
-                    child: SizedBox(
-                      width: double.infinity,
-                      child: FilledButton.icon(
-                        onPressed: () => _showLogWorkoutSheet(context),
-                        icon: const Icon(Icons.add),
-                        label: const Text('Log Workout'),
-                        style: FilledButton.styleFrom(
-                          backgroundColor: const Color(0xFF42C8B7),
-                          padding: const EdgeInsets.symmetric(vertical: 16),
-                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                    child: PremiumBounceInteraction(
+                      onTap: () => _showLogWorkoutSheet(context),
+                      child: Container(
+                        width: double.infinity,
+                        padding: const EdgeInsets.symmetric(vertical: 16),
+                        alignment: Alignment.center,
+                        decoration: BoxDecoration(
+                          gradient: AppTheme.primaryGradient,
+                          borderRadius: BorderRadius.circular(16),
+                          boxShadow: [
+                            BoxShadow(
+                              color:
+                                  AppTheme.primaryColor.withValues(alpha: 0.25),
+                              blurRadius: 16,
+                              offset: const Offset(0, 6),
+                            ),
+                          ],
+                        ),
+                        child: const Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Icon(Icons.add, color: Colors.white, size: 20),
+                            SizedBox(width: 8),
+                            Text(
+                              'Log Workout',
+                              style: TextStyle(
+                                fontFamily: 'Outfit',
+                                color: Colors.white,
+                                fontWeight: FontWeight.w700,
+                                fontSize: 16,
+                              ),
+                            ),
+                          ],
                         ),
                       ),
                     ),
@@ -111,20 +151,35 @@ class FitnessPage extends ConsumerWidget {
     final steps = state.todayRecord?.steps ?? 0;
     final goal = state.stats.dailyStepGoal;
     final progress = goal > 0 ? (steps / goal).clamp(0.0, 1.0) : 0.0;
-    final semanticLabel = 'Today\'s steps: $steps out of $goal goal, ${(progress * 100).toInt()} percent complete';
+    final semanticLabel =
+        'Today\'s steps: $steps out of $goal goal, ${(progress * 100).toInt()} percent complete';
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
     return Semantics(
       label: semanticLabel,
       child: Container(
         padding: const EdgeInsets.all(24),
         decoration: BoxDecoration(
-          gradient: LinearGradient(
-            colors: progress >= 1.0
-                ? [AppTheme.successColor, AppTheme.primaryColor]
-                : [AppTheme.primaryColor, AppTheme.primaryDark],
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-          ),
+          gradient: progress >= 1.0
+              ? const LinearGradient(
+                  colors: [AppTheme.successColor, AppTheme.primaryColor],
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                )
+              : const LinearGradient(
+                  colors: [AppTheme.primaryColor, AppTheme.primaryDark],
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                ),
           borderRadius: BorderRadius.circular(24),
+          boxShadow: [
+            BoxShadow(
+              color:
+                  AppTheme.primaryColor.withValues(alpha: isDark ? 0.3 : 0.15),
+              blurRadius: 16,
+              offset: const Offset(0, 6),
+            ),
+          ],
         ),
         child: Row(
           children: [
@@ -133,12 +188,25 @@ class FitnessPage extends ConsumerWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text('Today\'s Steps',
-                      style: TextStyle(color: Colors.white.withValues(alpha: 0.8), fontSize: 14)),
+                      style: TextStyle(
+                          fontFamily: 'Outfit',
+                          color: Colors.white.withValues(alpha: 0.8),
+                          fontSize: 14,
+                          fontWeight: FontWeight.w500)),
                   const SizedBox(height: 4),
                   Text('$steps',
-                      style: const TextStyle(color: Colors.white, fontSize: 40, fontWeight: FontWeight.w700)),
+                      style: const TextStyle(
+                          color: Colors.white,
+                          fontSize: 40,
+                          fontWeight: FontWeight.w800,
+                          height: 1.1)),
+                  const SizedBox(height: 4),
                   Text('Goal: $goal',
-                      style: TextStyle(color: Colors.white.withValues(alpha: 0.7), fontSize: 14)),
+                      style: TextStyle(
+                          fontFamily: 'Outfit',
+                          color: Colors.white.withValues(alpha: 0.7),
+                          fontSize: 13,
+                          fontWeight: FontWeight.w500)),
                 ],
               ),
             ),
@@ -151,12 +219,17 @@ class FitnessPage extends ConsumerWidget {
                   child: CircularProgressIndicator(
                     value: progress,
                     strokeWidth: 8,
-                    backgroundColor: Colors.white24,
-                    valueColor: const AlwaysStoppedAnimation<Color>(Colors.white),
+                    backgroundColor: Colors.white12,
+                    valueColor:
+                        const AlwaysStoppedAnimation<Color>(Colors.white),
                   ),
                 ),
                 Text('${(progress * 100).toInt()}%',
-                    style: const TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.w700)),
+                    style: const TextStyle(
+                        fontFamily: 'Outfit',
+                        color: Colors.white,
+                        fontSize: 18,
+                        fontWeight: FontWeight.w700)),
               ],
             ),
           ],
@@ -169,41 +242,74 @@ class FitnessPage extends ConsumerWidget {
     final stats = state.stats;
     return Row(
       children: [
-        _StatCard(label: 'Avg Steps', value: _formatNumber(stats.averageSteps), icon: Icons.directions_walk, color: AppTheme.primaryColor),
+        _StatCard(
+            label: 'Avg Steps',
+            value: _formatNumber(stats.averageSteps),
+            icon: Icons.directions_walk,
+            color: AppTheme.primaryColor),
         const SizedBox(width: 12),
-        _StatCard(label: 'Active Min', value: '${stats.totalActiveMinutes}', icon: Icons.timer, color: AppTheme.warningColor),
+        _StatCard(
+            label: 'Active Min',
+            value: '${stats.totalActiveMinutes}',
+            icon: Icons.timer,
+            color: AppTheme.warningColor),
         const SizedBox(width: 12),
-        _StatCard(label: 'Streak', value: '${stats.streakDays}d', icon: Icons.bolt, color: AppTheme.successColor),
+        _StatCard(
+            label: 'Streak',
+            value: '${stats.streakDays}d',
+            icon: Icons.local_fire_department_outlined,
+            color: AppTheme.successColor),
       ],
     );
   }
 
-  Widget _buildWeeklyChart(BuildContext context, FitnessState state, bool isDark) {
+  Widget _buildWeeklyChart(
+      BuildContext context, FitnessState state, bool isDark) {
     final weekData = state.stats.weeklyHistory.reversed.toList();
-    final maxSteps = weekData.fold<int>(0, (max, r) => r.steps > max ? r.steps : max);
+    final maxSteps =
+        weekData.fold<int>(0, (max, r) => r.steps > max ? r.steps : max);
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Text('Weekly Steps', style: TextStyle(fontSize: 18, fontWeight: FontWeight.w700)),
-        const SizedBox(height: 16),
+        const Padding(
+          padding: EdgeInsets.only(left: 4, bottom: 12),
+          child: Text(
+            'Weekly Steps Trend',
+            style: TextStyle(
+                fontFamily: 'Playfair Display',
+                fontSize: 18,
+                fontWeight: FontWeight.bold),
+          ),
+        ),
         Container(
-          height: 200,
-          padding: const EdgeInsets.all(16),
+          height: 220,
+          padding: const EdgeInsets.all(20),
           decoration: BoxDecoration(
-            color: isDark ? AppTheme.darkCard : AppTheme.lightSurface,
-            borderRadius: BorderRadius.circular(20),
+            color: isDark ? AppTheme.darkCard : Colors.white,
+            borderRadius: BorderRadius.circular(24),
+            border: Border.all(
+              color: isDark ? AppTheme.darkBorder : AppTheme.lightBorder,
+            ),
+            boxShadow: isDark ? AppTheme.darkShadow : AppTheme.lightShadow,
           ),
           child: weekData.isEmpty
-              ? const Center(child: Text('No data yet', style: TextStyle(color: Colors.grey)))
+              ? const Center(
+                  child: Text('No data yet',
+                      style:
+                          TextStyle(fontFamily: 'Outfit', color: Colors.grey)),
+                )
               : BarChart(
                   BarChartData(
                     maxY: (maxSteps * 1.2).ceilToDouble(),
                     gridData: FlGridData(
                       show: true,
                       drawVerticalLine: false,
-                      horizontalInterval: (maxSteps * 1.2 / 4).ceilToDouble().clamp(1000, double.infinity),
-                      getDrawingHorizontalLine: (v) =>
-                          FlLine(color: isDark ? Colors.white10 : Colors.black12, strokeWidth: 1),
+                      horizontalInterval: (maxSteps * 1.2 / 4)
+                          .ceilToDouble()
+                          .clamp(1000, double.infinity),
+                      getDrawingHorizontalLine: (v) => FlLine(
+                          color: isDark ? Colors.white10 : Colors.black12,
+                          strokeWidth: 1),
                     ),
                     titlesData: FlTitlesData(
                       bottomTitles: AxisTitles(
@@ -213,7 +319,11 @@ class FitnessPage extends ConsumerWidget {
                             const days = ['M', 'T', 'W', 'T', 'F', 'S', 'S'];
                             final i = v.toInt();
                             return i >= 0 && i < days.length
-                                ? Text(days[i], style: const TextStyle(fontSize: 11, color: Colors.grey))
+                                ? Text(days[i],
+                                    style: const TextStyle(
+                                        fontFamily: 'Outfit',
+                                        fontSize: 11,
+                                        color: Colors.grey))
                                 : const SizedBox();
                           },
                         ),
@@ -223,37 +333,51 @@ class FitnessPage extends ConsumerWidget {
                           showTitles: true,
                           getTitlesWidget: (v, _) {
                             final val = v.toInt();
-                            return Text(val >= 1000 ? '${val ~/ 1000}k' : '$val',
-                                style: const TextStyle(fontSize: 10, color: Colors.grey));
+                            return Text(
+                                val >= 1000 ? '${val ~/ 1000}k' : '$val',
+                                style: const TextStyle(
+                                    fontFamily: 'Outfit',
+                                    fontSize: 10,
+                                    color: Colors.grey));
                           },
                           reservedSize: 36,
                         ),
                       ),
-                      topTitles: const AxisTitles(sideTitles: SideTitles(showTitles: false)),
-                      rightTitles: const AxisTitles(sideTitles: SideTitles(showTitles: false)),
+                      topTitles: const AxisTitles(
+                          sideTitles: SideTitles(showTitles: false)),
+                      rightTitles: const AxisTitles(
+                          sideTitles: SideTitles(showTitles: false)),
                     ),
                     borderData: FlBorderData(show: false),
-                    barGroups: weekData.asMap().entries.map((e) => BarChartGroupData(
-                      x: e.key,
-                      barRods: [
-                        BarChartRodData(
-                          toY: e.value.steps.toDouble(),
-                          gradient: const LinearGradient(
-                            colors: [Color(0xFF42C8B7), Color(0xFF1E6C64)],
-                            begin: Alignment.bottomCenter,
-                            end: Alignment.topCenter,
-                          ),
-                          width: 28,
-                          borderRadius: const BorderRadius.vertical(top: Radius.circular(6)),
-                        )
-                      ],
-                    )).toList(),
+                    barGroups: weekData
+                        .asMap()
+                        .entries
+                        .map((e) => BarChartGroupData(
+                              x: e.key,
+                              barRods: [
+                                BarChartRodData(
+                                  toY: e.value.steps.toDouble(),
+                                  gradient: const LinearGradient(
+                                    colors: [
+                                      AppTheme.primaryColor,
+                                      AppTheme.primaryDark
+                                    ],
+                                    begin: Alignment.bottomCenter,
+                                    end: Alignment.topCenter,
+                                  ),
+                                  width: 24,
+                                  borderRadius: const BorderRadius.vertical(
+                                      top: Radius.circular(8)),
+                                )
+                              ],
+                            ))
+                        .toList(),
                     extraLinesData: ExtraLinesData(
                       horizontalLines: [
                         HorizontalLine(
                           y: state.stats.dailyStepGoal.toDouble(),
                           color: AppTheme.warningColor,
-                          strokeWidth: 1,
+                          strokeWidth: 1.5,
                           dashArray: [5, 5],
                         ),
                       ],
@@ -265,7 +389,8 @@ class FitnessPage extends ConsumerWidget {
     );
   }
 
-  Widget _buildWorkoutHistory(BuildContext context, FitnessState state, bool isDark) {
+  Widget _buildWorkoutHistory(
+      BuildContext context, FitnessState state, bool isDark) {
     final workoutRecords = state.history
         .expand((r) => r.workouts.map((w) => (date: r.date, workout: w)))
         .toList()
@@ -278,35 +403,76 @@ class FitnessPage extends ConsumerWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Text('Recent Workouts', style: TextStyle(fontSize: 18, fontWeight: FontWeight.w700)),
-        const SizedBox(height: 12),
+        const Padding(
+          padding: EdgeInsets.only(left: 4, bottom: 12),
+          child: Text(
+            'Recent Workouts',
+            style: TextStyle(
+                fontFamily: 'Playfair Display',
+                fontSize: 18,
+                fontWeight: FontWeight.bold),
+          ),
+        ),
         ...workoutRecords.take(5).map((entry) => Container(
-          margin: const EdgeInsets.only(bottom: 8),
-          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-          decoration: BoxDecoration(
-            color: isDark ? AppTheme.darkCard : AppTheme.lightSurface,
-            borderRadius: BorderRadius.circular(12),
-          ),
-          child: Row(
-            children: [
-              Icon(_iconForType(entry.workout.type), color: AppTheme.primaryColor, size: 24),
-              const SizedBox(width: 12),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(entry.workout.typeLabel, style: const TextStyle(fontWeight: FontWeight.w600)),
-                    Text('${entry.workout.durationMinutes} min',
-                        style: TextStyle(color: Colors.grey[600], fontSize: 12)),
-                  ],
+              margin: const EdgeInsets.only(bottom: 12),
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+              decoration: BoxDecoration(
+                color: isDark ? AppTheme.darkCard : Colors.white,
+                borderRadius: BorderRadius.circular(16),
+                border: Border.all(
+                  color: isDark ? AppTheme.darkBorder : AppTheme.lightBorder,
                 ),
+                boxShadow: isDark ? AppTheme.darkShadow : AppTheme.lightShadow,
               ),
-              if (entry.workout.caloriesBurned > 0)
-                Text('${entry.workout.caloriesBurned.toInt()} cal',
-                    style: const TextStyle(fontWeight: FontWeight.w600, color: AppTheme.warningColor)),
-            ],
-          ),
-        )),
+              child: Row(
+                children: [
+                  Container(
+                    padding: const EdgeInsets.all(8),
+                    decoration: BoxDecoration(
+                      color: AppTheme.primaryColor.withValues(alpha: 0.12),
+                      shape: BoxShape.circle,
+                    ),
+                    child: Icon(_iconForType(entry.workout.type),
+                        color: AppTheme.primaryColor, size: 22),
+                  ),
+                  const SizedBox(width: 14),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          entry.workout.typeLabel,
+                          style: TextStyle(
+                            fontFamily: 'Outfit',
+                            fontWeight: FontWeight.w700,
+                            fontSize: 14,
+                            color: isDark ? Colors.white : AppTheme.primaryDark,
+                          ),
+                        ),
+                        const SizedBox(height: 2),
+                        Text(
+                          '${entry.workout.durationMinutes} min',
+                          style: const TextStyle(
+                            fontFamily: 'Outfit',
+                            color: Colors.grey,
+                            fontSize: 12,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  if (entry.workout.caloriesBurned > 0)
+                    Text(
+                      '${entry.workout.caloriesBurned.toInt()} cal',
+                      style: const TextStyle(
+                        fontFamily: 'Outfit',
+                        fontWeight: FontWeight.w700,
+                        color: AppTheme.warningColor,
+                      ),
+                    ),
+                ],
+              ),
+            )),
       ],
     );
   }
@@ -324,14 +490,22 @@ class FitnessPage extends ConsumerWidget {
 
   IconData _iconForType(WorkoutType type) {
     switch (type) {
-      case WorkoutType.walking: return Icons.directions_walk;
-      case WorkoutType.running: return Icons.directions_run;
-      case WorkoutType.cycling: return Icons.directions_bike;
-      case WorkoutType.yoga: return Icons.self_improvement;
-      case WorkoutType.strength: return Icons.fitness_center;
-      case WorkoutType.meditation: return Icons.spa;
-      case WorkoutType.stretching: return Icons.straighten;
-      case WorkoutType.other: return Icons.sports;
+      case WorkoutType.walking:
+        return Icons.directions_walk;
+      case WorkoutType.running:
+        return Icons.directions_run;
+      case WorkoutType.cycling:
+        return Icons.directions_bike;
+      case WorkoutType.yoga:
+        return Icons.self_improvement;
+      case WorkoutType.strength:
+        return Icons.fitness_center;
+      case WorkoutType.meditation:
+        return Icons.spa;
+      case WorkoutType.stretching:
+        return Icons.straighten;
+      case WorkoutType.other:
+        return Icons.sports;
     }
   }
 
@@ -359,18 +533,33 @@ class _StatCard extends StatelessWidget {
     final isDark = Theme.of(context).brightness == Brightness.dark;
     return Expanded(
       child: Container(
-        padding: const EdgeInsets.all(16),
+        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 16),
         decoration: BoxDecoration(
-          color: isDark ? AppTheme.darkCard : AppTheme.lightSurface,
-          borderRadius: BorderRadius.circular(16),
+          color: isDark ? AppTheme.darkCard : Colors.white,
+          borderRadius: BorderRadius.circular(20),
+          border: Border.all(
+            color: isDark ? AppTheme.darkBorder : AppTheme.lightBorder,
+          ),
+          boxShadow: isDark ? AppTheme.darkShadow : AppTheme.lightShadow,
         ),
         child: Column(
           children: [
             Icon(icon, color: color, size: 24),
             const SizedBox(height: 8),
-            Text(value, style: TextStyle(fontSize: 20, fontWeight: FontWeight.w700, color: color)),
-            const SizedBox(height: 4),
-            Text(label, style: const TextStyle(fontSize: 11, color: Colors.grey)),
+            Text(
+              value,
+              style: TextStyle(
+                  fontFamily: 'Outfit',
+                  fontSize: 18,
+                  fontWeight: FontWeight.w700,
+                  color: color),
+            ),
+            const SizedBox(height: 2),
+            Text(
+              label,
+              style: const TextStyle(
+                  fontFamily: 'Outfit', fontSize: 11, color: Colors.grey),
+            ),
           ],
         ),
       ),

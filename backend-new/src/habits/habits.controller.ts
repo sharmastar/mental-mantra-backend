@@ -3,6 +3,7 @@ import { ApiTags, ApiOperation, ApiBearerAuth } from '@nestjs/swagger';
 import { HabitsService } from './habits.service';
 import { JwtAuthGuard } from '../common/guards/jwt-auth.guard';
 import { CurrentUser } from '../common/decorators/current-user.decorator';
+import { CreateHabitDto } from './dto/create-habit.dto';
 
 @ApiTags('Habits')
 @ApiBearerAuth()
@@ -19,8 +20,8 @@ export class HabitsController {
 
   @Post()
   @ApiOperation({ summary: 'Create a habit' })
-  async create(@CurrentUser('id') userId: string, @Body() data: any) {
-    return { success: true, data: await this.habitsService.create(userId, data) };
+  async create(@CurrentUser('id') userId: string, @Body() dto: CreateHabitDto) {
+    return { success: true, data: await this.habitsService.create(userId, dto) };
   }
 
   @Post(':id/log')

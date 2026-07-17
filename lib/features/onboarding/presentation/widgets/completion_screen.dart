@@ -26,11 +26,15 @@ class _CompletionScreenState extends State<CompletionScreen>
     );
 
     _scaleAnim = Tween<double>(begin: 0.5, end: 1).animate(
-      CurvedAnimation(parent: _controller, curve: const Interval(0, 0.4, curve: Curves.elasticOut)),
+      CurvedAnimation(
+          parent: _controller,
+          curve: const Interval(0, 0.4, curve: Curves.elasticOut)),
     );
 
     _opacityAnim = Tween<double>(begin: 0, end: 1).animate(
-      CurvedAnimation(parent: _controller, curve: const Interval(0.3, 0.6, curve: Curves.easeOut)),
+      CurvedAnimation(
+          parent: _controller,
+          curve: const Interval(0.3, 0.6, curve: Curves.easeOut)),
     );
 
     _pulseAnim = Tween<double>(begin: 1, end: 1.08).animate(

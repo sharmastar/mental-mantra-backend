@@ -2,7 +2,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../data/models/sleep_record.dart';
 import '../../data/repositories/sleep_repository.dart';
 
-final sleepRepositoryProvider = Provider<SleepRepository>((ref) => SleepRepository());
+final sleepRepositoryProvider =
+    Provider<SleepRepository>((ref) => SleepRepository());
 
 class SleepState {
   final List<SleepRecord> records;
@@ -23,12 +24,13 @@ class SleepState {
     bool? isLoading,
     String? error,
     bool clearError = false,
-  }) => SleepState(
-    records: records ?? this.records,
-    stats: stats ?? this.stats,
-    isLoading: isLoading ?? this.isLoading,
-    error: clearError ? null : (error ?? this.error),
-  );
+  }) =>
+      SleepState(
+        records: records ?? this.records,
+        stats: stats ?? this.stats,
+        isLoading: isLoading ?? this.isLoading,
+        error: clearError ? null : (error ?? this.error),
+      );
 }
 
 class SleepNotifier extends StateNotifier<SleepState> {
@@ -43,7 +45,8 @@ class SleepNotifier extends StateNotifier<SleepState> {
       final stats = await _repository.computeStats();
       state = state.copyWith(records: records, stats: stats, isLoading: false);
     } catch (e) {
-      state = state.copyWith(isLoading: false, error: 'Failed to load sleep records');
+      state = state.copyWith(
+          isLoading: false, error: 'Failed to load sleep records');
     }
   }
 

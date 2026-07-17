@@ -1,5 +1,6 @@
 import { Injectable, NotFoundException, BadRequestException } from '@nestjs/common';
 import { PrismaService } from '../common/prisma.service';
+import { CreateSleepDto } from './dto/create-sleep.dto';
 
 @Injectable()
 export class SleepService {
@@ -11,13 +12,13 @@ export class SleepService {
     });
   }
 
-  async create(userId: string, data: { bedtime: string; wakeTime: string; quality?: number; notes?: string; date: string }) {
-    const bedDateTime = new Date(data.bedtime);
-    const wakeDateTime = new Date(data.wakeTime);
+  async create(userId: string, dto: CreateSleepDto) {
+    const bedDateTime = new Date(dto.bedtime);
+    const wakeDateTime = new Date(dto.wakeTime);
     const durationMin = Math.round((wakeDateTime.getTime() - bedDateTime.getTime()) / 60000);
     if (durationMin <= 0) throw new BadRequestException('Wake time must be after bedtime');
     return this.prisma.sleepLog.create({
-      data: { userId, bedtime: bedDateTime, wakeTime: wakeDateTime, durationMin, quality: data.quality, notes: data.notes, date: new Date(data.date) },
+      data: { userId, bedtime: bedDateTime, wakeTime: wakeDateTime, durationMin, quality: dto.quality, notes: dto.notes, date: new Date(dto.date) },
     });
   }
 

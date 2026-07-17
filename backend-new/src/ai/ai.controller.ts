@@ -3,6 +3,7 @@ import { ApiTags, ApiOperation, ApiBearerAuth } from '@nestjs/swagger';
 import { Throttle } from '@nestjs/throttler';
 import { AiService } from './ai.service';
 import { JwtAuthGuard } from '../common/guards/jwt-auth.guard';
+import { CurrentUser } from '../common/decorators/current-user.decorator';
 
 @ApiTags('AI')
 @ApiBearerAuth()
@@ -14,8 +15,8 @@ export class AiController {
   @Post('chat')
   @Throttle({ default: { limit: 30, ttl: 600000 } })
   @ApiOperation({ summary: 'Chat with AI wellness coach' })
-  async chat(@Body() body: { messages: any[] }) {
-    return { success: true, ...await this.aiService.chat(body.messages) };
+  async chat(@CurrentUser('id') userId: string, @Body() body: { messages: any[] }) {
+    return { success: true, ...await this.aiService.chat(userId, body.messages) };
   }
 
   @Post('generate')

@@ -1,5 +1,6 @@
 import 'dart:math';
 import 'package:flutter/material.dart';
+import 'package:mental_mantra/core/theme/app_theme.dart';
 
 class FireParticlesWidget extends StatefulWidget {
   final bool isBurning;
@@ -20,7 +21,7 @@ class _FireParticlesWidgetState extends State<FireParticlesWidget>
   late AnimationController _controller;
   final List<_Particle> _particles = [];
   final Random _random = Random();
-  
+
   bool _notifiedComplete = false;
 
   @override
@@ -33,7 +34,7 @@ class _FireParticlesWidgetState extends State<FireParticlesWidget>
 
     _controller.addListener(() {
       _updateParticles();
-      
+
       // Stop condition
       if (_controller.value > 0.95 && !_notifiedComplete && widget.isBurning) {
         _notifiedComplete = true;
@@ -58,12 +59,12 @@ class _FireParticlesWidgetState extends State<FireParticlesWidget>
   void _startBurning() {
     _notifiedComplete = false;
     _particles.clear();
-    
+
     // Generate initial burst of particles
     for (int i = 0; i < 150; i++) {
       _particles.add(_createParticle(initial: true));
     }
-    
+
     _controller.forward(from: 0.0);
   }
 
@@ -82,20 +83,20 @@ class _FireParticlesWidgetState extends State<FireParticlesWidget>
 
   Color _getRandomFireColor() {
     final colors = [
-      const Color(0xFFFF5722), // Deep Orange
-      const Color(0xFFFF9800), // Orange
-      const Color(0xFFFFC107), // Amber
-      const Color(0xFFFFEB3B), // Yellow
-      const Color(0xFFE64A19), // Darker Orange
+      AppTheme.warningColor, // Deep Orange
+      AppTheme.warningColor, // Orange
+      AppTheme.warningColor, // Amber
+      AppTheme.warningColor, // Yellow
+      AppTheme.errorColor, // Darker Orange
     ];
     return colors[_random.nextInt(colors.length)];
   }
 
   void _updateParticles() {
     if (!widget.isBurning) return;
-    
+
     final currentVal = _controller.value;
-    
+
     // Add new particles continuously until near the end
     if (currentVal < 0.8 && _random.nextDouble() > 0.5) {
       for (int i = 0; i < 5; i++) {
@@ -123,7 +124,7 @@ class _FireParticlesWidgetState extends State<FireParticlesWidget>
   @override
   Widget build(BuildContext context) {
     if (!widget.isBurning) return const SizedBox.shrink();
-    
+
     return IgnorePointer(
       child: CustomPaint(
         painter: _FirePainter(_particles, _controller.value),
@@ -166,7 +167,8 @@ class _FirePainter extends CustomPainter {
     // Draw an encroaching dark overlay to simulate the paper burning away
     if (progress > 0) {
       final paint = Paint()
-        ..color = const Color(0xFF1A1A1A).withValues(alpha: (progress * 1.5).clamp(0.0, 1.0))
+        ..color = AppTheme.primaryDark
+            .withValues(alpha: (progress * 1.5).clamp(0.0, 1.0))
         ..style = PaintingStyle.fill;
       canvas.drawRect(Offset.zero & size, paint);
     }
@@ -175,7 +177,7 @@ class _FirePainter extends CustomPainter {
       final paint = Paint()
         ..color = p.color.withValues(alpha: p.life)
         ..maskFilter = const MaskFilter.blur(BlurStyle.normal, 3.0);
-      
+
       canvas.drawCircle(
         Offset(p.x * size.width, p.y * size.height),
         p.size * p.life,

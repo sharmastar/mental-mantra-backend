@@ -4,7 +4,8 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:mental_mantra/features/fitness/presentation/widgets/log_workout_sheet.dart';
 
 void main() {
-  testWidgets('LogWorkoutSheet renders workout type chips', (WidgetTester tester) async {
+  testWidgets('LogWorkoutSheet renders workout type chips',
+      (WidgetTester tester) async {
     await tester.pumpWidget(
       const ProviderScope(
         child: MaterialApp(
@@ -22,7 +23,8 @@ void main() {
     expect(find.text('Save Workout'), findsOneWidget);
   });
 
-  testWidgets('LogWorkoutSheet has duration and calories fields', (WidgetTester tester) async {
+  testWidgets('LogWorkoutSheet has duration and calories fields',
+      (WidgetTester tester) async {
     await tester.pumpWidget(
       const ProviderScope(
         child: MaterialApp(

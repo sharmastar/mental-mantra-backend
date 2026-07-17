@@ -18,12 +18,12 @@ class LandingPage extends StatelessWidget {
     // Time-aware background sunset gradient (teal theme matching screenshot)
     final bgGradient = isDark
         ? const LinearGradient(
-            colors: [Color(0xFF124C4E), Color(0xFF092526)],
+            colors: [AppTheme.darkBg, AppTheme.darkSurface],
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
           )
         : const LinearGradient(
-            colors: [Color(0xFFE0F2F1), Color(0xFFB2DFDB)],
+            colors: [AppTheme.lightCard, AppTheme.lightBorder],
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
           );
@@ -42,42 +42,39 @@ class LandingPage extends StatelessWidget {
         decoration: BoxDecoration(gradient: bgGradient),
         child: SafeArea(
           child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 16.0),
+            padding:
+                const EdgeInsets.symmetric(horizontal: 24.0, vertical: 16.0),
             child: Column(
               children: [
                 const Spacer(flex: 3),
 
-                // Mockup style Circular Leaf Icon Logo
+                // New full branding logo replacing both individual logo and title
                 Center(
-                  child: const AppLogo.large().animate().scale(
-                    duration: 600.ms,
-                    curve: Curves.easeOutBack,
+                  child: Container(
+                    margin: const EdgeInsets.only(top: 48, bottom: 24),
+                    child: const AppLogo(
+                      width: 220,
+                      variant: LogoVariant.full,
+                    ),
                   ),
-                ),
-                const SizedBox(height: 48),
-
-                // Large Editorial Serif Branding
-                Text(
-                  'Mental Mantra',
-                  style: GoogleFonts.playfairDisplay(
-                    fontSize: 36,
-                    fontWeight: FontWeight.w800,
-                    color: Colors.white,
-                    letterSpacing: -0.5,
-                  ),
-                ).animate().fadeIn(duration: 500.ms).slideY(begin: 0.1, end: 0),
-                const SizedBox(height: 12),
+                ).animate().scale(
+                      duration: 600.ms,
+                      curve: Curves.easeOut,
+                    ),
 
                 // Mockup style Subtitle
                 Text(
-                  'Your mental wellbeing matters 🌿',
+                  'Your mental wellbeing matters',
                   style: GoogleFonts.outfit(
                     fontSize: 16.5,
                     fontWeight: FontWeight.w600,
                     color: AppTheme.primaryColor,
                     letterSpacing: 0.2,
                   ),
-                ).animate().fadeIn(duration: 500.ms, delay: 100.ms).slideY(begin: 0.1, end: 0),
+                )
+                    .animate()
+                    .fadeIn(duration: 500.ms, delay: 100.ms)
+                    .slideY(begin: 0.1, end: 0),
                 const SizedBox(height: 10),
 
                 // Mockup style Description
@@ -89,12 +86,17 @@ class LandingPage extends StatelessWidget {
                     style: GoogleFonts.outfit(
                       fontSize: 14.5,
                       fontWeight: FontWeight.w400,
-                      color: isDark ? Colors.white70 : const Color(0xFF092828).withValues(alpha: 0.75),
+                      color: isDark
+                          ? Colors.white70
+                          : AppTheme.primaryDark.withValues(alpha: 0.75),
                       height: 1.5,
                     ),
                   ),
-                ).animate().fadeIn(duration: 500.ms, delay: 200.ms).slideY(begin: 0.1, end: 0),
-                
+                )
+                    .animate()
+                    .fadeIn(duration: 500.ms, delay: 200.ms)
+                    .slideY(begin: 0.1, end: 0),
+
                 const Spacer(flex: 4),
 
                 // Solid primary CTA button leading to Sign Up
@@ -138,7 +140,9 @@ class LandingPage extends StatelessWidget {
                       style: GoogleFonts.outfit(
                         fontSize: 14.5,
                         fontWeight: FontWeight.w500,
-                        color: isDark ? Colors.white60 : const Color(0xFF092828).withValues(alpha: 0.6),
+                        color: isDark
+                            ? Colors.white60
+                            : AppTheme.primaryDark.withValues(alpha: 0.6),
                       ),
                     ),
                   ),
@@ -150,36 +154,6 @@ class LandingPage extends StatelessWidget {
           ),
         ),
       ),
-    );
-  }
-
-  Widget _buildFeatureRow(BuildContext context, String emoji, String text) {
-    final isDark = Theme.of(context).brightness == Brightness.dark;
-    return Row(
-      children: [
-        Container(
-          width: 38,
-          height: 38,
-          decoration: BoxDecoration(
-            color: AppTheme.primaryColor.withValues(alpha: 0.08),
-            shape: BoxShape.circle,
-          ),
-          child: Center(
-            child: Text(emoji, style: const TextStyle(fontSize: 18)),
-          ),
-        ),
-        const SizedBox(width: 14),
-        Expanded(
-          child: Text(
-            text,
-            style: GoogleFonts.outfit(
-              fontSize: 14.5,
-              fontWeight: FontWeight.w400,
-              color: isDark ? Colors.white.withValues(alpha: 0.8) : const Color(0xFF1A1530).withValues(alpha: 0.75),
-            ),
-          ),
-        ),
-      ],
     );
   }
 }

@@ -1,4 +1,5 @@
 enum MeditationType { guided, unguided, breathing, bodyScan, lovingKindness }
+
 enum DifficultyLevel { beginner, intermediate, advanced }
 
 class MeditationCategory {
@@ -16,21 +17,22 @@ class MeditationCategory {
     this.sessionCount = 0,
   });
 
-  factory MeditationCategory.fromJson(Map<String, dynamic> json) => MeditationCategory(
-    id: json['id'] as String? ?? '',
-    name: json['name'] as String? ?? '',
-    description: json['description'] as String? ?? '',
-    iconUrl: json['iconUrl'] as String? ?? '',
-    sessionCount: json['sessionCount'] as int? ?? 0,
-  );
+  factory MeditationCategory.fromJson(Map<String, dynamic> json) =>
+      MeditationCategory(
+        id: json['id'] as String? ?? '',
+        name: json['name'] as String? ?? '',
+        description: json['description'] as String? ?? '',
+        iconUrl: json['iconUrl'] as String? ?? '',
+        sessionCount: json['sessionCount'] as int? ?? 0,
+      );
 
   Map<String, dynamic> toJson() => {
-    'id': id,
-    'name': name,
-    'description': description,
-    'iconUrl': iconUrl,
-    'sessionCount': sessionCount,
-  };
+        'id': id,
+        'name': name,
+        'description': description,
+        'iconUrl': iconUrl,
+        'sessionCount': sessionCount,
+      };
 }
 
 class MeditationSession {
@@ -76,47 +78,50 @@ class MeditationSession {
     return remainingMin > 0 ? '${hours}h ${remainingMin}min' : '${hours}h';
   }
 
-  factory MeditationSession.fromJson(Map<String, dynamic> json) => MeditationSession(
-    id: json['id'] as String? ?? '',
-    title: json['title'] as String? ?? '',
-    description: json['description'] as String? ?? '',
-    audioUrl: json['audioUrl'] as String?,
-    imageUrl: json['imageUrl'] as String?,
-    type: MeditationType.values.firstWhere(
-      (e) => e.name == json['type'],
-      orElse: () => MeditationType.guided,
-    ),
-    difficulty: DifficultyLevel.values.firstWhere(
-      (e) => e.name == json['difficulty'],
-      orElse: () => DifficultyLevel.beginner,
-    ),
-    durationSeconds: json['durationSeconds'] as int? ?? 600,
-    narrator: json['narrator'] as String?,
-    language: json['language'] as String?,
-    tags: List<String>.from(json['tags'] ?? []),
-    isFavorite: json['isFavorite'] as bool? ?? false,
-    isDownloaded: json['isDownloaded'] as bool? ?? false,
-    lastPlayedAt: json['lastPlayedAt'] != null ? DateTime.tryParse(json['lastPlayedAt'] as String) : null,
-    timesCompleted: json['timesCompleted'] as int? ?? 0,
-  );
+  factory MeditationSession.fromJson(Map<String, dynamic> json) =>
+      MeditationSession(
+        id: json['id'] as String? ?? '',
+        title: json['title'] as String? ?? '',
+        description: json['description'] as String? ?? '',
+        audioUrl: json['audioUrl'] as String?,
+        imageUrl: json['imageUrl'] as String?,
+        type: MeditationType.values.firstWhere(
+          (e) => e.name == json['type'],
+          orElse: () => MeditationType.guided,
+        ),
+        difficulty: DifficultyLevel.values.firstWhere(
+          (e) => e.name == json['difficulty'],
+          orElse: () => DifficultyLevel.beginner,
+        ),
+        durationSeconds: json['durationSeconds'] as int? ?? 600,
+        narrator: json['narrator'] as String?,
+        language: json['language'] as String?,
+        tags: List<String>.from(json['tags'] ?? []),
+        isFavorite: json['isFavorite'] as bool? ?? false,
+        isDownloaded: json['isDownloaded'] as bool? ?? false,
+        lastPlayedAt: json['lastPlayedAt'] != null
+            ? DateTime.tryParse(json['lastPlayedAt'] as String)
+            : null,
+        timesCompleted: json['timesCompleted'] as int? ?? 0,
+      );
 
   Map<String, dynamic> toJson() => {
-    'id': id,
-    'title': title,
-    'description': description,
-    'audioUrl': audioUrl,
-    'imageUrl': imageUrl,
-    'type': type.name,
-    'difficulty': difficulty.name,
-    'durationSeconds': durationSeconds,
-    'narrator': narrator,
-    'language': language,
-    'tags': tags,
-    'isFavorite': isFavorite,
-    'isDownloaded': isDownloaded,
-    'lastPlayedAt': lastPlayedAt?.toIso8601String(),
-    'timesCompleted': timesCompleted,
-  };
+        'id': id,
+        'title': title,
+        'description': description,
+        'audioUrl': audioUrl,
+        'imageUrl': imageUrl,
+        'type': type.name,
+        'difficulty': difficulty.name,
+        'durationSeconds': durationSeconds,
+        'narrator': narrator,
+        'language': language,
+        'tags': tags,
+        'isFavorite': isFavorite,
+        'isDownloaded': isDownloaded,
+        'lastPlayedAt': lastPlayedAt?.toIso8601String(),
+        'timesCompleted': timesCompleted,
+      };
 
   MeditationSession copyWith({
     String? id,

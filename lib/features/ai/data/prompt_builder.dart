@@ -34,19 +34,24 @@ Your personality is:
     if (ctx.domainScores.isNotEmpty) {
       final sorted = ctx.domainScores.entries.toList()
         ..sort((a, b) => b.value.compareTo(a.value));
-      buf.writeln("- Domain scores: ${sorted.map((e) => '${e.key}: ${e.value.toStringAsFixed(0)}/10').join(', ')}");
+      buf.writeln(
+          "- Domain scores: ${sorted.map((e) => '${e.key}: ${e.value.toStringAsFixed(0)}/10').join(', ')}");
     }
-    buf.writeln('- Classification confidence: ${(ctx.confidence * 100).toStringAsFixed(0)}%');
+    buf.writeln(
+        '- Classification confidence: ${(ctx.confidence * 100).toStringAsFixed(0)}%');
     if (ctx.needsCrisisAttention) {
-      buf.writeln('- Risk level: ${ctx.riskLevel} — monitor for safety concerns.');
+      buf.writeln(
+          '- Risk level: ${ctx.riskLevel} — monitor for safety concerns.');
     }
-    buf.writeln('Use this context to tailor your responses. Do NOT explicitly mention the classification.');
+    buf.writeln(
+        'Use this context to tailor your responses. Do NOT explicitly mention the classification.');
     return buf.toString();
   }
 
   static String _wellnessContext(PersonalizationContext ctx) {
     final buf = StringBuffer("WELLNESS PROFILE:\n");
-    buf.writeln('- Overall score: ${ctx.overallWellnessScore?.toStringAsFixed(0)}/100');
+    buf.writeln(
+        '- Overall score: ${ctx.overallWellnessScore?.toStringAsFixed(0)}/100');
     if (ctx.primaryConcerns.isNotEmpty) {
       buf.writeln('- Concerns: ${ctx.primaryConcerns.join(", ")}');
     }
@@ -69,7 +74,8 @@ Your personality is:
   static String _preferenceContext(PersonalizationContext ctx) {
     final buf = StringBuffer("USER PREFERENCES:\n");
     buf.writeln("- Language: ${ctx.language}");
-    buf.writeln("- Spiritual mode: ${ctx.spiritualMode ? 'enabled' : 'disabled'}");
+    buf.writeln(
+        "- Spiritual mode: ${ctx.spiritualMode ? 'enabled' : 'disabled'}");
     buf.writeln("- Level: ${ctx.level} | Streak: ${ctx.currentStreak} days");
     buf.writeln("- Onboarding completed: ${ctx.onboardingCompleted}");
     return buf.toString();

@@ -1,7 +1,10 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../data/models/user_model.dart';
 import '../data/repositories/auth_repository.dart';
 import '../../../core/errors/app_exceptions.dart';
+import '../../../core/network/api_client.dart';
+import '../../../core/config/app_config.dart';
 
 final authRepositoryProvider = Provider<AuthRepository>((ref) {
   return AuthRepository();
@@ -49,12 +52,18 @@ class AuthNotifier extends StateNotifier<AuthState> {
 
   AuthNotifier(this._repository) : super(const AuthState(isLoading: true)) {
     _init();
+    ApiClient.onUnauthorized = () {
+      debugPrint(
+          '[AuthNotifier] Unauthorized access detected -> clearing session');
+      signOut();
+    };
   }
 
   Future<void> _init() async {
     if (_initialized) return;
     _initialized = true;
     try {
+      await AppConfig.resolveBackendUrl();
       final user = await _repository.restoreSession();
       state = AuthState(
         user: user,
@@ -74,16 +83,21 @@ class AuthNotifier extends StateNotifier<AuthState> {
     state = state.copyWith(isLoading: true, clearError: true);
     try {
       final user = await _repository.signUpWithEmail(
-        name: name, email: email, password: password,
+        name: name,
+        email: email,
+        password: password,
       );
       state = AuthState(user: user, isOnboarded: user.onboardingCompleted);
       return true;
     } on AppException catch (e) {
       state = state.copyWith(
-        isLoading: false, errorMessage: e.message, errorCode: e.code,
+        isLoading: false,
+        errorMessage: e.message,
+        errorCode: e.code,
       );
       return false;
-    } catch (e) {
+    } catch (e, stack) {
+      debugPrint('[AuthNotifier] signUpWithEmail unexpected error: $e\n$stack');
       state = state.copyWith(
         isLoading: false,
         errorMessage: 'An unexpected error occurred: $e',
@@ -101,16 +115,21 @@ class AuthNotifier extends StateNotifier<AuthState> {
     state = state.copyWith(isLoading: true, clearError: true);
     try {
       final user = await _repository.signInWithEmail(
-        email: email, password: password, rememberMe: rememberMe,
+        email: email,
+        password: password,
+        rememberMe: rememberMe,
       );
       state = AuthState(user: user, isOnboarded: user.onboardingCompleted);
       return true;
     } on AppException catch (e) {
       state = state.copyWith(
-        isLoading: false, errorMessage: e.message, errorCode: e.code,
+        isLoading: false,
+        errorMessage: e.message,
+        errorCode: e.code,
       );
       return false;
-    } catch (e) {
+    } catch (e, stack) {
+      debugPrint('[AuthNotifier] signInWithEmail unexpected error: $e\n$stack');
       state = state.copyWith(
         isLoading: false,
         errorMessage: 'An unexpected error occurred: $e',
@@ -127,10 +146,14 @@ class AuthNotifier extends StateNotifier<AuthState> {
       state = AuthState(user: user, isOnboarded: user.onboardingCompleted);
       return true;
     } on AppException catch (e) {
-      state = state.copyWith(isLoading: false, errorMessage: e.message, errorCode: e.code);
+      state = state.copyWith(
+          isLoading: false, errorMessage: e.message, errorCode: e.code);
       return false;
     } catch (e) {
-      state = state.copyWith(isLoading: false, errorMessage: 'Anonymous sign-in failed.', errorCode: 'UNKNOWN');
+      state = state.copyWith(
+          isLoading: false,
+          errorMessage: 'Anonymous sign-in failed.',
+          errorCode: 'UNKNOWN');
       return false;
     }
   }
@@ -142,14 +165,31 @@ class AuthNotifier extends StateNotifier<AuthState> {
       state = AuthState(user: user, isOnboarded: user.onboardingCompleted);
       return true;
     } on AppException catch (e) {
-      state = state.copyWith(
-        isLoading: false, errorMessage: e.message, errorCode: e.code,
-      );
-      return false;
-    } catch (e) {
+      String message = e.message;
+      if (message.contains('people.googleapis.com') ||
+          message.contains('People API') ||
+          message.contains('PERMISSION_DENIED')) {
+        message = 'Google Sign-In is temporarily unavailable. Please try again in a few minutes.';
+      }
       state = state.copyWith(
         isLoading: false,
-        errorMessage: 'Google Sign-In failed: $e',
+        errorMessage: message,
+        errorCode: e.code,
+      );
+      return false;
+    } catch (e, stack) {
+      debugPrint(
+          '[AuthNotifier] signInWithGoogle unexpected error: $e\n$stack');
+      final errStr = e.toString();
+      String message = 'Google Sign-In failed: $e';
+      if (errStr.contains('people.googleapis.com') ||
+          errStr.contains('People API') ||
+          errStr.contains('PERMISSION_DENIED')) {
+        message = 'Google Sign-In is temporarily unavailable. Please try again in a few minutes.';
+      }
+      state = state.copyWith(
+        isLoading: false,
+        errorMessage: message,
         errorCode: 'UNKNOWN',
       );
       return false;
@@ -164,7 +204,9 @@ class AuthNotifier extends StateNotifier<AuthState> {
       return true;
     } on AppException catch (e) {
       state = state.copyWith(
-        isLoading: false, errorMessage: e.message, errorCode: e.code,
+        isLoading: false,
+        errorMessage: e.message,
+        errorCode: e.code,
       );
       return false;
     } catch (e) {
@@ -242,6 +284,7 @@ class AuthNotifier extends StateNotifier<AuthState> {
   }
 
   Future<bool> verifyOtp({required String email, required String otp}) async {
+    state = state.copyWith(isLoading: true, clearError: true);
     final success = await _repository.verifyOtp(email: email, otp: otp);
     if (!success) {
       state = state.copyWith(
@@ -249,10 +292,11 @@ class AuthNotifier extends StateNotifier<AuthState> {
         errorMessage: 'OTP verification failed.',
         errorCode: 'OTP_VERIFICATION_FAILED',
       );
+    } else {
+      state = state.copyWith(isLoading: false);
     }
     return success;
   }
-
 
   Future<bool> resendOtp(String email) async {
     final success = await _repository.resendOtp(email);

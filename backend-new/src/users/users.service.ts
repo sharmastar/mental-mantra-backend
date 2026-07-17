@@ -56,4 +56,33 @@ export class UsersService {
   async updateFcmToken(userId: string, token: string) {
     await this.prisma.user.update({ where: { id: userId }, data: { fcmToken: token } });
   }
+
+  async deleteAccount(userId: string) {
+    await this.prisma.user.delete({ where: { id: userId } });
+  }
+
+  async getDashboard(userId: string) {
+    const today = new Date(); today.setHours(0, 0, 0, 0);
+    const [user, stats, habits, goals, activeGoal, recentMoods] = await Promise.all([
+      this.getMe(userId),
+      this.getStats(userId),
+      this.prisma.habit.findMany({ where: { userId, isActive: true }, orderBy: { createdAt: 'asc' } }),
+      this.prisma.goal.findMany({ where: { userId, deletedAt: null }, orderBy: { createdAt: 'desc' }, take: 5 }),
+      this.prisma.recoveryGoal.findFirst({ where: { userId, isActive: true } }),
+      this.prisma.moodEntry.findMany({ where: { userId }, orderBy: { loggedAt: 'desc' }, take: 7 }),
+    ]);
+
+    const logs = await this.prisma.habitLog.findMany({ where: { userId, date: { gte: today } } });
+    const logMap = Object.fromEntries(logs.map(l => [l.habitId, l]));
+    const habitsWithStatus = habits.map(h => ({ ...h, todayDone: !!logMap[h.id] }));
+
+    return {
+      user,
+      stats,
+      habits: habitsWithStatus,
+      goals,
+      recoveryGoal: activeGoal,
+      recentMoods,
+    };
+  }
 }

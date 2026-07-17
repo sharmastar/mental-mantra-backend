@@ -92,14 +92,16 @@ class MeditationCatalog {
 
   static List<MeditationSession> get allSessions {
     final list = <MeditationSession>[];
-    
+
     // 1. Anxiety Relief (7 sessions)
     list.addAll([
       const MeditationSession(
         id: 'anx1',
         title: 'Calming the Storm',
-        description: 'A gentle grounding practice to stabilize your breath and calm racing thoughts during panic.',
-        audioUrl: 'https://ia800905.us.archive.org/28/items/calm-breathing-meditation/anxiety_relief_10m.mp3',
+        description:
+            'A gentle grounding practice to stabilize your breath and calm racing thoughts during panic.',
+        audioUrl:
+            'https://ia800905.us.archive.org/28/items/calm-breathing-meditation/anxiety_relief_10m.mp3',
         imageUrl: 'assets/wellness_hero.png',
         type: MeditationType.breathing,
         difficulty: DifficultyLevel.beginner,
@@ -110,8 +112,10 @@ class MeditationCatalog {
       const MeditationSession(
         id: 'anx2',
         title: 'Releasing Future Worries',
-        description: 'Anchor yourself in the present moment and let go of the pressure of tomorrow.',
-        audioUrl: 'https://ia800905.us.archive.org/28/items/calm-breathing-meditation/release_future_worries.mp3',
+        description:
+            'Anchor yourself in the present moment and let go of the pressure of tomorrow.',
+        audioUrl:
+            'https://ia800905.us.archive.org/28/items/calm-breathing-meditation/release_future_worries.mp3',
         imageUrl: 'assets/wellness_hero.png',
         type: MeditationType.guided,
         difficulty: DifficultyLevel.beginner,
@@ -122,8 +126,10 @@ class MeditationCatalog {
       const MeditationSession(
         id: 'anx3',
         title: '5-Minute Rapid Relief',
-        description: 'Quick breathing focus for high-stress situations or immediate anxiety relief.',
-        audioUrl: 'https://ia800905.us.archive.org/28/items/calm-breathing-meditation/rapid_relief_5m.mp3',
+        description:
+            'Quick breathing focus for high-stress situations or immediate anxiety relief.',
+        audioUrl:
+            'https://ia800905.us.archive.org/28/items/calm-breathing-meditation/rapid_relief_5m.mp3',
         imageUrl: 'assets/wellness_hero.png',
         type: MeditationType.breathing,
         difficulty: DifficultyLevel.beginner,
@@ -134,8 +140,10 @@ class MeditationCatalog {
       const MeditationSession(
         id: 'anx4',
         title: 'Sinking into Security',
-        description: 'Deep somatic body check-in to release localized anxiety and tight chest symptoms.',
-        audioUrl: 'https://ia800905.us.archive.org/28/items/calm-breathing-meditation/somatic_security.mp3',
+        description:
+            'Deep somatic body check-in to release localized anxiety and tight chest symptoms.',
+        audioUrl:
+            'https://ia800905.us.archive.org/28/items/calm-breathing-meditation/somatic_security.mp3',
         imageUrl: 'assets/wellness_hero.png',
         type: MeditationType.bodyScan,
         difficulty: DifficultyLevel.intermediate,
@@ -146,8 +154,10 @@ class MeditationCatalog {
       const MeditationSession(
         id: 'anx5',
         title: 'The Observer Mindset',
-        description: 'Learn to watch anxious thoughts pass by like clouds without clinging to them.',
-        audioUrl: 'https://ia800905.us.archive.org/28/items/calm-breathing-meditation/observer_mindset.mp3',
+        description:
+            'Learn to watch anxious thoughts pass by like clouds without clinging to them.',
+        audioUrl:
+            'https://ia800905.us.archive.org/28/items/calm-breathing-meditation/observer_mindset.mp3',
         imageUrl: 'assets/wellness_hero.png',
         type: MeditationType.guided,
         difficulty: DifficultyLevel.advanced,
@@ -158,8 +168,10 @@ class MeditationCatalog {
       const MeditationSession(
         id: 'anx6',
         title: 'Calming Vagus Nerve',
-        description: 'Rhythmic breath ratios specifically designed to lower heart rate and calm the vagus nerve.',
-        audioUrl: 'https://ia800905.us.archive.org/28/items/calm-breathing-meditation/vagus_nerve_calm.mp3',
+        description:
+            'Rhythmic breath ratios specifically designed to lower heart rate and calm the vagus nerve.',
+        audioUrl:
+            'https://ia800905.us.archive.org/28/items/calm-breathing-meditation/vagus_nerve_calm.mp3',
         imageUrl: 'assets/wellness_hero.png',
         type: MeditationType.breathing,
         difficulty: DifficultyLevel.intermediate,
@@ -170,8 +182,10 @@ class MeditationCatalog {
       const MeditationSession(
         id: 'anx7',
         title: 'Overcoming Social Dread',
-        description: 'Prepare your nervous system and mind for social interactions and reduce social anxiety.',
-        audioUrl: 'https://ia800905.us.archive.org/28/items/calm-breathing-meditation/social_anxiety_calm.mp3',
+        description:
+            'Prepare your nervous system and mind for social interactions and reduce social anxiety.',
+        audioUrl:
+            'https://ia800905.us.archive.org/28/items/calm-breathing-meditation/social_anxiety_calm.mp3',
         imageUrl: 'assets/wellness_hero.png',
         type: MeditationType.guided,
         difficulty: DifficultyLevel.beginner,
@@ -186,8 +200,10 @@ class MeditationCatalog {
       const MeditationSession(
         id: 'str1',
         title: 'Decelerating the Mind',
-        description: 'Slow down high cognitive momentum and dissolve mental clutter.',
-        audioUrl: 'https://ia800905.us.archive.org/28/items/calm-breathing-meditation/decelerate_mind_10m.mp3',
+        description:
+            'Slow down high cognitive momentum and dissolve mental clutter.',
+        audioUrl:
+            'https://ia800905.us.archive.org/28/items/calm-breathing-meditation/decelerate_mind_10m.mp3',
         imageUrl: 'assets/wellness_hero.png',
         type: MeditationType.guided,
         difficulty: DifficultyLevel.beginner,
@@ -198,8 +214,10 @@ class MeditationCatalog {
       const MeditationSession(
         id: 'str2',
         title: 'Somatic Stress Release',
-        description: 'A detailed physical scan to pinpoint and release stress held in the jaw, shoulders, and back.',
-        audioUrl: 'https://ia800905.us.archive.org/28/items/calm-breathing-meditation/somatic_stress.mp3',
+        description:
+            'A detailed physical scan to pinpoint and release stress held in the jaw, shoulders, and back.',
+        audioUrl:
+            'https://ia800905.us.archive.org/28/items/calm-breathing-meditation/somatic_stress.mp3',
         imageUrl: 'assets/wellness_hero.png',
         type: MeditationType.bodyScan,
         difficulty: DifficultyLevel.beginner,
@@ -210,8 +228,10 @@ class MeditationCatalog {
       const MeditationSession(
         id: 'str3',
         title: 'Midday Re-centering',
-        description: 'A quick 10-minute meditation to reset your stress response during a busy workday.',
-        audioUrl: 'https://ia800905.us.archive.org/28/items/calm-breathing-meditation/midday_reset.mp3',
+        description:
+            'A quick 10-minute meditation to reset your stress response during a busy workday.',
+        audioUrl:
+            'https://ia800905.us.archive.org/28/items/calm-breathing-meditation/midday_reset.mp3',
         imageUrl: 'assets/wellness_hero.png',
         type: MeditationType.guided,
         difficulty: DifficultyLevel.beginner,
@@ -222,8 +242,10 @@ class MeditationCatalog {
       const MeditationSession(
         id: 'str4',
         title: 'Dissolving Overwhelm',
-        description: 'Create internal space when responsibilities feel too heavy to carry.',
-        audioUrl: 'https://ia800905.us.archive.org/28/items/calm-breathing-meditation/dissolving_overwhelm.mp3',
+        description:
+            'Create internal space when responsibilities feel too heavy to carry.',
+        audioUrl:
+            'https://ia800905.us.archive.org/28/items/calm-breathing-meditation/dissolving_overwhelm.mp3',
         imageUrl: 'assets/wellness_hero.png',
         type: MeditationType.guided,
         difficulty: DifficultyLevel.intermediate,
@@ -234,8 +256,10 @@ class MeditationCatalog {
       const MeditationSession(
         id: 'str5',
         title: 'Deep Mind Unwind',
-        description: 'An advanced session focusing on mental spaciousness to reverse chronic work burnout.',
-        audioUrl: 'https://ia800905.us.archive.org/28/items/calm-breathing-meditation/burnout_recovery.mp3',
+        description:
+            'An advanced session focusing on mental spaciousness to reverse chronic work burnout.',
+        audioUrl:
+            'https://ia800905.us.archive.org/28/items/calm-breathing-meditation/burnout_recovery.mp3',
         imageUrl: 'assets/wellness_hero.png',
         type: MeditationType.guided,
         difficulty: DifficultyLevel.advanced,
@@ -246,8 +270,10 @@ class MeditationCatalog {
       const MeditationSession(
         id: 'str6',
         title: 'Wind-Down After Work',
-        description: 'Establish a clear boundary between your working hours and personal rest.',
-        audioUrl: 'https://ia800905.us.archive.org/28/items/calm-breathing-meditation/after_work_reset.mp3',
+        description:
+            'Establish a clear boundary between your working hours and personal rest.',
+        audioUrl:
+            'https://ia800905.us.archive.org/28/items/calm-breathing-meditation/after_work_reset.mp3',
         imageUrl: 'assets/wellness_hero.png',
         type: MeditationType.guided,
         difficulty: DifficultyLevel.beginner,
@@ -258,8 +284,10 @@ class MeditationCatalog {
       const MeditationSession(
         id: 'str7',
         title: 'Unconditional Silence',
-        description: 'Rest in pure silence with minimal guiding to fully reset your sensory overload.',
-        audioUrl: 'https://ia800905.us.archive.org/28/items/calm-breathing-meditation/pure_silence.mp3',
+        description:
+            'Rest in pure silence with minimal guiding to fully reset your sensory overload.',
+        audioUrl:
+            'https://ia800905.us.archive.org/28/items/calm-breathing-meditation/pure_silence.mp3',
         imageUrl: 'assets/wellness_hero.png',
         type: MeditationType.unguided,
         difficulty: DifficultyLevel.intermediate,
@@ -274,8 +302,10 @@ class MeditationCatalog {
       const MeditationSession(
         id: 'dep1',
         title: 'Gentle Light in Dark Seasons',
-        description: 'A compassionate, slow space for heavy feelings or low motivation.',
-        audioUrl: 'https://ia800905.us.archive.org/28/items/calm-breathing-meditation/gentle_light_12m.mp3',
+        description:
+            'A compassionate, slow space for heavy feelings or low motivation.',
+        audioUrl:
+            'https://ia800905.us.archive.org/28/items/calm-breathing-meditation/gentle_light_12m.mp3',
         imageUrl: 'assets/wellness_hero.png',
         type: MeditationType.lovingKindness,
         difficulty: DifficultyLevel.beginner,
@@ -286,8 +316,10 @@ class MeditationCatalog {
       const MeditationSession(
         id: 'dep2',
         title: 'Allowing the Heavy Cloud',
-        description: 'Remove the expectation to be happy. Allow yourself to feel heavy and just be held.',
-        audioUrl: 'https://ia800905.us.archive.org/28/items/calm-breathing-meditation/allow_cloud.mp3',
+        description:
+            'Remove the expectation to be happy. Allow yourself to feel heavy and just be held.',
+        audioUrl:
+            'https://ia800905.us.archive.org/28/items/calm-breathing-meditation/allow_cloud.mp3',
         imageUrl: 'assets/wellness_hero.png',
         type: MeditationType.guided,
         difficulty: DifficultyLevel.beginner,
@@ -298,8 +330,10 @@ class MeditationCatalog {
       const MeditationSession(
         id: 'dep3',
         title: 'Compassion For Low Energy',
-        description: 'A loving kindness focus directed toward your current state of exhaustion.',
-        audioUrl: 'https://ia800905.us.archive.org/28/items/calm-breathing-meditation/low_energy_compassion.mp3',
+        description:
+            'A loving kindness focus directed toward your current state of exhaustion.',
+        audioUrl:
+            'https://ia800905.us.archive.org/28/items/calm-breathing-meditation/low_energy_compassion.mp3',
         imageUrl: 'assets/wellness_hero.png',
         type: MeditationType.lovingKindness,
         difficulty: DifficultyLevel.beginner,
@@ -310,8 +344,10 @@ class MeditationCatalog {
       const MeditationSession(
         id: 'dep4',
         title: 'Reconnecting to Life Sparks',
-        description: 'Gently guide your focus back to small anchors of joy and positive elements.',
-        audioUrl: 'https://ia800905.us.archive.org/28/items/calm-breathing-meditation/reconnect_joy.mp3',
+        description:
+            'Gently guide your focus back to small anchors of joy and positive elements.',
+        audioUrl:
+            'https://ia800905.us.archive.org/28/items/calm-breathing-meditation/reconnect_joy.mp3',
         imageUrl: 'assets/wellness_hero.png',
         type: MeditationType.guided,
         difficulty: DifficultyLevel.intermediate,
@@ -322,8 +358,10 @@ class MeditationCatalog {
       const MeditationSession(
         id: 'dep5',
         title: 'Somatic Awakening',
-        description: 'Wake up your physical senses gently, starting with small finger and toe movements.',
-        audioUrl: 'https://ia800905.us.archive.org/28/items/calm-breathing-meditation/somatic_awaken.mp3',
+        description:
+            'Wake up your physical senses gently, starting with small finger and toe movements.',
+        audioUrl:
+            'https://ia800905.us.archive.org/28/items/calm-breathing-meditation/somatic_awaken.mp3',
         imageUrl: 'assets/wellness_hero.png',
         type: MeditationType.bodyScan,
         difficulty: DifficultyLevel.beginner,
@@ -334,8 +372,10 @@ class MeditationCatalog {
       const MeditationSession(
         id: 'dep6',
         title: 'Mindful Breathing for Motivation',
-        description: 'Breathe to ignite neural focus and gently build energy to start your day.',
-        audioUrl: 'https://ia800905.us.archive.org/28/items/calm-breathing-meditation/breath_motivation.mp3',
+        description:
+            'Breathe to ignite neural focus and gently build energy to start your day.',
+        audioUrl:
+            'https://ia800905.us.archive.org/28/items/calm-breathing-meditation/breath_motivation.mp3',
         imageUrl: 'assets/wellness_hero.png',
         type: MeditationType.breathing,
         difficulty: DifficultyLevel.intermediate,
@@ -350,8 +390,10 @@ class MeditationCatalog {
       const MeditationSession(
         id: 'sle1',
         title: 'Drifting into Slumber',
-        description: 'Deep sleep induction body scan designed to turn down mental static and assist sleep.',
-        audioUrl: 'https://ia800905.us.archive.org/28/items/calm-breathing-meditation/drift_slumber_15m.mp3',
+        description:
+            'Deep sleep induction body scan designed to turn down mental static and assist sleep.',
+        audioUrl:
+            'https://ia800905.us.archive.org/28/items/calm-breathing-meditation/drift_slumber_15m.mp3',
         imageUrl: 'assets/wellness_hero.png',
         type: MeditationType.bodyScan,
         difficulty: DifficultyLevel.beginner,
@@ -362,8 +404,10 @@ class MeditationCatalog {
       const MeditationSession(
         id: 'sle2',
         title: 'Restoring Sleep Quality',
-        description: 'Rhythmic, slow breathing session to prepare your nervous system for deep cycles.',
-        audioUrl: 'https://ia800905.us.archive.org/28/items/calm-breathing-meditation/restore_sleep.mp3',
+        description:
+            'Rhythmic, slow breathing session to prepare your nervous system for deep cycles.',
+        audioUrl:
+            'https://ia800905.us.archive.org/28/items/calm-breathing-meditation/restore_sleep.mp3',
         imageUrl: 'assets/wellness_hero.png',
         type: MeditationType.breathing,
         difficulty: DifficultyLevel.beginner,
@@ -374,8 +418,10 @@ class MeditationCatalog {
       const MeditationSession(
         id: 'sle3',
         title: 'Deep Release Body Scan',
-        description: 'Gradual relaxation of muscle groups from crown to toes to prepare for bed.',
-        audioUrl: 'https://ia800905.us.archive.org/28/items/calm-breathing-meditation/deep_release_body.mp3',
+        description:
+            'Gradual relaxation of muscle groups from crown to toes to prepare for bed.',
+        audioUrl:
+            'https://ia800905.us.archive.org/28/items/calm-breathing-meditation/deep_release_body.mp3',
         imageUrl: 'assets/wellness_hero.png',
         type: MeditationType.bodyScan,
         difficulty: DifficultyLevel.beginner,
@@ -386,8 +432,10 @@ class MeditationCatalog {
       const MeditationSession(
         id: 'sle4',
         title: 'Dissolving Insomnia Thoughts',
-        description: 'A guiding voice to help you detach from the pressure of wanting to fall asleep.',
-        audioUrl: 'https://ia800905.us.archive.org/28/items/calm-breathing-meditation/dissolving_insomnia.mp3',
+        description:
+            'A guiding voice to help you detach from the pressure of wanting to fall asleep.',
+        audioUrl:
+            'https://ia800905.us.archive.org/28/items/calm-breathing-meditation/dissolving_insomnia.mp3',
         imageUrl: 'assets/wellness_hero.png',
         type: MeditationType.guided,
         difficulty: DifficultyLevel.intermediate,
@@ -398,8 +446,10 @@ class MeditationCatalog {
       const MeditationSession(
         id: 'sle5',
         title: 'Bedtime Sound bath',
-        description: 'Soothing instrumental background overlay designed to slow brain waves into Delta.',
-        audioUrl: 'https://ia800905.us.archive.org/28/items/calm-breathing-meditation/bedtime_soundbath.mp3',
+        description:
+            'Soothing instrumental background overlay designed to slow brain waves into Delta.',
+        audioUrl:
+            'https://ia800905.us.archive.org/28/items/calm-breathing-meditation/bedtime_soundbath.mp3',
         imageUrl: 'assets/wellness_hero.png',
         type: MeditationType.unguided,
         difficulty: DifficultyLevel.beginner,
@@ -410,8 +460,10 @@ class MeditationCatalog {
       const MeditationSession(
         id: 'sle6',
         title: 'Quiet Pillow Affirmations',
-        description: 'Soft whisper affirmations centered on security, peace, and permission to rest.',
-        audioUrl: 'https://ia800905.us.archive.org/28/items/calm-breathing-meditation/quiet_affirmations.mp3',
+        description:
+            'Soft whisper affirmations centered on security, peace, and permission to rest.',
+        audioUrl:
+            'https://ia800905.us.archive.org/28/items/calm-breathing-meditation/quiet_affirmations.mp3',
         imageUrl: 'assets/wellness_hero.png',
         type: MeditationType.guided,
         difficulty: DifficultyLevel.beginner,
@@ -422,8 +474,10 @@ class MeditationCatalog {
       const MeditationSession(
         id: 'sle7',
         title: 'Midnight Reset',
-        description: 'If you wake up in the middle of the night, this session helps you ease back to sleep.',
-        audioUrl: 'https://ia800905.us.archive.org/28/items/calm-breathing-meditation/midnight_reset.mp3',
+        description:
+            'If you wake up in the middle of the night, this session helps you ease back to sleep.',
+        audioUrl:
+            'https://ia800905.us.archive.org/28/items/calm-breathing-meditation/midnight_reset.mp3',
         imageUrl: 'assets/wellness_hero.png',
         type: MeditationType.guided,
         difficulty: DifficultyLevel.intermediate,
@@ -438,8 +492,10 @@ class MeditationCatalog {
       const MeditationSession(
         id: 'lov1',
         title: 'Unconditional Self Acceptance',
-        description: 'Cultivate compassion for your perceived flaws and embrace who you are today.',
-        audioUrl: 'https://ia800905.us.archive.org/28/items/calm-breathing-meditation/self_acceptance_10m.mp3',
+        description:
+            'Cultivate compassion for your perceived flaws and embrace who you are today.',
+        audioUrl:
+            'https://ia800905.us.archive.org/28/items/calm-breathing-meditation/self_acceptance_10m.mp3',
         imageUrl: 'assets/wellness_hero.png',
         type: MeditationType.lovingKindness,
         difficulty: DifficultyLevel.beginner,
@@ -450,8 +506,10 @@ class MeditationCatalog {
       const MeditationSession(
         id: 'lov2',
         title: 'Rewriting Inner Narratives',
-        description: 'Shift from critical thoughts to self-compassionate dialogue.',
-        audioUrl: 'https://ia800905.us.archive.org/28/items/calm-breathing-meditation/inner_narrative.mp3',
+        description:
+            'Shift from critical thoughts to self-compassionate dialogue.',
+        audioUrl:
+            'https://ia800905.us.archive.org/28/items/calm-breathing-meditation/inner_narrative.mp3',
         imageUrl: 'assets/wellness_hero.png',
         type: MeditationType.guided,
         difficulty: DifficultyLevel.intermediate,
@@ -462,8 +520,10 @@ class MeditationCatalog {
       const MeditationSession(
         id: 'lov3',
         title: 'Healing Childhood Wounds',
-        description: 'Send comfort and safety to your past self to heal old emotional wounds.',
-        audioUrl: 'https://ia800905.us.archive.org/28/items/calm-breathing-meditation/healing_childhood.mp3',
+        description:
+            'Send comfort and safety to your past self to heal old emotional wounds.',
+        audioUrl:
+            'https://ia800905.us.archive.org/28/items/calm-breathing-meditation/healing_childhood.mp3',
         imageUrl: 'assets/wellness_hero.png',
         type: MeditationType.lovingKindness,
         difficulty: DifficultyLevel.advanced,
@@ -474,8 +534,10 @@ class MeditationCatalog {
       const MeditationSession(
         id: 'lov4',
         title: 'Gratitude for the Body',
-        description: 'A body scan focusing on appreciation for everything your body does for you daily.',
-        audioUrl: 'https://ia800905.us.archive.org/28/items/calm-breathing-meditation/body_appreciation.mp3',
+        description:
+            'A body scan focusing on appreciation for everything your body does for you daily.',
+        audioUrl:
+            'https://ia800905.us.archive.org/28/items/calm-breathing-meditation/body_appreciation.mp3',
         imageUrl: 'assets/wellness_hero.png',
         type: MeditationType.bodyScan,
         difficulty: DifficultyLevel.beginner,
@@ -486,8 +548,10 @@ class MeditationCatalog {
       const MeditationSession(
         id: 'lov5',
         title: 'Setting Clear Boundaries',
-        description: 'Connect with your self-worth to define and protect your emotional boundaries.',
-        audioUrl: 'https://ia800905.us.archive.org/28/items/calm-breathing-meditation/setting_boundaries.mp3',
+        description:
+            'Connect with your self-worth to define and protect your emotional boundaries.',
+        audioUrl:
+            'https://ia800905.us.archive.org/28/items/calm-breathing-meditation/setting_boundaries.mp3',
         imageUrl: 'assets/wellness_hero.png',
         type: MeditationType.guided,
         difficulty: DifficultyLevel.intermediate,
@@ -498,8 +562,10 @@ class MeditationCatalog {
       const MeditationSession(
         id: 'lov6',
         title: 'Compassion in Hard Times',
-        description: 'Wrap yourself in kindness when dealing with mistakes or stressful situations.',
-        audioUrl: 'https://ia800905.us.archive.org/28/items/calm-breathing-meditation/hard_times_compassion.mp3',
+        description:
+            'Wrap yourself in kindness when dealing with mistakes or stressful situations.',
+        audioUrl:
+            'https://ia800905.us.archive.org/28/items/calm-breathing-meditation/hard_times_compassion.mp3',
         imageUrl: 'assets/wellness_hero.png',
         type: MeditationType.lovingKindness,
         difficulty: DifficultyLevel.beginner,
@@ -514,8 +580,10 @@ class MeditationCatalog {
       const MeditationSession(
         id: 'cnf1',
         title: 'Igniting the Inner Fire',
-        description: 'A vibrant visualization session designed to build healthy confidence.',
-        audioUrl: 'https://ia800905.us.archive.org/28/items/calm-breathing-meditation/inner_fire_10m.mp3',
+        description:
+            'A vibrant visualization session designed to build healthy confidence.',
+        audioUrl:
+            'https://ia800905.us.archive.org/28/items/calm-breathing-meditation/inner_fire_10m.mp3',
         imageUrl: 'assets/wellness_hero.png',
         type: MeditationType.guided,
         difficulty: DifficultyLevel.beginner,
@@ -526,8 +594,10 @@ class MeditationCatalog {
       const MeditationSession(
         id: 'cnf2',
         title: 'Dissolving Imposter Syndrome',
-        description: 'Quiet the critical voice of self-doubt and recognize your worth.',
-        audioUrl: 'https://ia800905.us.archive.org/28/items/calm-breathing-meditation/imposter_syndrome.mp3',
+        description:
+            'Quiet the critical voice of self-doubt and recognize your worth.',
+        audioUrl:
+            'https://ia800905.us.archive.org/28/items/calm-breathing-meditation/imposter_syndrome.mp3',
         imageUrl: 'assets/wellness_hero.png',
         type: MeditationType.guided,
         difficulty: DifficultyLevel.intermediate,
@@ -538,8 +608,10 @@ class MeditationCatalog {
       const MeditationSession(
         id: 'cnf3',
         title: 'Stand Tall Somatics',
-        description: 'Focus on body posture and chest breathing to build confident energy.',
-        audioUrl: 'https://ia800905.us.archive.org/28/items/calm-breathing-meditation/confident_posture.mp3',
+        description:
+            'Focus on body posture and chest breathing to build confident energy.',
+        audioUrl:
+            'https://ia800905.us.archive.org/28/items/calm-breathing-meditation/confident_posture.mp3',
         imageUrl: 'assets/wellness_hero.png',
         type: MeditationType.bodyScan,
         difficulty: DifficultyLevel.beginner,
@@ -550,8 +622,10 @@ class MeditationCatalog {
       const MeditationSession(
         id: 'cnf4',
         title: 'Meeting Your Wise Self',
-        description: 'A visualization session to meet your future, fully confident self.',
-        audioUrl: 'https://ia800905.us.archive.org/28/items/calm-breathing-meditation/wise_self_meet.mp3',
+        description:
+            'A visualization session to meet your future, fully confident self.',
+        audioUrl:
+            'https://ia800905.us.archive.org/28/items/calm-breathing-meditation/wise_self_meet.mp3',
         imageUrl: 'assets/wellness_hero.png',
         type: MeditationType.guided,
         difficulty: DifficultyLevel.advanced,
@@ -562,8 +636,10 @@ class MeditationCatalog {
       const MeditationSession(
         id: 'cnf5',
         title: 'Unshakable Boundaries',
-        description: 'Reinforce your core worth to speak your truth with confidence and calm.',
-        audioUrl: 'https://ia800905.us.archive.org/28/items/calm-breathing-meditation/unshakable_borders.mp3',
+        description:
+            'Reinforce your core worth to speak your truth with confidence and calm.',
+        audioUrl:
+            'https://ia800905.us.archive.org/28/items/calm-breathing-meditation/unshakable_borders.mp3',
         imageUrl: 'assets/wellness_hero.png',
         type: MeditationType.guided,
         difficulty: DifficultyLevel.intermediate,
@@ -574,8 +650,10 @@ class MeditationCatalog {
       const MeditationSession(
         id: 'cnf6',
         title: 'Daily Warrior Focus',
-        description: 'A quick energizing practice to prepare you for public speaking or reviews.',
-        audioUrl: 'https://ia800905.us.archive.org/28/items/calm-breathing-meditation/warrior_focus.mp3',
+        description:
+            'A quick energizing practice to prepare you for public speaking or reviews.',
+        audioUrl:
+            'https://ia800905.us.archive.org/28/items/calm-breathing-meditation/warrior_focus.mp3',
         imageUrl: 'assets/wellness_hero.png',
         type: MeditationType.guided,
         difficulty: DifficultyLevel.beginner,
@@ -590,8 +668,10 @@ class MeditationCatalog {
       const MeditationSession(
         id: 'foc1',
         title: 'Laser Clarity',
-        description: 'Focus your mind on a single anchor point to build strong attention.',
-        audioUrl: 'https://ia800905.us.archive.org/28/items/calm-breathing-meditation/focus_clarity_10m.mp3',
+        description:
+            'Focus your mind on a single anchor point to build strong attention.',
+        audioUrl:
+            'https://ia800905.us.archive.org/28/items/calm-breathing-meditation/focus_clarity_10m.mp3',
         imageUrl: 'assets/wellness_hero.png',
         type: MeditationType.guided,
         difficulty: DifficultyLevel.beginner,
@@ -602,8 +682,10 @@ class MeditationCatalog {
       const MeditationSession(
         id: 'foc2',
         title: 'Counting the Breath',
-        description: 'An ancient counting practice to calm distractions and clear your mind.',
-        audioUrl: 'https://ia800905.us.archive.org/28/items/calm-breathing-meditation/breath_count.mp3',
+        description:
+            'An ancient counting practice to calm distractions and clear your mind.',
+        audioUrl:
+            'https://ia800905.us.archive.org/28/items/calm-breathing-meditation/breath_count.mp3',
         imageUrl: 'assets/wellness_hero.png',
         type: MeditationType.breathing,
         difficulty: DifficultyLevel.beginner,
@@ -614,8 +696,10 @@ class MeditationCatalog {
       const MeditationSession(
         id: 'foc3',
         title: 'Sharpening Sensory Focus',
-        description: 'A detailed focus on sounds, physical touch, and breaths to train your mind.',
-        audioUrl: 'https://ia800905.us.archive.org/28/items/calm-breathing-meditation/sensory_focus.mp3',
+        description:
+            'A detailed focus on sounds, physical touch, and breaths to train your mind.',
+        audioUrl:
+            'https://ia800905.us.archive.org/28/items/calm-breathing-meditation/sensory_focus.mp3',
         imageUrl: 'assets/wellness_hero.png',
         type: MeditationType.guided,
         difficulty: DifficultyLevel.intermediate,
@@ -626,8 +710,10 @@ class MeditationCatalog {
       const MeditationSession(
         id: 'foc4',
         title: 'Flow State Training',
-        description: 'Enter a state of complete absorption for deep work and high output.',
-        audioUrl: 'https://ia800905.us.archive.org/28/items/calm-breathing-meditation/flow_state.mp3',
+        description:
+            'Enter a state of complete absorption for deep work and high output.',
+        audioUrl:
+            'https://ia800905.us.archive.org/28/items/calm-breathing-meditation/flow_state.mp3',
         imageUrl: 'assets/wellness_hero.png',
         type: MeditationType.guided,
         difficulty: DifficultyLevel.intermediate,
@@ -638,8 +724,10 @@ class MeditationCatalog {
       const MeditationSession(
         id: 'foc5',
         title: 'Zen Breath Focus',
-        description: 'An advanced session focusing on the space between breaths for deep quiet.',
-        audioUrl: 'https://ia800905.us.archive.org/28/items/calm-breathing-meditation/zen_breath.mp3',
+        description:
+            'An advanced session focusing on the space between breaths for deep quiet.',
+        audioUrl:
+            'https://ia800905.us.archive.org/28/items/calm-breathing-meditation/zen_breath.mp3',
         imageUrl: 'assets/wellness_hero.png',
         type: MeditationType.breathing,
         difficulty: DifficultyLevel.advanced,
@@ -650,8 +738,10 @@ class MeditationCatalog {
       const MeditationSession(
         id: 'foc6',
         title: '1-Minute Focus Reset',
-        description: 'A quick attention reset to use between tasks or meetings.',
-        audioUrl: 'https://ia800905.us.archive.org/28/items/calm-breathing-meditation/focus_reset_1m.mp3',
+        description:
+            'A quick attention reset to use between tasks or meetings.',
+        audioUrl:
+            'https://ia800905.us.archive.org/28/items/calm-breathing-meditation/focus_reset_1m.mp3',
         imageUrl: 'assets/wellness_hero.png',
         type: MeditationType.breathing,
         difficulty: DifficultyLevel.beginner,
@@ -666,8 +756,10 @@ class MeditationCatalog {
       const MeditationSession(
         id: 'prd1',
         title: 'Morning Intentions',
-        description: 'Set your focus, energy, and intentions clearly for the day ahead.',
-        audioUrl: 'https://ia800905.us.archive.org/28/items/calm-breathing-meditation/morning_intentions.mp3',
+        description:
+            'Set your focus, energy, and intentions clearly for the day ahead.',
+        audioUrl:
+            'https://ia800905.us.archive.org/28/items/calm-breathing-meditation/morning_intentions.mp3',
         imageUrl: 'assets/wellness_hero.png',
         type: MeditationType.guided,
         difficulty: DifficultyLevel.beginner,
@@ -678,8 +770,10 @@ class MeditationCatalog {
       const MeditationSession(
         id: 'prd2',
         title: 'Dissolving Procrastination',
-        description: 'Address the fear and overwhelm that trigger procrastination.',
-        audioUrl: 'https://ia800905.us.archive.org/28/items/calm-breathing-meditation/dissolving_procrastination.mp3',
+        description:
+            'Address the fear and overwhelm that trigger procrastination.',
+        audioUrl:
+            'https://ia800905.us.archive.org/28/items/calm-breathing-meditation/dissolving_procrastination.mp3',
         imageUrl: 'assets/wellness_hero.png',
         type: MeditationType.guided,
         difficulty: DifficultyLevel.intermediate,
@@ -690,8 +784,10 @@ class MeditationCatalog {
       const MeditationSession(
         id: 'prd3',
         title: 'Strategic Brain Break',
-        description: 'Clear short-term memory during work to improve cognitive performance.',
-        audioUrl: 'https://ia800905.us.archive.org/28/items/calm-breathing-meditation/brain_break.mp3',
+        description:
+            'Clear short-term memory during work to improve cognitive performance.',
+        audioUrl:
+            'https://ia800905.us.archive.org/28/items/calm-breathing-meditation/brain_break.mp3',
         imageUrl: 'assets/wellness_hero.png',
         type: MeditationType.guided,
         difficulty: DifficultyLevel.beginner,
@@ -702,8 +798,10 @@ class MeditationCatalog {
       const MeditationSession(
         id: 'prd4',
         title: 'Visualizing Your Day',
-        description: 'A mental run-through of your tasks to build confidence and ease.',
-        audioUrl: 'https://ia800905.us.archive.org/28/items/calm-breathing-meditation/visualizing_day.mp3',
+        description:
+            'A mental run-through of your tasks to build confidence and ease.',
+        audioUrl:
+            'https://ia800905.us.archive.org/28/items/calm-breathing-meditation/visualizing_day.mp3',
         imageUrl: 'assets/wellness_hero.png',
         type: MeditationType.guided,
         difficulty: DifficultyLevel.beginner,
@@ -714,8 +812,10 @@ class MeditationCatalog {
       const MeditationSession(
         id: 'prd5',
         title: 'Deep Mind Recharge',
-        description: 'A restorative practice to release mental fatigue and build fresh focus.',
-        audioUrl: 'https://ia800905.us.archive.org/28/items/calm-breathing-meditation/deep_recharge.mp3',
+        description:
+            'A restorative practice to release mental fatigue and build fresh focus.',
+        audioUrl:
+            'https://ia800905.us.archive.org/28/items/calm-breathing-meditation/deep_recharge.mp3',
         imageUrl: 'assets/wellness_hero.png',
         type: MeditationType.guided,
         difficulty: DifficultyLevel.intermediate,
@@ -726,8 +826,10 @@ class MeditationCatalog {
       const MeditationSession(
         id: 'prd6',
         title: 'Evening Gratitude Review',
-        description: 'Reflect on what you achieved today with gratitude and joy.',
-        audioUrl: 'https://ia800905.us.archive.org/28/items/calm-breathing-meditation/evening_review.mp3',
+        description:
+            'Reflect on what you achieved today with gratitude and joy.',
+        audioUrl:
+            'https://ia800905.us.archive.org/28/items/calm-breathing-meditation/evening_review.mp3',
         imageUrl: 'assets/wellness_hero.png',
         type: MeditationType.guided,
         difficulty: DifficultyLevel.beginner,
@@ -742,8 +844,10 @@ class MeditationCatalog {
       const MeditationSession(
         id: 'hea1',
         title: 'Healing Breath',
-        description: 'Direct calming oxygen to areas of physical pain or emotional distress.',
-        audioUrl: 'https://ia800905.us.archive.org/28/items/calm-breathing-meditation/healing_breath.mp3',
+        description:
+            'Direct calming oxygen to areas of physical pain or emotional distress.',
+        audioUrl:
+            'https://ia800905.us.archive.org/28/items/calm-breathing-meditation/healing_breath.mp3',
         imageUrl: 'assets/wellness_hero.png',
         type: MeditationType.breathing,
         difficulty: DifficultyLevel.beginner,
@@ -754,8 +858,10 @@ class MeditationCatalog {
       const MeditationSession(
         id: 'hea2',
         title: 'Releasing Old Tears',
-        description: 'A safe, gentle space to let go of accumulated sadness or old grief.',
-        audioUrl: 'https://ia800905.us.archive.org/28/items/calm-breathing-meditation/releasing_tears.mp3',
+        description:
+            'A safe, gentle space to let go of accumulated sadness or old grief.',
+        audioUrl:
+            'https://ia800905.us.archive.org/28/items/calm-breathing-meditation/releasing_tears.mp3',
         imageUrl: 'assets/wellness_hero.png',
         type: MeditationType.guided,
         difficulty: DifficultyLevel.intermediate,
@@ -766,8 +872,10 @@ class MeditationCatalog {
       const MeditationSession(
         id: 'hea3',
         title: 'Somatic Healing Scan',
-        description: 'Locate and release emotional blockages held inside your muscles.',
-        audioUrl: 'https://ia800905.us.archive.org/28/items/calm-breathing-meditation/somatic_healing_scan.mp3',
+        description:
+            'Locate and release emotional blockages held inside your muscles.',
+        audioUrl:
+            'https://ia800905.us.archive.org/28/items/calm-breathing-meditation/somatic_healing_scan.mp3',
         imageUrl: 'assets/wellness_hero.png',
         type: MeditationType.bodyScan,
         difficulty: DifficultyLevel.intermediate,
@@ -778,8 +886,10 @@ class MeditationCatalog {
       const MeditationSession(
         id: 'hea4',
         title: 'Universal Compassion',
-        description: 'Connect with the shared human experience of healing and sending love.',
-        audioUrl: 'https://ia800905.us.archive.org/28/items/calm-breathing-meditation/universal_compassion.mp3',
+        description:
+            'Connect with the shared human experience of healing and sending love.',
+        audioUrl:
+            'https://ia800905.us.archive.org/28/items/calm-breathing-meditation/universal_compassion.mp3',
         imageUrl: 'assets/wellness_hero.png',
         type: MeditationType.lovingKindness,
         difficulty: DifficultyLevel.beginner,
@@ -790,8 +900,10 @@ class MeditationCatalog {
       const MeditationSession(
         id: 'hea5',
         title: 'Forgiving Yourself',
-        description: 'Release guilt and forgive your past mistakes with compassion.',
-        audioUrl: 'https://ia800905.us.archive.org/28/items/calm-breathing-meditation/forgiving_oneself.mp3',
+        description:
+            'Release guilt and forgive your past mistakes with compassion.',
+        audioUrl:
+            'https://ia800905.us.archive.org/28/items/calm-breathing-meditation/forgiving_oneself.mp3',
         imageUrl: 'assets/wellness_hero.png',
         type: MeditationType.lovingKindness,
         difficulty: DifficultyLevel.advanced,
@@ -802,8 +914,10 @@ class MeditationCatalog {
       const MeditationSession(
         id: 'hea6',
         title: 'Nervous System Reset',
-        description: 'A deep restorative practice to return to a baseline state of safety.',
-        audioUrl: 'https://ia800905.us.archive.org/28/items/calm-breathing-meditation/nervous_system_reset.mp3',
+        description:
+            'A deep restorative practice to return to a baseline state of safety.',
+        audioUrl:
+            'https://ia800905.us.archive.org/28/items/calm-breathing-meditation/nervous_system_reset.mp3',
         imageUrl: 'assets/wellness_hero.png',
         type: MeditationType.guided,
         difficulty: DifficultyLevel.intermediate,
@@ -818,8 +932,10 @@ class MeditationCatalog {
       const MeditationSession(
         id: 'gra1',
         title: 'Anchor of Appreciation',
-        description: 'Reflect on three simple anchors of gratitude in your life right now.',
-        audioUrl: 'https://ia800905.us.archive.org/28/items/calm-breathing-meditation/anchor_appreciation.mp3',
+        description:
+            'Reflect on three simple anchors of gratitude in your life right now.',
+        audioUrl:
+            'https://ia800905.us.archive.org/28/items/calm-breathing-meditation/anchor_appreciation.mp3',
         imageUrl: 'assets/wellness_hero.png',
         type: MeditationType.guided,
         difficulty: DifficultyLevel.beginner,
@@ -830,8 +946,10 @@ class MeditationCatalog {
       const MeditationSession(
         id: 'gra2',
         title: 'Gratitude for Simple Things',
-        description: 'Connect with appreciation for simple moments, warm water, and breath.',
-        audioUrl: 'https://ia800905.us.archive.org/28/items/calm-breathing-meditation/simple_things_gratitude.mp3',
+        description:
+            'Connect with appreciation for simple moments, warm water, and breath.',
+        audioUrl:
+            'https://ia800905.us.archive.org/28/items/calm-breathing-meditation/simple_things_gratitude.mp3',
         imageUrl: 'assets/wellness_hero.png',
         type: MeditationType.guided,
         difficulty: DifficultyLevel.beginner,
@@ -842,8 +960,10 @@ class MeditationCatalog {
       const MeditationSession(
         id: 'gra3',
         title: 'Radiating Joy',
-        description: 'Cultivate a sense of warmth in your chest and send it outward to others.',
-        audioUrl: 'https://ia800905.us.archive.org/28/items/calm-breathing-meditation/radiating_joy.mp3',
+        description:
+            'Cultivate a sense of warmth in your chest and send it outward to others.',
+        audioUrl:
+            'https://ia800905.us.archive.org/28/items/calm-breathing-meditation/radiating_joy.mp3',
         imageUrl: 'assets/wellness_hero.png',
         type: MeditationType.lovingKindness,
         difficulty: DifficultyLevel.intermediate,
@@ -854,8 +974,10 @@ class MeditationCatalog {
       const MeditationSession(
         id: 'gra4',
         title: 'Gratitude in Difficult Times',
-        description: 'Find small anchors of safety even when dealing with challenges.',
-        audioUrl: 'https://ia800905.us.archive.org/28/items/calm-breathing-meditation/gratitude_challenges.mp3',
+        description:
+            'Find small anchors of safety even when dealing with challenges.',
+        audioUrl:
+            'https://ia800905.us.archive.org/28/items/calm-breathing-meditation/gratitude_challenges.mp3',
         imageUrl: 'assets/wellness_hero.png',
         type: MeditationType.guided,
         difficulty: DifficultyLevel.advanced,
@@ -866,8 +988,10 @@ class MeditationCatalog {
       const MeditationSession(
         id: 'gra5',
         title: 'Thanking the People',
-        description: 'A visualization thanking the people who support and care for you.',
-        audioUrl: 'https://ia800905.us.archive.org/28/items/calm-breathing-meditation/thanking_people.mp3',
+        description:
+            'A visualization thanking the people who support and care for you.',
+        audioUrl:
+            'https://ia800905.us.archive.org/28/items/calm-breathing-meditation/thanking_people.mp3',
         imageUrl: 'assets/wellness_hero.png',
         type: MeditationType.lovingKindness,
         difficulty: DifficultyLevel.beginner,
@@ -878,8 +1002,10 @@ class MeditationCatalog {
       const MeditationSession(
         id: 'gra6',
         title: 'Heart Awakening Flow',
-        description: 'Open your posture and heart to feel gratitude in your body.',
-        audioUrl: 'https://ia800905.us.archive.org/28/items/calm-breathing-meditation/heart_awakening.mp3',
+        description:
+            'Open your posture and heart to feel gratitude in your body.',
+        audioUrl:
+            'https://ia800905.us.archive.org/28/items/calm-breathing-meditation/heart_awakening.mp3',
         imageUrl: 'assets/wellness_hero.png',
         type: MeditationType.guided,
         difficulty: DifficultyLevel.intermediate,
@@ -894,8 +1020,10 @@ class MeditationCatalog {
       const MeditationSession(
         id: 'spi1',
         title: 'Higher Self Connection',
-        description: 'Connect with your inner wisdom, intuition, and highest truth.',
-        audioUrl: 'https://ia800905.us.archive.org/28/items/calm-breathing-meditation/higher_self.mp3',
+        description:
+            'Connect with your inner wisdom, intuition, and highest truth.',
+        audioUrl:
+            'https://ia800905.us.archive.org/28/items/calm-breathing-meditation/higher_self.mp3',
         imageUrl: 'assets/wellness_hero.png',
         type: MeditationType.guided,
         difficulty: DifficultyLevel.beginner,
@@ -906,8 +1034,10 @@ class MeditationCatalog {
       const MeditationSession(
         id: 'spi2',
         title: 'Cosmic Presence',
-        description: 'Feel your connection to the Earth, stars, and the universe.',
-        audioUrl: 'https://ia800905.us.archive.org/28/items/calm-breathing-meditation/cosmic_presence.mp3',
+        description:
+            'Feel your connection to the Earth, stars, and the universe.',
+        audioUrl:
+            'https://ia800905.us.archive.org/28/items/calm-breathing-meditation/cosmic_presence.mp3',
         imageUrl: 'assets/wellness_hero.png',
         type: MeditationType.guided,
         difficulty: DifficultyLevel.intermediate,
@@ -918,8 +1048,10 @@ class MeditationCatalog {
       const MeditationSession(
         id: 'spi3',
         title: 'Rooting to Earth',
-        description: 'A grounding visualization connecting your energy deep into the earth.',
-        audioUrl: 'https://ia800905.us.archive.org/28/items/calm-breathing-meditation/rooting_earth.mp3',
+        description:
+            'A grounding visualization connecting your energy deep into the earth.',
+        audioUrl:
+            'https://ia800905.us.archive.org/28/items/calm-breathing-meditation/rooting_earth.mp3',
         imageUrl: 'assets/wellness_hero.png',
         type: MeditationType.bodyScan,
         difficulty: DifficultyLevel.beginner,
@@ -930,8 +1062,10 @@ class MeditationCatalog {
       const MeditationSession(
         id: 'spi4',
         title: 'Light Transmission',
-        description: 'Visualize high-frequency healing light filling your energy field.',
-        audioUrl: 'https://ia800905.us.archive.org/28/items/calm-breathing-meditation/light_transmission.mp3',
+        description:
+            'Visualize high-frequency healing light filling your energy field.',
+        audioUrl:
+            'https://ia800905.us.archive.org/28/items/calm-breathing-meditation/light_transmission.mp3',
         imageUrl: 'assets/wellness_hero.png',
         type: MeditationType.guided,
         difficulty: DifficultyLevel.intermediate,
@@ -942,8 +1076,10 @@ class MeditationCatalog {
       const MeditationSession(
         id: 'spi5',
         title: 'Unification Space',
-        description: 'An advanced silent practice focusing on universal consciousness and peace.',
-        audioUrl: 'https://ia800905.us.archive.org/28/items/calm-breathing-meditation/unification_space.mp3',
+        description:
+            'An advanced silent practice focusing on universal consciousness and peace.',
+        audioUrl:
+            'https://ia800905.us.archive.org/28/items/calm-breathing-meditation/unification_space.mp3',
         imageUrl: 'assets/wellness_hero.png',
         type: MeditationType.unguided,
         difficulty: DifficultyLevel.advanced,
@@ -954,8 +1090,10 @@ class MeditationCatalog {
       const MeditationSession(
         id: 'spi6',
         title: 'Daily Blessing Intention',
-        description: 'Start your day by sending peace and light to everyone you meet.',
-        audioUrl: 'https://ia800905.us.archive.org/28/items/calm-breathing-meditation/daily_blessings.mp3',
+        description:
+            'Start your day by sending peace and light to everyone you meet.',
+        audioUrl:
+            'https://ia800905.us.archive.org/28/items/calm-breathing-meditation/daily_blessings.mp3',
         imageUrl: 'assets/wellness_hero.png',
         type: MeditationType.lovingKindness,
         difficulty: DifficultyLevel.beginner,
@@ -970,8 +1108,10 @@ class MeditationCatalog {
       const MeditationSession(
         id: 'min1',
         title: 'Introduction to Mindfulness',
-        description: 'Learn the basic principles of non-judgmental present moment awareness.',
-        audioUrl: 'https://ia800905.us.archive.org/28/items/calm-breathing-meditation/intro_mindfulness_10m.mp3',
+        description:
+            'Learn the basic principles of non-judgmental present moment awareness.',
+        audioUrl:
+            'https://ia800905.us.archive.org/28/items/calm-breathing-meditation/intro_mindfulness_10m.mp3',
         imageUrl: 'assets/wellness_hero.png',
         type: MeditationType.guided,
         difficulty: DifficultyLevel.beginner,
@@ -982,8 +1122,10 @@ class MeditationCatalog {
       const MeditationSession(
         id: 'min2',
         title: 'Anchoring in the Now',
-        description: 'Anchor your attention in the physical breath and sensory sounds.',
-        audioUrl: 'https://ia800905.us.archive.org/28/items/calm-breathing-meditation/anchor_now.mp3',
+        description:
+            'Anchor your attention in the physical breath and sensory sounds.',
+        audioUrl:
+            'https://ia800905.us.archive.org/28/items/calm-breathing-meditation/anchor_now.mp3',
         imageUrl: 'assets/wellness_hero.png',
         type: MeditationType.guided,
         difficulty: DifficultyLevel.beginner,
@@ -994,8 +1136,10 @@ class MeditationCatalog {
       const MeditationSession(
         id: 'min3',
         title: 'Somatic Flow Scan',
-        description: 'Track the flow of sensations through your body without labeling them.',
-        audioUrl: 'https://ia800905.us.archive.org/28/items/calm-breathing-meditation/somatic_flow.mp3',
+        description:
+            'Track the flow of sensations through your body without labeling them.',
+        audioUrl:
+            'https://ia800905.us.archive.org/28/items/calm-breathing-meditation/somatic_flow.mp3',
         imageUrl: 'assets/wellness_hero.png',
         type: MeditationType.bodyScan,
         difficulty: DifficultyLevel.intermediate,
@@ -1006,8 +1150,10 @@ class MeditationCatalog {
       const MeditationSession(
         id: 'min4',
         title: 'Thought Detachment Training',
-        description: 'Learn to notice the space between your thoughts and drop judgment.',
-        audioUrl: 'https://ia800905.us.archive.org/28/items/calm-breathing-meditation/thought_detachment.mp3',
+        description:
+            'Learn to notice the space between your thoughts and drop judgment.',
+        audioUrl:
+            'https://ia800905.us.archive.org/28/items/calm-breathing-meditation/thought_detachment.mp3',
         imageUrl: 'assets/wellness_hero.png',
         type: MeditationType.guided,
         difficulty: DifficultyLevel.intermediate,
@@ -1018,8 +1164,10 @@ class MeditationCatalog {
       const MeditationSession(
         id: 'min5',
         title: 'Open Monitoring Meditation',
-        description: 'An advanced practice welcoming whatever appears in consciousness without reaction.',
-        audioUrl: 'https://ia800905.us.archive.org/28/items/calm-breathing-meditation/open_monitoring.mp3',
+        description:
+            'An advanced practice welcoming whatever appears in consciousness without reaction.',
+        audioUrl:
+            'https://ia800905.us.archive.org/28/items/calm-breathing-meditation/open_monitoring.mp3',
         imageUrl: 'assets/wellness_hero.png',
         type: MeditationType.unguided,
         difficulty: DifficultyLevel.advanced,
@@ -1030,8 +1178,10 @@ class MeditationCatalog {
       const MeditationSession(
         id: 'min6',
         title: 'Mindful Drinking & Eating',
-        description: 'A practical exercise to bring complete attention to tasting and drinking.',
-        audioUrl: 'https://ia800905.us.archive.org/28/items/calm-breathing-meditation/mindful_eating.mp3',
+        description:
+            'A practical exercise to bring complete attention to tasting and drinking.',
+        audioUrl:
+            'https://ia800905.us.archive.org/28/items/calm-breathing-meditation/mindful_eating.mp3',
         imageUrl: 'assets/wellness_hero.png',
         type: MeditationType.guided,
         difficulty: DifficultyLevel.beginner,

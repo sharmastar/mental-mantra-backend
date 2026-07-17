@@ -3,8 +3,18 @@ import 'package:flutter/material.dart';
 extension DateTimeFormatting on DateTime {
   String get formattedDate {
     final months = [
-      'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
-      'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec',
+      'Jan',
+      'Feb',
+      'Mar',
+      'Apr',
+      'May',
+      'Jun',
+      'Jul',
+      'Aug',
+      'Sep',
+      'Oct',
+      'Nov',
+      'Dec',
     ];
     return '${months[month - 1]} $day, $year';
   }
@@ -54,7 +64,12 @@ extension StringCasing on String {
 
   String get initials {
     if (isEmpty) return '';
-    return split(' ').where((w) => w.isNotEmpty).map((w) => w[0]).take(2).join().toUpperCase();
+    return split(' ')
+        .where((w) => w.isNotEmpty)
+        .map((w) => w[0])
+        .take(2)
+        .join()
+        .toUpperCase();
   }
 }
 

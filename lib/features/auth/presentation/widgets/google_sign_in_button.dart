@@ -51,7 +51,9 @@ class _GoogleSignInButtonState extends State<GoogleSignInButton> {
             ),
             boxShadow: [
               BoxShadow(
-                color: isDark ? Colors.transparent : Colors.black.withValues(alpha: 0.05),
+                color: isDark
+                    ? Colors.transparent
+                    : Colors.black.withValues(alpha: 0.05),
                 blurRadius: 8,
                 offset: const Offset(0, 2),
               ),
@@ -64,7 +66,8 @@ class _GoogleSignInButtonState extends State<GoogleSignInButton> {
                     height: 22,
                     child: CircularProgressIndicator(
                       strokeWidth: 2.5,
-                      valueColor: AlwaysStoppedAnimation<Color>(AppTheme.primaryColor),
+                      valueColor:
+                          AlwaysStoppedAnimation<Color>(AppTheme.primaryColor),
                     ),
                   )
                 : Row(

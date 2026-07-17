@@ -12,7 +12,11 @@ class InsightState {
 
   const InsightState({this.collection, this.isLoading = false, this.error});
 
-  InsightState copyWith({AIInsightCollection? collection, bool? isLoading, String? error, bool clearError = false}) {
+  InsightState copyWith(
+      {AIInsightCollection? collection,
+      bool? isLoading,
+      String? error,
+      bool clearError = false}) {
     return InsightState(
       collection: collection ?? this.collection,
       isLoading: isLoading ?? this.isLoading,
@@ -23,7 +27,8 @@ class InsightState {
 
 class InsightNotifier extends StateNotifier<InsightState> {
   final InsightEngine _engine = InsightEngine();
-  final PersonalizationRepository _personalizationRepo = PersonalizationRepository();
+  final PersonalizationRepository _personalizationRepo =
+      PersonalizationRepository();
   final JournalRepository _journalRepo = JournalRepository();
   String? _userId;
 
@@ -36,14 +41,18 @@ class InsightNotifier extends StateNotifier<InsightState> {
       final ctx = await _personalizationRepo.build();
       final journalEntries = await _journalRepo.getEntries(limit: 10);
 
-      final moodResponse = await ApiClient.get('/mood', queryParameters: {'limit': 30});
+      final moodResponse =
+          await ApiClient.get('/mood', queryParameters: {'limit': 30});
       final moodData = moodResponse.data as Map<String, dynamic>;
-      final moodHistory = (moodData['success'] == true && moodData['data'] != null)
-          ? List<Map<String, dynamic>>.from(moodData['data'] as List)
-          : <Map<String, dynamic>>[];
+      final moodHistory =
+          (moodData['success'] == true && moodData['data'] != null)
+              ? List<Map<String, dynamic>>.from(moodData['data'] as List)
+              : <Map<String, dynamic>>[];
 
       final userResponse = await ApiClient.get('/users/me');
-      final userData = (userResponse.data as Map<String, dynamic>)['data'] as Map<String, dynamic>? ?? {};
+      final userData = (userResponse.data as Map<String, dynamic>)['data']
+              as Map<String, dynamic>? ??
+          {};
 
       final todayMood = moodHistory.isNotEmpty
           ? ((moodHistory.first['mood'] as num?)?.toInt() ?? 3)
@@ -59,7 +68,8 @@ class InsightNotifier extends StateNotifier<InsightState> {
         stress: userData['stress'] as int? ?? 5,
         anxiety: userData['anxiety'] as int? ?? 4,
         consecutiveBadSleep: userData['consecutiveBadSleep'] as int? ?? 0,
-        meditationMinutes: userData['stats']?['totalMeditationMinutes'] as int? ?? 0,
+        meditationMinutes:
+            userData['stats']?['totalMeditationMinutes'] as int? ?? 0,
         streakDays: userData['streak']?['currentDays'] as int? ?? 0,
         waterGlasses: userData['waterGlasses'] as int? ?? 4,
         screenTimeHours: userData['screenTimeHours'] as int? ?? 5,
@@ -70,7 +80,8 @@ class InsightNotifier extends StateNotifier<InsightState> {
 
       state = state.copyWith(collection: collection, isLoading: false);
     } catch (e) {
-      state = state.copyWith(isLoading: false, error: 'Failed to generate insights: $e');
+      state = state.copyWith(
+          isLoading: false, error: 'Failed to generate insights: $e');
     }
   }
 
@@ -79,6 +90,7 @@ class InsightNotifier extends StateNotifier<InsightState> {
   }
 }
 
-final insightProvider = StateNotifierProvider<InsightNotifier, InsightState>((ref) {
+final insightProvider =
+    StateNotifierProvider<InsightNotifier, InsightState>((ref) {
   return InsightNotifier();
 });

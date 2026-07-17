@@ -34,7 +34,9 @@ class ConversationCanvasCard extends StatelessWidget {
         margin: const EdgeInsets.only(bottom: 12),
         padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
         decoration: BoxDecoration(
-          color: isSelected ? AppTheme.primaryColor.withValues(alpha: 0.08) : cardBg,
+          color: isSelected
+              ? AppTheme.primaryColor.withValues(alpha: 0.08)
+              : cardBg,
           borderRadius: BorderRadius.circular(24),
           border: Border.all(
             color: borderCol,
@@ -63,7 +65,9 @@ class ConversationCanvasCard extends StatelessWidget {
               decoration: BoxDecoration(
                 color: isSelected
                     ? AppTheme.primaryColor.withValues(alpha: 0.15)
-                    : (isDark ? Colors.white.withValues(alpha: 0.05) : Colors.black.withValues(alpha: 0.03)),
+                    : (isDark
+                        ? Colors.white.withValues(alpha: 0.05)
+                        : Colors.black.withValues(alpha: 0.03)),
                 shape: BoxShape.circle,
               ),
               child: Text(
@@ -82,7 +86,8 @@ class ConversationCanvasCard extends StatelessWidget {
                     style: TextStyle(
                       fontFamily: 'Outfit',
                       fontSize: 16,
-                      fontWeight: isSelected ? FontWeight.w600 : FontWeight.w500,
+                      fontWeight:
+                          isSelected ? FontWeight.w600 : FontWeight.w500,
                       color: isSelected
                           ? AppTheme.primaryColor
                           : (isDark ? Colors.white : Colors.black87),
@@ -104,7 +109,9 @@ class ConversationCanvasCard extends StatelessWidget {
             ),
             Icon(
               isSelected ? Icons.check_circle : Icons.circle_outlined,
-              color: isSelected ? AppTheme.primaryColor : Colors.grey.withValues(alpha: 0.5),
+              color: isSelected
+                  ? AppTheme.primaryColor
+                  : Colors.grey.withValues(alpha: 0.5),
               size: 20,
             ),
           ],
@@ -145,7 +152,9 @@ class ConversationCanvasChip extends StatelessWidget {
         duration: const Duration(milliseconds: 200),
         padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 12),
         decoration: BoxDecoration(
-          color: isSelected ? AppTheme.primaryColor.withValues(alpha: 0.1) : cardBg,
+          color: isSelected
+              ? AppTheme.primaryColor.withValues(alpha: 0.1)
+              : cardBg,
           borderRadius: BorderRadius.circular(20),
           border: Border.all(
             color: borderCol,

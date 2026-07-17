@@ -16,7 +16,8 @@ class WellnessEngine {
   final JournalIntelligenceEngine _journalEngine = JournalIntelligenceEngine();
   final BriefingEngine _briefingEngine = BriefingEngine();
 
-  WellnessPlan generate(PersonalizationContext ctx, {
+  WellnessPlan generate(
+    PersonalizationContext ctx, {
     required List<JournalEntry> recentEntries,
     required List<Map<String, dynamic>> moodHistory,
     required int todayMood,
@@ -40,7 +41,8 @@ class WellnessEngine {
     final journalSentimentAvg = _computeJournalSentiment(recentEntries);
     final period = _currentPeriod();
 
-    final score = _scoreEngine.compute(ctx,
+    final score = _scoreEngine.compute(
+      ctx,
       recentEntries: recentEntries,
       todayMood: todayMood,
       sleepHours: sleepHours,
@@ -106,7 +108,8 @@ class WellnessEngine {
       userName: userName,
     );
 
-    final isMorning = period == TimeOfDayPeriod.morning || period == TimeOfDayPeriod.afternoon;
+    final isMorning = period == TimeOfDayPeriod.morning ||
+        period == TimeOfDayPeriod.afternoon;
 
     return WellnessPlan(
       wellnessScore: score,
@@ -131,7 +134,8 @@ class WellnessEngine {
     return TimeOfDayPeriod.night;
   }
 
-  DailyFocus _generateFocus(PersonalizationContext ctx, WellnessScore score, TimeOfDayPeriod period) {
+  DailyFocus _generateFocus(
+      PersonalizationContext ctx, WellnessScore score, TimeOfDayPeriod period) {
     final domain = ctx.primaryDomain ?? 'general';
 
     String title;
@@ -164,17 +168,28 @@ class WellnessEngine {
 
   String _morningFocusTitle(String domain, WellnessScore score) {
     if (score.needsAttention.contains('Sleep')) return 'Start fresh today';
-    if (score.needsAttention.contains('Screen time')) return 'Digital detox today';
+    if (score.needsAttention.contains('Screen time')) {
+      return 'Digital detox today';
+    }
     switch (domain) {
-      case 'stress_burnout': return 'Find your calm';
-      case 'anxiety_overthinking': return 'Stay grounded';
-      case 'sleep_dysregulation': return 'Build sleep momentum';
-      case 'low_motivation': return 'One step forward';
-      case 'addiction_recovery': return 'Every moment counts';
-      case 'emotional_isolation': return 'Connect today';
-      case 'anger_dysregulation': return 'Choose peace';
-      case 'spiritual_seeking': return 'Your journey continues';
-      default: return 'Set your intention';
+      case 'stress_burnout':
+        return 'Find your calm';
+      case 'anxiety_overthinking':
+        return 'Stay grounded';
+      case 'sleep_dysregulation':
+        return 'Build sleep momentum';
+      case 'low_motivation':
+        return 'One step forward';
+      case 'addiction_recovery':
+        return 'Every moment counts';
+      case 'emotional_isolation':
+        return 'Connect today';
+      case 'anger_dysregulation':
+        return 'Choose peace';
+      case 'spiritual_seeking':
+        return 'Your journey continues';
+      default:
+        return 'Set your intention';
     }
   }
 
@@ -183,12 +198,18 @@ class WellnessEngine {
       return "Let's work on ${score.needsAttention.first.toLowerCase()} today.";
     }
     switch (domain) {
-      case 'stress_burnout': return 'Begin with a 5-minute breathing exercise.';
-      case 'anxiety_overthinking': return 'Try a grounding check-in now.';
-      case 'sleep_dysregulation': return 'Set your bedtime goal for tonight.';
-      case 'low_motivation': return 'What is the one tiny task you can do today?';
-      case 'addiction_recovery': return 'Affirm your commitment to yourself.';
-      default: return 'Take a moment to set a positive intention.';
+      case 'stress_burnout':
+        return 'Begin with a 5-minute breathing exercise.';
+      case 'anxiety_overthinking':
+        return 'Try a grounding check-in now.';
+      case 'sleep_dysregulation':
+        return 'Set your bedtime goal for tonight.';
+      case 'low_motivation':
+        return 'What is the one tiny task you can do today?';
+      case 'addiction_recovery':
+        return 'Affirm your commitment to yourself.';
+      default:
+        return 'Take a moment to set a positive intention.';
     }
   }
 
@@ -201,24 +222,38 @@ class WellnessEngine {
 
   String _afternoonFocusDescription(String domain) {
     if (domain.contains('stress')) return 'Take a 5-minute walk to reset.';
-    if (domain.contains('anxiety')) return 'Check your anxiety level. Pause. Breathe.';
+    if (domain.contains('anxiety')) {
+      return 'Check your anxiety level. Pause. Breathe.';
+    }
     if (domain.contains('sleep')) return 'No caffeine after 2 PM today.';
-    if (domain.contains('motivat')) return 'Complete one more small task before the day ends.';
+    if (domain.contains('motivat')) {
+      return 'Complete one more small task before the day ends.';
+    }
     return 'Stretch, hydrate, and reset your focus.';
   }
 
   String _eveningFocusTitle(String domain) {
     if (domain.contains('sleep')) return 'Wind down';
-    if (domain.contains('stress') || domain.contains('anxiety')) return 'Release the day';
+    if (domain.contains('stress') || domain.contains('anxiety')) {
+      return 'Release the day';
+    }
     if (domain.contains('motivat')) return 'Reflect on today';
     return 'Prepare for rest';
   }
 
   String _eveningFocusDescription(String domain) {
-    if (domain.contains('sleep')) return 'Begin your phone-off wind-down routine.';
-    if (domain.contains('stress')) return 'Write down three things you accomplished today.';
-    if (domain.contains('anxiety')) return 'Do a brain dump — write everything on your mind.';
-    if (domain.contains('motivat')) return 'What went well today? Celebrate the small wins.';
+    if (domain.contains('sleep')) {
+      return 'Begin your phone-off wind-down routine.';
+    }
+    if (domain.contains('stress')) {
+      return 'Write down three things you accomplished today.';
+    }
+    if (domain.contains('anxiety')) {
+      return 'Do a brain dump — write everything on your mind.';
+    }
+    if (domain.contains('motivat')) {
+      return 'What went well today? Celebrate the small wins.';
+    }
     return 'Take 5 minutes to reflect on today with gratitude.';
   }
 
@@ -227,11 +262,14 @@ class WellnessEngine {
   }
 
   String _nightFocusDescription(String domain) {
-    if (domain.contains('sleep')) return 'Follow your bedtime routine for deep sleep.';
+    if (domain.contains('sleep')) {
+      return 'Follow your bedtime routine for deep sleep.';
+    }
     return 'Release today. Tomorrow is a fresh start.';
   }
 
-  List<QuickAction> _generateActions(PersonalizationContext ctx, WellnessScore score, TimeOfDayPeriod period) {
+  List<QuickAction> _generateActions(
+      PersonalizationContext ctx, WellnessScore score, TimeOfDayPeriod period) {
     final actions = <QuickAction>[];
     final domain = ctx.primaryDomain ?? '';
 
@@ -247,7 +285,14 @@ class WellnessEngine {
     }
 
     actions.sort((a, b) {
-      final priority = ['Breathing', 'Meditation', 'Journal', 'Hydration', 'Walk', 'Chat'];
+      final priority = [
+        'Breathing',
+        'Meditation',
+        'Journal',
+        'Hydration',
+        'Walk',
+        'Chat'
+      ];
       final ai = priority.indexOf(a.label);
       final bi = priority.indexOf(b.label);
       if (ai != -1 && bi != -1) return ai.compareTo(bi);
@@ -261,24 +306,58 @@ class WellnessEngine {
 
   List<QuickAction> _morningActions(String domain, WellnessScore score) {
     final list = <QuickAction>[
-      const QuickAction(label: 'AI Chat', route: '/home/ai-chat', icon: IconType.chat, reason: 'Check in with Nova'),
-      const QuickAction(label: 'Journal', route: '/home/journal', icon: IconType.journal, reason: 'Set your intention'),
+      const QuickAction(
+          label: 'AI Chat',
+          route: '/home/ai-chat',
+          icon: IconType.chat,
+          reason: 'Check in with Nova'),
+      const QuickAction(
+          label: 'Journal',
+          route: '/home/journal',
+          icon: IconType.journal,
+          reason: 'Set your intention'),
     ];
 
     if (domain.contains('stress') || domain.contains('anxiety')) {
-      list.insert(0, const QuickAction(label: 'Breathing', route: '/home/meditation/breathing', icon: IconType.breathing, reason: 'Start with calm'));
+      list.insert(
+          0,
+          const QuickAction(
+              label: 'Breathing',
+              route: '/home/meditation/breathing',
+              icon: IconType.breathing,
+              reason: 'Start with calm'));
     }
     if (domain.contains('sleep')) {
-      list.add(const QuickAction(label: 'Sleep', route: '/home/sleep', icon: IconType.sleep, reason: 'Set bedtime goal'));
+      list.add(const QuickAction(
+          label: 'Sleep',
+          route: '/home/sleep',
+          icon: IconType.sleep,
+          reason: 'Set bedtime goal'));
     }
     if (domain.contains('motivat')) {
-      list.insert(1, const QuickAction(label: 'Goals', route: '/home/goals', icon: IconType.goals, reason: 'Plan your day'));
+      list.insert(
+          1,
+          const QuickAction(
+              label: 'Goals',
+              route: '/home/goals',
+              icon: IconType.goals,
+              reason: 'Plan your day'));
     }
     if (domain.contains('addiction') || domain.contains('recovery')) {
-      list.insert(0, const QuickAction(label: 'Streak', route: '/home/recovery', icon: IconType.streak, reason: 'Protect your streak'));
+      list.insert(
+          0,
+          const QuickAction(
+              label: 'Streak',
+              route: '/home/recovery',
+              icon: IconType.streak,
+              reason: 'Protect your streak'));
     }
     if (score.hydration < 60) {
-      list.add(const QuickAction(label: 'Hydration', route: '/home/nutrition', icon: IconType.water, reason: 'Drink water'));
+      list.add(const QuickAction(
+          label: 'Hydration',
+          route: '/home/nutrition',
+          icon: IconType.water,
+          reason: 'Drink water'));
     }
 
     return list;
@@ -287,34 +366,76 @@ class WellnessEngine {
   List<QuickAction> _afternoonActions(String domain, WellnessScore score) {
     return [
       if (domain.contains('stress') || domain.contains('anxiety'))
-        const QuickAction(label: 'Breathing', route: '/home/meditation/breathing', icon: IconType.breathing, reason: 'Stress reset'),
-      const QuickAction(label: 'Hydration', route: '/home/nutrition', icon: IconType.water, reason: 'Drink water'),
-      const QuickAction(label: 'Walk', route: '/home/yoga', icon: IconType.walk, reason: 'Stretch your legs'),
+        const QuickAction(
+            label: 'Breathing',
+            route: '/home/meditation/breathing',
+            icon: IconType.breathing,
+            reason: 'Stress reset'),
+      const QuickAction(
+          label: 'Hydration',
+          route: '/home/nutrition',
+          icon: IconType.water,
+          reason: 'Drink water'),
+      const QuickAction(
+          label: 'Walk',
+          route: '/home/yoga',
+          icon: IconType.walk,
+          reason: 'Stretch your legs'),
       if (score.screenTime < 50)
-        const QuickAction(label: 'Focus Timer', route: '/home/meditation', icon: IconType.timer, reason: 'Focus session'),
+        const QuickAction(
+            label: 'Focus Timer',
+            route: '/home/meditation',
+            icon: IconType.timer,
+            reason: 'Focus session'),
     ];
   }
 
   List<QuickAction> _eveningActions(String domain, WellnessScore score) {
     return [
-      const QuickAction(label: 'Reflection', route: '/home/journal', icon: IconType.journal, reason: 'Reflect on today'),
+      const QuickAction(
+          label: 'Reflection',
+          route: '/home/journal',
+          icon: IconType.journal,
+          reason: 'Reflect on today'),
       if (domain.contains('sleep'))
-        const QuickAction(label: 'Sleep', route: '/home/sleep', icon: IconType.sleep, reason: 'Wind down'),
-      const QuickAction(label: 'Meditation', route: '/home/meditation', icon: IconType.meditate, reason: 'Evening meditation'),
+        const QuickAction(
+            label: 'Sleep',
+            route: '/home/sleep',
+            icon: IconType.sleep,
+            reason: 'Wind down'),
+      const QuickAction(
+          label: 'Meditation',
+          route: '/home/meditation',
+          icon: IconType.meditate,
+          reason: 'Evening meditation'),
     ];
   }
 
   List<QuickAction> _nightActions(String domain) {
     return [
-      const QuickAction(label: 'Sleep', route: '/home/sleep', icon: IconType.sleep, reason: 'Time to rest'),
-      const QuickAction(label: 'Meditation', route: '/home/meditate', icon: IconType.meditate, reason: 'Sleep meditation'),
-      const QuickAction(label: 'Music', route: '/home/music', icon: IconType.music, reason: 'Sleep sounds'),
+      const QuickAction(
+          label: 'Sleep',
+          route: '/home/sleep',
+          icon: IconType.sleep,
+          reason: 'Time to rest'),
+      const QuickAction(
+          label: 'Meditation',
+          route: '/home/meditate',
+          icon: IconType.meditate,
+          reason: 'Sleep meditation'),
+      const QuickAction(
+          label: 'Music',
+          route: '/home/music',
+          icon: IconType.music,
+          reason: 'Sleep sounds'),
     ];
   }
 
-  MeditationRecommendation _recommendMeditation(PersonalizationContext ctx, TimeOfDayPeriod period) {
+  MeditationRecommendation _recommendMeditation(
+      PersonalizationContext ctx, TimeOfDayPeriod period) {
     final domain = ctx.primaryDomain ?? '';
-    final isEvening = period == TimeOfDayPeriod.evening || period == TimeOfDayPeriod.night;
+    final isEvening =
+        period == TimeOfDayPeriod.evening || period == TimeOfDayPeriod.night;
 
     String category = 'mindfulness';
     String reason = 'A brief pause to center yourself.';
@@ -374,9 +495,11 @@ class WellnessEngine {
     );
   }
 
-  BreathingRecommendation _recommendBreathing(PersonalizationContext ctx, TimeOfDayPeriod period) {
+  BreathingRecommendation _recommendBreathing(
+      PersonalizationContext ctx, TimeOfDayPeriod period) {
     final domain = ctx.primaryDomain ?? '';
-    final isEvening = period == TimeOfDayPeriod.evening || period == TimeOfDayPeriod.night;
+    final isEvening =
+        period == TimeOfDayPeriod.evening || period == TimeOfDayPeriod.night;
 
     if (isEvening) {
       return const BreathingRecommendation(
@@ -387,12 +510,15 @@ class WellnessEngine {
       );
     }
 
-    if (domain.contains('stress') || domain.contains('anxiety') || domain.contains('anger')) {
+    if (domain.contains('stress') ||
+        domain.contains('anxiety') ||
+        domain.contains('anger')) {
       return const BreathingRecommendation(
         name: 'Anxiety Relief',
         duration: '5 min',
         technique: 'Inhale 4s — Hold 2s — Exhale 6s — Hold 2s',
-        reason: 'Specifically structured to lower heart rate and reduce physical panic.',
+        reason:
+            'Specifically structured to lower heart rate and reduce physical panic.',
       );
     }
 
@@ -413,12 +539,14 @@ class WellnessEngine {
     );
   }
 
-  JournalPromptSuggestion _generateJournalPrompt(PersonalizationContext ctx, TimeOfDayPeriod period) {
+  JournalPromptSuggestion _generateJournalPrompt(
+      PersonalizationContext ctx, TimeOfDayPeriod period) {
     final domain = ctx.primaryDomain ?? '';
 
     if (period == TimeOfDayPeriod.evening || period == TimeOfDayPeriod.night) {
       return const JournalPromptSuggestion(
-        prompt: 'What went well today? What would you like to release before sleep?',
+        prompt:
+            'What went well today? What would you like to release before sleep?',
         context: 'Evening reflection',
         type: JournalPromptType.reflection,
       );
@@ -427,50 +555,58 @@ class WellnessEngine {
     switch (domain) {
       case 'stress_burnout':
         return const JournalPromptSuggestion(
-          prompt: 'What is the biggest source of stress right now? What is one small thing you can do about it?',
+          prompt:
+              'What is the biggest source of stress right now? What is one small thing you can do about it?',
           context: 'Stress management',
           type: JournalPromptType.emotionalCheckin,
         );
       case 'anxiety_overthinking':
         return const JournalPromptSuggestion(
-          prompt: 'What thoughts are occupying your mind? Which ones are facts vs fears?',
+          prompt:
+              'What thoughts are occupying your mind? Which ones are facts vs fears?',
           context: 'Anxiety check-in',
           type: JournalPromptType.emotionalCheckin,
         );
       case 'low_motivation':
         return const JournalPromptSuggestion(
-          prompt: 'What is one thing you could do today that your future self would thank you for?',
+          prompt:
+              'What is one thing you could do today that your future self would thank you for?',
           context: 'Motivation boost',
           type: JournalPromptType.goalSetting,
         );
       case 'sleep_dysregulation':
         return const JournalPromptSuggestion(
-          prompt: 'Describe your ideal morning after a perfect night of sleep. What needs to happen before bed?',
+          prompt:
+              'Describe your ideal morning after a perfect night of sleep. What needs to happen before bed?',
           context: 'Sleep preparation',
           type: JournalPromptType.reflection,
         );
       case 'emotional_isolation':
         return const JournalPromptSuggestion(
-          prompt: 'Write a letter to yourself from the perspective of someone who loves you unconditionally.',
+          prompt:
+              'Write a letter to yourself from the perspective of someone who loves you unconditionally.',
           context: 'Self-compassion practice',
           type: JournalPromptType.gratitude,
         );
       case 'spiritual_seeking':
         return const JournalPromptSuggestion(
-          prompt: 'What does inner peace mean to you? When was the last time you felt truly connected?',
+          prompt:
+              'What does inner peace mean to you? When was the last time you felt truly connected?',
           context: 'Spiritual exploration',
           type: JournalPromptType.reflection,
         );
       default:
         return const JournalPromptSuggestion(
-          prompt: 'How are you feeling right now? Take a moment to check in with yourself.',
+          prompt:
+              'How are you feeling right now? Take a moment to check in with yourself.',
           context: 'Daily check-in',
           type: JournalPromptType.freeform,
         );
     }
   }
 
-  SleepRecommendation _recommendSleep(PersonalizationContext ctx, int sleepHours) {
+  SleepRecommendation _recommendSleep(
+      PersonalizationContext ctx, int sleepHours) {
     final domain = ctx.primaryDomain ?? '';
     final targetHours = sleepHours >= 7 ? sleepHours : 8;
 
@@ -502,21 +638,32 @@ class WellnessEngine {
 
   double _computeJournalSentiment(List<JournalEntry> entries) {
     if (entries.isEmpty) return 0.0;
-    final insights = entries.take(5).map((e) => _journalEngine.analyzeEntry(e)).toList();
-    return insights.fold(0.0, (a, i) => a + i.emotions.sentimentScore) / insights.length;
+    final insights =
+        entries.take(5).map((e) => _journalEngine.analyzeEntry(e)).toList();
+    return insights.fold(0.0, (a, i) => a + i.emotions.sentimentScore) /
+        insights.length;
   }
 
   String _domainEmoji(String domain) {
     switch (domain) {
-      case 'stress_burnout': return '🔥';
-      case 'anxiety_overthinking': return '🌀';
-      case 'emotional_isolation': return '🏝️';
-      case 'addiction_recovery': return '🛤️';
-      case 'anger_dysregulation': return '💢';
-      case 'low_motivation': return '⚡';
-      case 'spiritual_seeking': return '🕉️';
-      case 'sleep_dysregulation': return '🌙';
-      default: return '🧘';
+      case 'stress_burnout':
+        return '🔥';
+      case 'anxiety_overthinking':
+        return '🌀';
+      case 'emotional_isolation':
+        return '🏝️';
+      case 'addiction_recovery':
+        return '🛤️';
+      case 'anger_dysregulation':
+        return '💢';
+      case 'low_motivation':
+        return '⚡';
+      case 'spiritual_seeking':
+        return '🕉️';
+      case 'sleep_dysregulation':
+        return '🌙';
+      default:
+        return '🧘';
     }
   }
 }

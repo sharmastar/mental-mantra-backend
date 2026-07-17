@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { Module, NestModule, MiddlewareConsumer } from '@nestjs/common';
 import { ThrottlerModule, ThrottlerGuard } from '@nestjs/throttler';
 import { APP_GUARD } from '@nestjs/core';
 import { PrismaModule } from './common/prisma.module';
@@ -24,6 +24,7 @@ import { FitnessModule } from './fitness/fitness.module';
 import { YogaModule } from './yoga/yoga.module';
 import { AnalyticsModule } from './analytics/analytics.module';
 import { HealthController } from './health.controller';
+import { CorrelationIdMiddleware } from './common/middleware/correlation-id.middleware';
 
 @Module({
   imports: [
@@ -59,4 +60,8 @@ import { HealthController } from './health.controller';
     { provide: APP_GUARD, useClass: ThrottlerGuard },
   ],
 })
-export class AppModule {}
+export class AppModule implements NestModule {
+  configure(consumer: MiddlewareConsumer) {
+    consumer.apply(CorrelationIdMiddleware).forRoutes('*');
+  }
+}

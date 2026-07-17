@@ -23,7 +23,8 @@ class MultiSelectChip extends StatelessWidget {
         children: [
           for (int i = 0; i < question.options.length; i++)
             Padding(
-              padding: EdgeInsets.only(bottom: i == question.options.length - 1 ? 0 : 10),
+              padding: EdgeInsets.only(
+                  bottom: i == question.options.length - 1 ? 0 : 10),
               child: TweenAnimationBuilder<double>(
                 tween: Tween(begin: 0, end: 1),
                 duration: Duration(milliseconds: 300 + (i * 50)),
@@ -64,14 +65,24 @@ class MultiSelectChip extends StatelessWidget {
               ? (showColor
                   ? effectiveColor!.withValues(alpha: isLight ? 0.12 : 0.25)
                   : isLight
-                      ? Theme.of(context).colorScheme.primary.withValues(alpha: 0.12)
-                      : Theme.of(context).colorScheme.primary.withValues(alpha: 0.2))
+                      ? Theme.of(context)
+                          .colorScheme
+                          .primary
+                          .withValues(alpha: 0.12)
+                      : Theme.of(context)
+                          .colorScheme
+                          .primary
+                          .withValues(alpha: 0.2))
               : (isLight ? Colors.white : Colors.white.withValues(alpha: 0.06)),
           borderRadius: BorderRadius.circular(16),
           border: Border.all(
             color: isSelected
-                ? (showColor ? effectiveColor! : Theme.of(context).colorScheme.primary)
-                : (isLight ? Colors.grey.withValues(alpha: 0.2) : Colors.white.withValues(alpha: 0.1)),
+                ? (showColor
+                    ? effectiveColor!
+                    : Theme.of(context).colorScheme.primary)
+                : (isLight
+                    ? Colors.grey.withValues(alpha: 0.2)
+                    : Colors.white.withValues(alpha: 0.1)),
             width: isSelected ? 2 : 1,
           ),
         ),
@@ -81,7 +92,9 @@ class MultiSelectChip extends StatelessWidget {
               Icon(
                 option.icon,
                 color: isSelected
-                    ? (showColor ? effectiveColor : Theme.of(context).colorScheme.primary)
+                    ? (showColor
+                        ? effectiveColor
+                        : Theme.of(context).colorScheme.primary)
                     : Colors.white54,
                 size: 22,
               ),
@@ -95,7 +108,8 @@ class MultiSelectChip extends StatelessWidget {
                     option.label,
                     style: TextStyle(
                       fontSize: 15,
-                      fontWeight: isSelected ? FontWeight.w600 : FontWeight.w400,
+                      fontWeight:
+                          isSelected ? FontWeight.w600 : FontWeight.w400,
                       color: isLight
                           ? (isSelected
                               ? (showColor
@@ -126,12 +140,18 @@ class MultiSelectChip extends StatelessWidget {
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(6),
                 color: isSelected
-                    ? (showColor ? effectiveColor : Theme.of(context).colorScheme.primary)
+                    ? (showColor
+                        ? effectiveColor
+                        : Theme.of(context).colorScheme.primary)
                     : Colors.transparent,
                 border: Border.all(
                   color: isSelected
-                      ? (showColor ? effectiveColor! : Theme.of(context).colorScheme.primary)
-                      : (isLight ? Colors.grey.withValues(alpha: 0.4) : Colors.white38),
+                      ? (showColor
+                          ? effectiveColor!
+                          : Theme.of(context).colorScheme.primary)
+                      : (isLight
+                          ? Colors.grey.withValues(alpha: 0.4)
+                          : Colors.white38),
                   width: 2,
                 ),
               ),

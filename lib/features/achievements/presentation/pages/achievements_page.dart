@@ -47,9 +47,13 @@ class AchievementsPage extends ConsumerWidget {
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text('Level 1: Beginner', style: theme.textTheme.titleMedium?.copyWith(fontWeight: FontWeight.bold)),
+                    Text('Level 1: Beginner',
+                        style: theme.textTheme.titleMedium
+                            ?.copyWith(fontWeight: FontWeight.bold)),
                     const SizedBox(height: 4),
-                    Text('0 XP', style: theme.textTheme.bodySmall?.copyWith(color: Colors.grey)),
+                    Text('0 XP',
+                        style: theme.textTheme.bodySmall
+                            ?.copyWith(color: Colors.grey)),
                   ],
                 ),
               ],
@@ -57,7 +61,8 @@ class AchievementsPage extends ConsumerWidget {
             const SizedBox(height: 16),
             ClipRRect(
               borderRadius: BorderRadius.circular(8),
-              child: LinearProgressIndicator(value: 0.3, minHeight: 8, backgroundColor: Colors.grey[200]),
+              child: LinearProgressIndicator(
+                  value: 0.3, minHeight: 8, backgroundColor: Colors.grey[200]),
             ),
             const SizedBox(height: 8),
             Text('30 / 100 XP to Level 2', style: theme.textTheme.bodySmall),
@@ -72,7 +77,9 @@ class AchievementsPage extends ConsumerWidget {
       child: ListTile(
         leading: Container(
           padding: const EdgeInsets.all(8),
-          decoration: BoxDecoration(color: Colors.orange.withValues(alpha: 0.1), borderRadius: BorderRadius.circular(8)),
+          decoration: BoxDecoration(
+              color: Colors.orange.withValues(alpha: 0.1),
+              borderRadius: BorderRadius.circular(8)),
           child: const Icon(Icons.local_fire_department, color: Colors.orange),
         ),
         title: const Text('Current Streak'),
@@ -82,31 +89,51 @@ class AchievementsPage extends ConsumerWidget {
     );
   }
 
-  Widget _buildCategorySection(BuildContext context, ThemeData theme, String emoji, String title, List list) {
+  Widget _buildCategorySection(BuildContext context, ThemeData theme,
+      String emoji, String title, List list) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Padding(
           padding: const EdgeInsets.only(bottom: 8),
-          child: Text('$emoji $title', style: theme.textTheme.titleSmall?.copyWith(fontWeight: FontWeight.w600)),
+          child: Text('$emoji $title',
+              style: theme.textTheme.titleSmall
+                  ?.copyWith(fontWeight: FontWeight.w600)),
         ),
         ...List.generate(4, (i) => _buildAchievementCard(context, theme, i)),
       ],
     );
   }
 
-  Widget _buildAchievementCard(BuildContext context, ThemeData theme, int index) {
+  Widget _buildAchievementCard(
+      BuildContext context, ThemeData theme, int index) {
     final achievements = [
-      {'title': 'First Meditation', 'progress': 1.0, 'icon': '🥇', 'status': 'Completed'},
+      {
+        'title': 'First Meditation',
+        'progress': 1.0,
+        'icon': '🥇',
+        'status': 'Completed'
+      },
       {'title': '10 Sessions', 'progress': 0.3, 'icon': '🥈', 'status': '3/10'},
-      {'title': '5 Hours Total', 'progress': 0.15, 'icon': '🥉', 'status': '45min/5h'},
-      {'title': '30 Day Streak', 'progress': 0.0, 'icon': '💎', 'status': 'Locked'},
+      {
+        'title': '5 Hours Total',
+        'progress': 0.15,
+        'icon': '🥉',
+        'status': '45min/5h'
+      },
+      {
+        'title': '30 Day Streak',
+        'progress': 0.0,
+        'icon': '💎',
+        'status': 'Locked'
+      },
     ];
     final a = achievements[index];
     return Card(
       margin: const EdgeInsets.only(bottom: 4),
       child: ListTile(
-        leading: Text(a['icon'] as String, style: const TextStyle(fontSize: 24)),
+        leading:
+            Text(a['icon'] as String, style: const TextStyle(fontSize: 24)),
         title: Text(a['title'] as String, style: const TextStyle(fontSize: 14)),
         trailing: a['progress'] as double >= 1.0
             ? const Icon(Icons.check_circle, color: Colors.green)
@@ -119,7 +146,11 @@ class AchievementsPage extends ConsumerWidget {
               content: Text(a['progress'] as double >= 1.0
                   ? 'You completed this achievement!'
                   : 'Progress: ${a['status']}'),
-              actions: [TextButton(onPressed: () => Navigator.pop(ctx), child: const Text('OK'))],
+              actions: [
+                TextButton(
+                    onPressed: () => Navigator.pop(ctx),
+                    child: const Text('OK'))
+              ],
             ),
           );
         },

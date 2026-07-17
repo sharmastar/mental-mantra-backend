@@ -2,7 +2,8 @@ import 'package:mental_mantra/core/network/api_client.dart';
 import '../models/journal_entry.dart';
 
 class JournalRepository {
-  Future<List<JournalEntry>> getEntries({int limit = 20, int skip = 0, String? search}) async {
+  Future<List<JournalEntry>> getEntries(
+      {int limit = 20, int skip = 0, String? search}) async {
     try {
       final params = <String, dynamic>{'limit': limit, 'skip': skip};
       if (search != null) params['search'] = search;
@@ -10,7 +11,9 @@ class JournalRepository {
       final data = response.data as Map<String, dynamic>;
       if (data['success'] == true && data['data'] != null) {
         final entriesData = data['data']['entries'] as List<dynamic>? ?? [];
-        return entriesData.map((e) => JournalEntry.fromJson(e as Map<String, dynamic>, '')).toList();
+        return entriesData
+            .map((e) => JournalEntry.fromJson(e as Map<String, dynamic>, ''))
+            .toList();
       }
       return [];
     } catch (e) {
@@ -70,11 +73,13 @@ class JournalRepository {
   Future<Map<String, dynamic>> getStats() async {
     final entries = await getEntries(limit: 100);
     if (entries.isEmpty) return {'count': 0, 'avgMood': 0.0, 'streak': 0};
-    final avgMood = entries.fold(0.0, (acc, e) => acc + e.mood) / entries.length;
+    final avgMood =
+        entries.fold(0.0, (acc, e) => acc + e.mood) / entries.length;
     return {'count': entries.length, 'avgMood': avgMood};
   }
 
-  Future<bool> saveAiAnalysis(String entryId, Map<String, dynamic> analysis) async {
+  Future<bool> saveAiAnalysis(
+      String entryId, Map<String, dynamic> analysis) async {
     try {
       await ApiClient.put('/journal/$entryId/analysis', data: analysis);
       return true;

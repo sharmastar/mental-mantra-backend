@@ -3,6 +3,8 @@ import { ApiTags, ApiOperation, ApiBearerAuth } from '@nestjs/swagger';
 import { GoalsService } from './goals.service';
 import { JwtAuthGuard } from '../common/guards/jwt-auth.guard';
 import { CurrentUser } from '../common/decorators/current-user.decorator';
+import { CreateGoalDto } from './dto/create-goal.dto';
+import { UpdateGoalDto } from './dto/update-goal.dto';
 
 @ApiTags('Goals')
 @ApiBearerAuth()
@@ -19,14 +21,14 @@ export class GoalsController {
 
   @Post()
   @ApiOperation({ summary: 'Create a goal' })
-  async create(@CurrentUser('id') userId: string, @Body() data: any) {
-    return { success: true, data: await this.goalsService.create(userId, data) };
+  async create(@CurrentUser('id') userId: string, @Body() dto: CreateGoalDto) {
+    return { success: true, data: await this.goalsService.create(userId, dto) };
   }
 
   @Put(':id')
   @ApiOperation({ summary: 'Update a goal' })
-  async update(@CurrentUser('id') userId: string, @Param('id') id: string, @Body() data: any) {
-    return { success: true, data: await this.goalsService.update(userId, id, data) };
+  async update(@CurrentUser('id') userId: string, @Param('id') id: string, @Body() dto: UpdateGoalDto) {
+    return { success: true, data: await this.goalsService.update(userId, id, dto) };
   }
 
   @Delete(':id')

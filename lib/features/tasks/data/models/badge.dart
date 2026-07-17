@@ -24,18 +24,18 @@ class Badge {
   }
 
   Map<String, dynamic> toJson() => {
-    'id': id,
-    'emoji': emoji,
-    'label': label,
-    'description': description,
-    'earned': earned,
-  };
+        'id': id,
+        'emoji': emoji,
+        'label': label,
+        'description': description,
+        'earned': earned,
+      };
 
   factory Badge.fromJson(Map<String, dynamic> json) => Badge(
-    id: json['id'] as String,
-    emoji: json['emoji'] as String,
-    label: json['label'] as String,
-    description: json['description'] as String? ?? '',
-    earned: json['earned'] as bool? ?? false,
-  );
+        id: json['id'] as String,
+        emoji: json['emoji'] as String,
+        label: json['label'] as String,
+        description: json['description'] as String? ?? '',
+        earned: json['earned'] as bool? ?? false,
+      );
 }

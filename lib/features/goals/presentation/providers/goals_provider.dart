@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:mental_mantra/core/theme/app_theme.dart';
 import '../../data/models/goal.dart';
 
 class GoalsState {
@@ -39,7 +40,7 @@ class GoalsNotifier extends StateNotifier<GoalsState> {
     required String title,
     required String category,
     IconData icon = Icons.self_improvement,
-    Color color = const Color(0xFF42C8B7),
+    Color color = AppTheme.primaryColor,
     int target = 1,
   }) {
     final goal = Goal(
@@ -86,7 +87,7 @@ final _sampleGoals = [
     title: 'Meditate 30 days in a row',
     category: 'Mindfulness',
     progress: 0.7,
-    color: const Color(0xFF42C8B7),
+    color: AppTheme.primaryColor,
     icon: Icons.self_improvement,
     current: 21,
     target: 30,
@@ -97,7 +98,7 @@ final _sampleGoals = [
     title: 'Write 10 journal entries',
     category: 'Journaling',
     progress: 0.5,
-    color: const Color(0xFFFF6B9D),
+    color: AppTheme.errorColor,
     icon: Icons.book_outlined,
     current: 5,
     target: 10,
@@ -108,7 +109,7 @@ final _sampleGoals = [
     title: 'Complete anxiety course',
     category: 'Learning',
     progress: 0.35,
-    color: const Color(0xFF00BCD4),
+    color: AppTheme.secondaryColor,
     icon: Icons.school_outlined,
     current: 7,
     target: 20,
@@ -119,7 +120,7 @@ final _sampleGoals = [
     title: 'Build sleep routine',
     category: 'Sleep',
     progress: 0.9,
-    color: const Color(0xFF9C27B0),
+    color: AppTheme.primaryLight,
     icon: Icons.bedtime_outlined,
     current: 18,
     target: 20,

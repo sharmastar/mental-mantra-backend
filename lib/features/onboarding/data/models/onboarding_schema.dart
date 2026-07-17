@@ -146,8 +146,15 @@ class BasicInfoSection extends Equatable {
       );
 
   @override
-  List<Object?> get props =>
-      [nickname, ageRange, gender, country, role, relationshipStatus, livingWith];
+  List<Object?> get props => [
+        nickname,
+        ageRange,
+        gender,
+        country,
+        role,
+        relationshipStatus,
+        livingWith
+      ];
 }
 
 // ── Section 3: Needs & Motivation ─────────────────────────
@@ -198,8 +205,13 @@ class NeedsSection extends Equatable {
       );
 
   @override
-  List<Object?> get props =>
-      [reasonsJoined, duration, affectedAreas, previousHelp, previousHelpDetails];
+  List<Object?> get props => [
+        reasonsJoined,
+        duration,
+        affectedAreas,
+        previousHelp,
+        previousHelpDetails
+      ];
 }
 
 // ── Section 4: Emotional Check-in ─────────────────────────
@@ -218,17 +230,15 @@ class EmotionalCheckinSection extends Equatable {
         symptoms: json.map((k, v) => MapEntry(k, v.toString())),
       );
 
-  List<String> get elevatedSymptoms =>
-      symptoms.entries
-          .where((e) => ['Often', 'Almost Always'].contains(e.value))
-          .map((e) => e.key)
-          .toList();
+  List<String> get elevatedSymptoms => symptoms.entries
+      .where((e) => ['Often', 'Almost Always'].contains(e.value))
+      .map((e) => e.key)
+      .toList();
 
-  List<String> get moderateSymptoms =>
-      symptoms.entries
-          .where((e) => e.value == 'Sometimes')
-          .map((e) => e.key)
-          .toList();
+  List<String> get moderateSymptoms => symptoms.entries
+      .where((e) => e.value == 'Sometimes')
+      .map((e) => e.key)
+      .toList();
 
   @override
   List<Object?> get props => [symptoms];
@@ -275,7 +285,11 @@ class SleepEnergySection extends Equatable {
 
   double get sleepScore {
     final quality = {
-      'Excellent': 1.0, 'Good': 0.8, 'Fair': 0.6, 'Poor': 0.3, 'Very poor': 0.1,
+      'Excellent': 1.0,
+      'Good': 0.8,
+      'Fair': 0.6,
+      'Poor': 0.3,
+      'Very poor': 0.1,
     };
     return (quality[sleepQuality] ?? 0.5);
   }
@@ -427,7 +441,8 @@ class HabitsSection extends Equatable {
         triggers: triggers ?? this.triggers,
       );
 
-  bool get hasAddictions => addictions.isNotEmpty && addictions != ['Not applicable'];
+  bool get hasAddictions =>
+      addictions.isNotEmpty && addictions != ['Not applicable'];
 
   Map<String, dynamic> toJson() => {
         'addictions': addictions,
@@ -550,7 +565,8 @@ class CopingSection extends Equatable {
         personalityTraits: personalityTraits ?? this.personalityTraits,
         selfHarmIdeation: selfHarmIdeation ?? this.selfHarmIdeation,
         emotionallySafe: emotionallySafe ?? this.emotionallySafe,
-        wantsSupportResources: wantsSupportResources ?? this.wantsSupportResources,
+        wantsSupportResources:
+            wantsSupportResources ?? this.wantsSupportResources,
         safetyPlan: safetyPlan ?? this.safetyPlan,
       );
 

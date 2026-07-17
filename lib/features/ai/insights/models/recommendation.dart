@@ -16,24 +16,25 @@ class Recommendation {
   });
 
   Map<String, dynamic> toJson() => {
-    'id': id,
-    'action': action,
-    'detail': detail,
-    'route': route,
-    'expectedImpacts': expectedImpacts.map((e) => e.toJson()).toList(),
-    'domain': domain,
-  };
+        'id': id,
+        'action': action,
+        'detail': detail,
+        'route': route,
+        'expectedImpacts': expectedImpacts.map((e) => e.toJson()).toList(),
+        'domain': domain,
+      };
 
   factory Recommendation.fromJson(Map<String, dynamic> json) => Recommendation(
-    id: json['id'] as String? ?? '',
-    action: json['action'] as String? ?? '',
-    detail: json['detail'] as String? ?? '',
-    route: json['route'] as String? ?? '',
-    expectedImpacts: (json['expectedImpacts'] as List<dynamic>?)
-        ?.map((e) => ExpectedImpact.fromJson(e as Map<String, dynamic>))
-        .toList() ?? [],
-    domain: json['domain'] as String? ?? '',
-  );
+        id: json['id'] as String? ?? '',
+        action: json['action'] as String? ?? '',
+        detail: json['detail'] as String? ?? '',
+        route: json['route'] as String? ?? '',
+        expectedImpacts: (json['expectedImpacts'] as List<dynamic>?)
+                ?.map((e) => ExpectedImpact.fromJson(e as Map<String, dynamic>))
+                .toList() ??
+            [],
+        domain: json['domain'] as String? ?? '',
+      );
 }
 
 class ExpectedImpact {
@@ -50,18 +51,18 @@ class ExpectedImpact {
   });
 
   Map<String, dynamic> toJson() => {
-    'metric': metric,
-    'change': change,
-    'direction': direction,
-    'description': description,
-  };
+        'metric': metric,
+        'change': change,
+        'direction': direction,
+        'description': description,
+      };
 
   factory ExpectedImpact.fromJson(Map<String, dynamic> json) => ExpectedImpact(
-    metric: json['metric'] as String? ?? '',
-    change: (json['change'] as num?)?.toDouble() ?? 0.0,
-    direction: json['direction'] as String? ?? 'improve',
-    description: json['description'] as String? ?? '',
-  );
+        metric: json['metric'] as String? ?? '',
+        change: (json['change'] as num?)?.toDouble() ?? 0.0,
+        direction: json['direction'] as String? ?? 'improve',
+        description: json['description'] as String? ?? '',
+      );
 }
 
 class RecommendationOutcome {
@@ -95,35 +96,46 @@ class RecommendationOutcome {
   bool get isCompleted => completed;
 
   Map<String, dynamic> toJson() => {
-    'recommendationId': recommendationId,
-    'userId': userId,
-    'action': action,
-    'domain': domain,
-    'accepted': accepted,
-    'completed': completed,
-    'acceptedAt': acceptedAt?.toIso8601String(),
-    'completedAt': completedAt?.toIso8601String(),
-    'timeTakenSeconds': timeTakenSeconds,
-    'beforeMetrics': beforeMetrics,
-    'afterMetrics': afterMetrics,
-  };
+        'recommendationId': recommendationId,
+        'userId': userId,
+        'action': action,
+        'domain': domain,
+        'accepted': accepted,
+        'completed': completed,
+        'acceptedAt': acceptedAt?.toIso8601String(),
+        'completedAt': completedAt?.toIso8601String(),
+        'timeTakenSeconds': timeTakenSeconds,
+        'beforeMetrics': beforeMetrics,
+        'afterMetrics': afterMetrics,
+      };
 
-  factory RecommendationOutcome.fromJson(Map<String, dynamic> json) => RecommendationOutcome(
-    recommendationId: json['recommendationId'] as String? ?? '',
-    userId: json['userId'] as String? ?? '',
-    action: json['action'] as String? ?? '',
-    domain: json['domain'] as String? ?? '',
-    accepted: json['accepted'] as bool? ?? false,
-    completed: json['completed'] as bool? ?? false,
-    acceptedAt: json['acceptedAt'] != null ? DateTime.parse(json['acceptedAt'] as String) : null,
-    completedAt: json['completedAt'] != null ? DateTime.parse(json['completedAt'] as String) : null,
-    timeTakenSeconds: (json['timeTakenSeconds'] as num?)?.toInt() ?? 0,
-    beforeMetrics: (json['beforeMetrics'] as Map<String, dynamic>?)?.map((k, v) => MapEntry(k, (v as num).toDouble())) ?? {},
-    afterMetrics: (json['afterMetrics'] as Map<String, dynamic>?)?.map((k, v) => MapEntry(k, (v as num).toDouble())) ?? {},
-  );
+  factory RecommendationOutcome.fromJson(Map<String, dynamic> json) =>
+      RecommendationOutcome(
+        recommendationId: json['recommendationId'] as String? ?? '',
+        userId: json['userId'] as String? ?? '',
+        action: json['action'] as String? ?? '',
+        domain: json['domain'] as String? ?? '',
+        accepted: json['accepted'] as bool? ?? false,
+        completed: json['completed'] as bool? ?? false,
+        acceptedAt: json['acceptedAt'] != null
+            ? DateTime.parse(json['acceptedAt'] as String)
+            : null,
+        completedAt: json['completedAt'] != null
+            ? DateTime.parse(json['completedAt'] as String)
+            : null,
+        timeTakenSeconds: (json['timeTakenSeconds'] as num?)?.toInt() ?? 0,
+        beforeMetrics: (json['beforeMetrics'] as Map<String, dynamic>?)
+                ?.map((k, v) => MapEntry(k, (v as num).toDouble())) ??
+            {},
+        afterMetrics: (json['afterMetrics'] as Map<String, dynamic>?)
+                ?.map((k, v) => MapEntry(k, (v as num).toDouble())) ??
+            {},
+      );
 
   bool get isSuccess {
-    if (!completed || afterMetrics.isEmpty || beforeMetrics.isEmpty) return false;
+    if (!completed || afterMetrics.isEmpty || beforeMetrics.isEmpty) {
+      return false;
+    }
     bool improved = false;
     for (final key in afterMetrics.keys) {
       final before = beforeMetrics[key] ?? 0;
@@ -151,7 +163,8 @@ class RecommendationHistory {
     required this.successRate,
   });
 
-  factory RecommendationHistory.fromOutcomes(String domain, List<RecommendationOutcome> outcomes) {
+  factory RecommendationHistory.fromOutcomes(
+      String domain, List<RecommendationOutcome> outcomes) {
     final total = outcomes.length;
     final accepted = outcomes.where((o) => o.accepted).length;
     final completed = outcomes.where((o) => o.completed).length;

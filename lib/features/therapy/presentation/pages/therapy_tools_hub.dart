@@ -7,7 +7,8 @@ import '../../../onboarding/data/classification_engine.dart';
 import '../../../spiritual/presentation/pages/spiritual_page.dart';
 import '../../data/intervention_data.dart';
 
-final classificationResultProvider = StateProvider<ClassificationResult?>((ref) => null);
+final classificationResultProvider =
+    StateProvider<ClassificationResult?>((ref) => null);
 
 class TherapyToolsHub extends ConsumerWidget {
   const TherapyToolsHub({super.key});
@@ -27,8 +28,9 @@ class TherapyToolsHub extends ConsumerWidget {
               background: Container(
                 decoration: const BoxDecoration(
                   gradient: LinearGradient(
-                    colors: [Color(0xFF6C63FF), Color(0xFF00BFA5)],
-                    begin: Alignment.topLeft, end: Alignment.bottomRight,
+                    colors: [AppTheme.primaryColor, AppTheme.secondaryColor],
+                    begin: Alignment.topLeft,
+                    end: Alignment.bottomRight,
                   ),
                 ),
                 child: SafeArea(
@@ -38,15 +40,21 @@ class TherapyToolsHub extends ConsumerWidget {
                       mainAxisAlignment: MainAxisAlignment.end,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        const Icon(Icons.healing_outlined, color: Colors.white, size: 36),
+                        const Icon(Icons.healing_outlined,
+                            color: Colors.white, size: 36),
                         const SizedBox(height: 8),
                         const Text(
                           'Therapy Tools',
-                          style: TextStyle(fontSize: 26, fontWeight: FontWeight.w700, color: Colors.white),
+                          style: TextStyle(
+                              fontSize: 26,
+                              fontWeight: FontWeight.w700,
+                              color: Colors.white),
                         ),
                         Text(
                           'Mindfulness practices to support your journey',
-                          style: TextStyle(color: Colors.white.withValues(alpha: 0.7), fontSize: 13),
+                          style: TextStyle(
+                              color: Colors.white.withValues(alpha: 0.7),
+                              fontSize: 13),
                         ),
                       ],
                     ),
@@ -69,7 +77,7 @@ class TherapyToolsHub extends ConsumerWidget {
                 const SizedBox(height: 24),
                 _buildYogaSection(context, isDark),
                 const SizedBox(height: 24),
-                _buildWisdomSection(context, isDark),
+                _buildWisdomSection(context, ref, isDark),
                 const SizedBox(height: 32),
               ]),
             ),
@@ -87,14 +95,18 @@ class TherapyToolsHub extends ConsumerWidget {
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
         gradient: LinearGradient(
-          colors: [AppTheme.primaryColor.withValues(alpha: 0.1), AppTheme.primaryColor.withValues(alpha: 0.02)],
+          colors: [
+            AppTheme.primaryColor.withValues(alpha: 0.1),
+            AppTheme.primaryColor.withValues(alpha: 0.02)
+          ],
         ),
         borderRadius: BorderRadius.circular(16),
         border: Border.all(color: AppTheme.primaryColor.withValues(alpha: 0.2)),
       ),
       child: Row(
         children: [
-          Text(result.primaryDomain.emoji, style: const TextStyle(fontSize: 32)),
+          Text(result.primaryDomain.emoji,
+              style: const TextStyle(fontSize: 32)),
           const SizedBox(width: 12),
           Expanded(
             child: Column(
@@ -102,12 +114,15 @@ class TherapyToolsHub extends ConsumerWidget {
               children: [
                 Text(
                   'Your Focus: ${result.primaryDomain.label}',
-                  style: const TextStyle(fontWeight: FontWeight.w700, fontSize: 15),
+                  style: const TextStyle(
+                      fontWeight: FontWeight.w700, fontSize: 15),
                 ),
                 if (result.secondaryDomain != null)
                   Text(
                     'Supporting: ${result.secondaryDomain!.label}',
-                    style: TextStyle(fontSize: 12, color: isDark ? Colors.white60 : Colors.black54),
+                    style: TextStyle(
+                        fontSize: 12,
+                        color: isDark ? Colors.white60 : Colors.black54),
                   ),
               ],
             ),
@@ -119,30 +134,72 @@ class TherapyToolsHub extends ConsumerWidget {
 
   Widget _buildToolGrid(BuildContext context, bool isDark) {
     final tools = [
-      const _ToolItem('Venting Space', Icons.local_fire_department, Color(0xFFE53935), 'Burn away your frustrations', AppRoutes.ventingSpace),
-      const _ToolItem('Music Therapy', Icons.music_note_outlined, AppTheme.primaryColor, 'Binaural beats, nature sounds, solfeggio', AppRoutes.music),
-      const _ToolItem('Guided Meditation', Icons.self_improvement, AppTheme.secondaryColor, 'Target-specific sessions', AppRoutes.meditation),
-      const _ToolItem('Yoga & Movement', Icons.accessibility_new, AppTheme.accentColor, 'Office stress, flexibility, energy', AppRoutes.yoga),
-      const _ToolItem('Brain Games', Icons.psychology_outlined, Color(0xFF00BCD4), 'Focus, memory, pattern games', AppRoutes.games),
-      const _ToolItem('Breathing Exercises', Icons.air_outlined, Color(0xFF00BFA5), 'Calm your nervous system', '\${AppRoutes.meditation}/timer'),
-      const _ToolItem('Sleep Sounds', Icons.bedtime_outlined, Color(0xFF9C27B0), 'Rain, ocean, 432 Hz', AppRoutes.sleep),
-      const _ToolItem('Meditation Videos', Icons.smart_display_outlined, Color(0xFFE91E63), 'Video tutorials & guides', AppRoutes.videos),
-      const _ToolItem('Spiritual & Calm', Icons.wb_sunny_outlined, Color(0xFFFF9800), 'Calming spiritual insights', AppRoutes.spiritual),
+      const _ToolItem(
+          'Venting Space',
+          Icons.local_fire_department,
+          AppTheme.errorColor,
+          'Burn away your frustrations',
+          AppRoutes.ventingSpace),
+      const _ToolItem(
+          'Music Therapy',
+          Icons.music_note_outlined,
+          AppTheme.primaryColor,
+          'Binaural beats, nature sounds, solfeggio',
+          AppRoutes.music),
+      const _ToolItem(
+          'Guided Meditation',
+          Icons.self_improvement,
+          AppTheme.secondaryColor,
+          'Target-specific sessions',
+          AppRoutes.meditation),
+      const _ToolItem(
+          'Yoga & Movement',
+          Icons.accessibility_new,
+          AppTheme.accentColor,
+          'Office stress, flexibility, energy',
+          AppRoutes.yoga),
+      const _ToolItem(
+          'Brain Games',
+          Icons.psychology_outlined,
+          AppTheme.secondaryColor,
+          'Focus, memory, pattern games',
+          AppRoutes.games),
+      const _ToolItem(
+          'Breathing Exercises',
+          Icons.air_outlined,
+          AppTheme.secondaryColor,
+          'Calm your nervous system',
+          AppRoutes.breathing),
+      const _ToolItem('Sleep Sounds', Icons.bedtime_outlined,
+          AppTheme.primaryLight, 'Rain, ocean, 432 Hz', AppRoutes.sleep),
+      const _ToolItem('Meditation Videos', Icons.smart_display_outlined,
+          AppTheme.errorColor, 'Video tutorials & guides', AppRoutes.videos),
+      const _ToolItem(
+          'Spiritual & Calm',
+          Icons.wb_sunny_outlined,
+          AppTheme.warningColor,
+          'Calming spiritual insights',
+          AppRoutes.spiritual),
     ];
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text('All Tools', style: TextStyle(
-          fontSize: 18, fontWeight: FontWeight.w700,
-          color: isDark ? Colors.white : Colors.black87,
-        )),
+        Text('All Tools',
+            style: TextStyle(
+              fontSize: 18,
+              fontWeight: FontWeight.w700,
+              color: isDark ? Colors.white : Colors.black87,
+            )),
         const SizedBox(height: 12),
         GridView.builder(
           shrinkWrap: true,
           physics: const NeverScrollableScrollPhysics(),
           gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: 2, childAspectRatio: 1.4, mainAxisSpacing: 12, crossAxisSpacing: 12,
+            crossAxisCount: 2,
+            childAspectRatio: 1.4,
+            mainAxisSpacing: 12,
+            crossAxisSpacing: 12,
           ),
           itemCount: tools.length,
           itemBuilder: (ctx, i) {
@@ -153,7 +210,10 @@ class TherapyToolsHub extends ConsumerWidget {
                 padding: const EdgeInsets.all(16),
                 decoration: BoxDecoration(
                   gradient: LinearGradient(
-                    colors: [t.color.withValues(alpha: 0.1), t.color.withValues(alpha: 0.02)],
+                    colors: [
+                      t.color.withValues(alpha: 0.1),
+                      t.color.withValues(alpha: 0.02)
+                    ],
                   ),
                   borderRadius: BorderRadius.circular(20),
                   border: Border.all(color: t.color.withValues(alpha: 0.2)),
@@ -171,12 +231,19 @@ class TherapyToolsHub extends ConsumerWidget {
                       child: Icon(t.icon, color: t.color, size: 22),
                     ),
                     const SizedBox(height: 10),
-                    Text(t.title, style: TextStyle(
-                      fontSize: 14, fontWeight: FontWeight.w700, color: t.color,
-                    )),
-                    Text(t.subtitle, style: TextStyle(
-                      fontSize: 11, color: isDark ? Colors.white60 : Colors.black54,
-                    ), maxLines: 1, overflow: TextOverflow.ellipsis),
+                    Text(t.title,
+                        style: TextStyle(
+                          fontSize: 14,
+                          fontWeight: FontWeight.w700,
+                          color: t.color,
+                        )),
+                    Text(t.subtitle,
+                        style: TextStyle(
+                          fontSize: 11,
+                          color: isDark ? Colors.white60 : Colors.black54,
+                        ),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis),
                   ],
                 ),
               ),
@@ -189,7 +256,8 @@ class TherapyToolsHub extends ConsumerWidget {
 
   Widget _buildMusicTherapySection(BuildContext context, bool isDark) {
     return _buildSection(
-      context, isDark,
+      context,
+      isDark,
       icon: Icons.music_note_outlined,
       title: 'Music Therapy',
       color: AppTheme.primaryColor,
@@ -200,7 +268,8 @@ class TherapyToolsHub extends ConsumerWidget {
 
   Widget _buildMeditationSection(BuildContext context, bool isDark) {
     return _buildSection(
-      context, isDark,
+      context,
+      isDark,
       icon: Icons.self_improvement,
       title: 'Target-Specific Meditations',
       color: AppTheme.secondaryColor,
@@ -211,7 +280,8 @@ class TherapyToolsHub extends ConsumerWidget {
 
   Widget _buildYogaSection(BuildContext context, bool isDark) {
     return _buildSection(
-      context, isDark,
+      context,
+      isDark,
       icon: Icons.accessibility_new,
       title: 'Yoga Routines',
       color: AppTheme.accentColor,
@@ -220,7 +290,7 @@ class TherapyToolsHub extends ConsumerWidget {
     );
   }
 
-  Widget _buildWisdomSection(BuildContext context, bool isDark) {
+  Widget _buildWisdomSection(BuildContext context, WidgetRef ref, bool isDark) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -229,36 +299,46 @@ class TherapyToolsHub extends ConsumerWidget {
             Container(
               padding: const EdgeInsets.all(8),
               decoration: BoxDecoration(
-                color: const Color(0xFFFFB547).withValues(alpha: 0.15),
+                color: AppTheme.warningColor.withValues(alpha: 0.15),
                 borderRadius: BorderRadius.circular(12),
               ),
-              child: const Icon(Icons.self_improvement, color: Color(0xFFFFB547), size: 20),
+              child: const Icon(Icons.self_improvement,
+                  color: AppTheme.warningColor, size: 20),
             ),
             const SizedBox(width: 10),
-            Text('Wisdom & Reflection', style: TextStyle(
-              fontSize: 16, fontWeight: FontWeight.w700,
-              color: isDark ? Colors.white : Colors.black87,
-            )),
+            Text('Wisdom & Reflection',
+                style: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.w700,
+                  color: isDark ? Colors.white : Colors.black87,
+                )),
           ],
         ),
         const SizedBox(height: 12),
         GestureDetector(
-          onTap: () => Navigator.push(context, MaterialPageRoute(builder: (_) => const SpiritualPage())),
+          onTap: () {
+            ref.read(showSecularProvider.notifier).state = false;
+            context.push(AppRoutes.spiritual);
+          },
           child: Container(
             padding: const EdgeInsets.all(20),
             decoration: BoxDecoration(
               gradient: LinearGradient(
-                colors: [const Color(0xFFFFB547).withValues(alpha: 0.1), const Color(0xFFFFB547).withValues(alpha: 0.02)],
+                colors: [
+                  AppTheme.warningColor.withValues(alpha: 0.1),
+                  AppTheme.warningColor.withValues(alpha: 0.02)
+                ],
               ),
               borderRadius: BorderRadius.circular(20),
-              border: Border.all(color: const Color(0xFFFFB547).withValues(alpha: 0.2)),
+              border: Border.all(
+                  color: AppTheme.warningColor.withValues(alpha: 0.2)),
             ),
             child: Row(
               children: [
                 Container(
                   padding: const EdgeInsets.all(12),
                   decoration: BoxDecoration(
-                    color: const Color(0xFFFFB547).withValues(alpha: 0.15),
+                    color: AppTheme.warningColor.withValues(alpha: 0.15),
                     borderRadius: BorderRadius.circular(14),
                   ),
                   child: const Text('🕉️', style: TextStyle(fontSize: 28)),
@@ -268,35 +348,49 @@ class TherapyToolsHub extends ConsumerWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const Text('Bhagavad Gita Wisdom', style: TextStyle(
-                        fontSize: 15, fontWeight: FontWeight.w700, color: Color(0xFFFFB547),
-                      )),
+                      const Text('Bhagavad Gita Wisdom',
+                          style: TextStyle(
+                            fontSize: 15,
+                            fontWeight: FontWeight.w700,
+                            color: AppTheme.warningColor,
+                          )),
                       const SizedBox(height: 4),
                       Text(
                         'Ancient verses for modern challenges — slokas matched to how you feel',
                         style: TextStyle(
-                          fontSize: 12, color: isDark ? Colors.white60 : Colors.black54, height: 1.3,
+                          fontSize: 12,
+                          color: isDark ? Colors.white60 : Colors.black54,
+                          height: 1.3,
                         ),
                       ),
                     ],
                   ),
                 ),
-                Icon(Icons.arrow_forward_ios, color: const Color(0xFFFFB547).withValues(alpha: 0.5), size: 16),
+                Icon(Icons.arrow_forward_ios,
+                    color: AppTheme.warningColor.withValues(alpha: 0.5),
+                    size: 16),
               ],
             ),
           ),
         ),
         const SizedBox(height: 12),
         GestureDetector(
-          onTap: () => Navigator.push(context, MaterialPageRoute(builder: (_) => const SpiritualPage())),
+          onTap: () {
+            ref.read(showSecularProvider.notifier).state = true;
+            context.push(AppRoutes.spiritual);
+          },
           child: Container(
             padding: const EdgeInsets.all(20),
             decoration: BoxDecoration(
               gradient: LinearGradient(
-                colors: [AppTheme.secondaryColor.withValues(alpha: 0.1), AppTheme.secondaryColor.withValues(alpha: 0.02)],
+                colors: [
+                  AppTheme.secondaryColor.withValues(alpha: 0.1),
+                  AppTheme.secondaryColor.withValues(alpha: 0.02)
+                ],
               ),
               borderRadius: BorderRadius.circular(20),
-              border: Border.all(color: AppTheme.secondaryColor.withValues(alpha: 0.2)),
+              border: Border.all(
+                  color: AppTheme.secondaryColor.withValues(alpha: 0.2)),
             ),
             child: Row(
               children: [
@@ -306,27 +400,35 @@ class TherapyToolsHub extends ConsumerWidget {
                     color: AppTheme.secondaryColor.withValues(alpha: 0.15),
                     borderRadius: BorderRadius.circular(14),
                   ),
-                  child: const Icon(Icons.spa, color: Color(0xFF00BFA5), size: 28),
+                  child: const Icon(Icons.spa,
+                      color: AppTheme.secondaryColor, size: 28),
                 ),
                 const SizedBox(width: 16),
                 Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const Text('Secular Mindfulness', style: TextStyle(
-                        fontSize: 15, fontWeight: FontWeight.w700, color: Color(0xFF00BFA5),
-                      )),
+                      const Text('Secular Mindfulness',
+                          style: TextStyle(
+                            fontSize: 15,
+                            fontWeight: FontWeight.w700,
+                            color: AppTheme.secondaryColor,
+                          )),
                       const SizedBox(height: 4),
                       Text(
                         'Non-religious reflection and grounding practices',
                         style: TextStyle(
-                          fontSize: 12, color: isDark ? Colors.white60 : Colors.black54, height: 1.3,
+                          fontSize: 12,
+                          color: isDark ? Colors.white60 : Colors.black54,
+                          height: 1.3,
                         ),
                       ),
                     ],
                   ),
                 ),
-                Icon(Icons.arrow_forward_ios, color: AppTheme.secondaryColor.withValues(alpha: 0.5), size: 16),
+                Icon(Icons.arrow_forward_ios,
+                    color: AppTheme.secondaryColor.withValues(alpha: 0.5),
+                    size: 16),
               ],
             ),
           ),
@@ -336,7 +438,8 @@ class TherapyToolsHub extends ConsumerWidget {
   }
 
   Widget _buildSection(
-    BuildContext context, bool isDark, {
+    BuildContext context,
+    bool isDark, {
     required IconData icon,
     required String title,
     required Color color,
@@ -357,34 +460,48 @@ class TherapyToolsHub extends ConsumerWidget {
               child: Icon(icon, color: color, size: 20),
             ),
             const SizedBox(width: 10),
-            Expanded(child: Text(title, style: TextStyle(
-              fontSize: 16, fontWeight: FontWeight.w700,
-              color: isDark ? Colors.white : Colors.black87,
-            ))),
+            Expanded(
+                child: Text(title,
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w700,
+                      color: isDark ? Colors.white : Colors.black87,
+                    ))),
             GestureDetector(
               onTap: onTap,
-              child: Text('View all →', style: TextStyle(color: color, fontSize: 12, fontWeight: FontWeight.w600)),
+              child: Text('View all →',
+                  style: TextStyle(
+                      color: color, fontSize: 12, fontWeight: FontWeight.w600)),
             ),
           ],
         ),
         const SizedBox(height: 12),
         ...items.take(3).map((item) {
-          return Container(
-            margin: const EdgeInsets.only(bottom: 8),
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-            decoration: BoxDecoration(
-              color: isDark ? AppTheme.darkCard : AppTheme.lightSurface,
-              borderRadius: BorderRadius.circular(14),
-              border: Border.all(color: isDark ? AppTheme.darkBorder : color.withValues(alpha: 0.1)),
-            ),
-            child: Row(
-              children: [
-                Icon(Icons.play_circle_outline, color: color, size: 20),
-                const SizedBox(width: 12),
-                Expanded(child: Text(item, style: TextStyle(
-                  fontSize: 13, color: isDark ? Colors.white70 : Colors.black87,
-                ))),
-              ],
+          return GestureDetector(
+            onTap: onTap,
+            child: Container(
+              margin: const EdgeInsets.only(bottom: 8),
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+              decoration: BoxDecoration(
+                color: isDark ? AppTheme.darkCard : AppTheme.lightSurface,
+                borderRadius: BorderRadius.circular(14),
+                border: Border.all(
+                    color: isDark
+                        ? AppTheme.darkBorder
+                        : color.withValues(alpha: 0.1)),
+              ),
+              child: Row(
+                children: [
+                  Icon(Icons.play_circle_outline, color: color, size: 20),
+                  const SizedBox(width: 12),
+                  Expanded(
+                      child: Text(item,
+                          style: TextStyle(
+                            fontSize: 13,
+                            color: isDark ? Colors.white70 : Colors.black87,
+                          ))),
+                ],
+              ),
             ),
           );
         }),

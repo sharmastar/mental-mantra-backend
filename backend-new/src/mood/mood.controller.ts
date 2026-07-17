@@ -3,6 +3,7 @@ import { ApiTags, ApiOperation, ApiBearerAuth } from '@nestjs/swagger';
 import { MoodService } from './mood.service';
 import { JwtAuthGuard } from '../common/guards/jwt-auth.guard';
 import { CurrentUser } from '../common/decorators/current-user.decorator';
+import { CreateMoodDto } from './dto/create-mood.dto';
 
 @ApiTags('Mood')
 @ApiBearerAuth()
@@ -13,8 +14,8 @@ export class MoodController {
 
   @Post()
   @ApiOperation({ summary: 'Log mood entry' })
-  async create(@CurrentUser('id') userId: string, @Body() data: any) {
-    return { success: true, data: await this.moodService.create(userId, data) };
+  async create(@CurrentUser('id') userId: string, @Body() dto: CreateMoodDto) {
+    return { success: true, data: await this.moodService.create(userId, dto) };
   }
 
   @Get()

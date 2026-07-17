@@ -4,7 +4,8 @@ import '../core/theme/app_theme.dart';
 class Helpers {
   Helpers._();
 
-  static void showLoadingDialog(BuildContext context, {String message = 'Loading...'}) {
+  static void showLoadingDialog(BuildContext context,
+      {String message = 'Loading...'}) {
     showDialog(
       context: context,
       barrierDismissible: false,

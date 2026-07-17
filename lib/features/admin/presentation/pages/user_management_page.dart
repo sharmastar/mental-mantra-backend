@@ -48,7 +48,8 @@ class _UserManagementPageState extends ConsumerState<UserManagementPage> {
           const SizedBox(height: 16),
           Text('No users found', style: theme.textTheme.titleMedium),
           const SizedBox(height: 8),
-          Text('Users will appear here once they sign up.', style: theme.textTheme.bodySmall?.copyWith(color: Colors.grey)),
+          Text('Users will appear here once they sign up.',
+              style: theme.textTheme.bodySmall?.copyWith(color: Colors.grey)),
           const SizedBox(height: 16),
           ElevatedButton(
             onPressed: () => ref.read(adminProvider.notifier).load(),
@@ -70,39 +71,56 @@ class _UserManagementPageState extends ConsumerState<UserManagementPage> {
       decoration: BoxDecoration(
         color: isDark ? AppTheme.darkCard : AppTheme.lightSurface,
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: isDark ? AppTheme.darkBorder : AppTheme.lightBorder),
+        border: Border.all(
+            color: isDark ? AppTheme.darkBorder : AppTheme.lightBorder),
       ),
       child: Row(
         children: [
           CircleAvatar(
-            backgroundColor: isAdmin ? AppTheme.primaryColor : AppTheme.secondaryColor,
-            child: Text(user.name[0], style: const TextStyle(color: Colors.white)),
+            backgroundColor:
+                isAdmin ? AppTheme.primaryColor : AppTheme.secondaryColor,
+            child:
+                Text(user.name[0], style: const TextStyle(color: Colors.white)),
           ),
           const SizedBox(width: 16),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(user.name, style: theme.textTheme.titleMedium?.copyWith(fontWeight: FontWeight.bold)),
+                Text(user.name,
+                    style: theme.textTheme.titleMedium
+                        ?.copyWith(fontWeight: FontWeight.bold)),
                 const SizedBox(height: 2),
-                Text('${user.role} \u2022 ${isActive ? "Active" : "Inactive"}', style: theme.textTheme.bodySmall?.copyWith(color: Colors.grey)),
-                Text(user.email, style: theme.textTheme.bodySmall?.copyWith(color: Colors.grey, fontSize: 11)),
+                Text('${user.role} \u2022 ${isActive ? "Active" : "Inactive"}',
+                    style: theme.textTheme.bodySmall
+                        ?.copyWith(color: Colors.grey)),
+                Text(user.email,
+                    style: theme.textTheme.bodySmall
+                        ?.copyWith(color: Colors.grey, fontSize: 11)),
               ],
             ),
           ),
           PopupMenuButton<String>(
             onSelected: (val) {
               if (val == 'make_admin') {
-                ref.read(adminProvider.notifier).updateUserRole(user.uid, 'admin');
+                ref
+                    .read(adminProvider.notifier)
+                    .updateUserRole(user.uid, 'admin');
               } else if (val == 'make_user') {
-                ref.read(adminProvider.notifier).updateUserRole(user.uid, 'user');
+                ref
+                    .read(adminProvider.notifier)
+                    .updateUserRole(user.uid, 'user');
               } else if (val == 'toggle_status') {
                 ref.read(adminProvider.notifier).toggleUserStatus(user.uid);
               }
             },
             itemBuilder: (context) => [
-              if (!isAdmin) const PopupMenuItem(value: 'make_admin', child: Text('Promote to Admin')),
-              if (isAdmin) const PopupMenuItem(value: 'make_user', child: Text('Demote to User')),
+              if (!isAdmin)
+                const PopupMenuItem(
+                    value: 'make_admin', child: Text('Promote to Admin')),
+              if (isAdmin)
+                const PopupMenuItem(
+                    value: 'make_user', child: Text('Demote to User')),
               PopupMenuItem(
                 value: 'toggle_status',
                 child: Text(isActive ? 'Deactivate' : 'Activate'),

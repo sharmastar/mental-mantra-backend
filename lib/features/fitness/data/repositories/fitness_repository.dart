@@ -13,7 +13,8 @@ class FitnessRepository {
       final data = response.data as Map<String, dynamic>;
       if (data['success'] == true && data['data'] != null) {
         return (data['data'] as List<dynamic>)
-            .map((e) => FitnessRecord.fromJson({...e as Map<String, dynamic>, 'id': e['id'] ?? ''}))
+            .map((e) => FitnessRecord.fromJson(
+                {...e as Map<String, dynamic>, 'id': e['id'] ?? ''}))
             .toList();
       }
       return [];

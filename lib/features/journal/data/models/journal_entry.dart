@@ -23,34 +23,40 @@ class JournalEntry {
     required this.updatedAt,
   });
 
-  int get wordCount => content.split(RegExp(r'\s+')).where((w) => w.isNotEmpty).length;
+  int get wordCount =>
+      content.split(RegExp(r'\s+')).where((w) => w.isNotEmpty).length;
 
   String? get aiInsight => aiAnalysis?['encouragement'] as String?;
 
-  factory JournalEntry.fromJson(Map<String, dynamic> json, [String? docId]) => JournalEntry(
-    id: docId ?? json['id'],
-    title: json['title'] ?? '',
-    content: json['content'] ?? '',
-    mood: json['mood'] ?? 3,
-    emotions: List<String>.from(json['emotions'] ?? []),
-    tags: List<String>.from(json['tags'] ?? []),
-    isPrivate: json['isPrivate'] ?? false,
-    aiAnalysis: json['aiAnalysis'] as Map<String, dynamic>?,
-    createdAt: json['createdAt'] != null ? DateTime.parse(json['createdAt'] as String) : DateTime.now(),
-    updatedAt: json['updatedAt'] != null ? DateTime.parse(json['updatedAt'] as String) : DateTime.now(),
-  );
+  factory JournalEntry.fromJson(Map<String, dynamic> json, [String? docId]) =>
+      JournalEntry(
+        id: docId ?? json['id'],
+        title: json['title'] ?? '',
+        content: json['content'] ?? '',
+        mood: json['mood'] ?? 3,
+        emotions: List<String>.from(json['emotions'] ?? []),
+        tags: List<String>.from(json['tags'] ?? []),
+        isPrivate: json['isPrivate'] ?? false,
+        aiAnalysis: json['aiAnalysis'] as Map<String, dynamic>?,
+        createdAt: json['createdAt'] != null
+            ? DateTime.parse(json['createdAt'] as String)
+            : DateTime.now(),
+        updatedAt: json['updatedAt'] != null
+            ? DateTime.parse(json['updatedAt'] as String)
+            : DateTime.now(),
+      );
 
   Map<String, dynamic> toJson() => {
-    'title': title,
-    'content': content,
-    'mood': mood,
-    'emotions': emotions,
-    'tags': tags,
-    'isPrivate': isPrivate,
-    'aiAnalysis': aiAnalysis,
-    'createdAt': createdAt,
-    'updatedAt': updatedAt,
-  };
+        'title': title,
+        'content': content,
+        'mood': mood,
+        'emotions': emotions,
+        'tags': tags,
+        'isPrivate': isPrivate,
+        'aiAnalysis': aiAnalysis,
+        'createdAt': createdAt,
+        'updatedAt': updatedAt,
+      };
 
   JournalEntry copyWith({
     String? id,

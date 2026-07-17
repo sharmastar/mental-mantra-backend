@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mental_mantra/core/theme/app_theme.dart';
 
 class Habit {
   final String id;
@@ -14,7 +15,7 @@ class Habit {
     required this.id,
     required this.title,
     this.icon = Icons.check_circle_outline,
-    this.color = const Color(0xFF42C8B7),
+    this.color = AppTheme.primaryColor,
     this.streak = 0,
     this.done = false,
     this.target = 1,
@@ -44,22 +45,22 @@ class Habit {
   }
 
   Map<String, dynamic> toJson() => {
-    'id': id,
-    'title': title,
-    'streak': streak,
-    'done': done,
-    'target': target,
-    'createdAt': createdAt.toIso8601String(),
-  };
+        'id': id,
+        'title': title,
+        'streak': streak,
+        'done': done,
+        'target': target,
+        'createdAt': createdAt.toIso8601String(),
+      };
 
   factory Habit.fromJson(Map<String, dynamic> json) => Habit(
-    id: json['id'] as String,
-    title: json['title'] as String,
-    streak: (json['streak'] as num?)?.toInt() ?? 0,
-    done: json['done'] as bool? ?? false,
-    target: (json['target'] as num?)?.toInt() ?? 1,
-    createdAt: json['createdAt'] != null
-        ? DateTime.parse(json['createdAt'] as String)
-        : DateTime.now(),
-  );
+        id: json['id'] as String,
+        title: json['title'] as String,
+        streak: (json['streak'] as num?)?.toInt() ?? 0,
+        done: json['done'] as bool? ?? false,
+        target: (json['target'] as num?)?.toInt() ?? 1,
+        createdAt: json['createdAt'] != null
+            ? DateTime.parse(json['createdAt'] as String)
+            : DateTime.now(),
+      );
 }

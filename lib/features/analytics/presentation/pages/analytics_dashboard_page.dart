@@ -11,7 +11,8 @@ class AnalyticsDashboardPage extends ConsumerStatefulWidget {
   const AnalyticsDashboardPage({super.key});
 
   @override
-  ConsumerState<AnalyticsDashboardPage> createState() => _AnalyticsDashboardPageState();
+  ConsumerState<AnalyticsDashboardPage> createState() =>
+      _AnalyticsDashboardPageState();
 }
 
 class _AnalyticsDashboardPageState extends ConsumerState<AnalyticsDashboardPage>
@@ -44,14 +45,18 @@ class _AnalyticsDashboardPageState extends ConsumerState<AnalyticsDashboardPage>
     final streak = user?.streakDays ?? 0;
 
     return Scaffold(
-      appBar: AppBar(title: Text('Analytics', style: GoogleFonts.playfairDisplay(fontSize: 20))),
+      appBar: AppBar(
+          title: Text('Analytics',
+              style: GoogleFonts.playfairDisplay(fontSize: 20))),
       body: state.isLoading
           ? ListView(
               padding: const EdgeInsets.all(20),
-              children: List.generate(4, (_) => const Padding(
-                padding: EdgeInsets.only(bottom: 16),
-                child: SkeletonCardLoader(),
-              )),
+              children: List.generate(
+                  4,
+                  (_) => const Padding(
+                        padding: EdgeInsets.only(bottom: 16),
+                        child: SkeletonCardLoader(),
+                      )),
             )
           : ListView(
               padding: const EdgeInsets.fromLTRB(20, 8, 20, 100),
@@ -61,15 +66,18 @@ class _AnalyticsDashboardPageState extends ConsumerState<AnalyticsDashboardPage>
                 _buildStatCards(state, isDark),
                 const SizedBox(height: 24),
                 if (state.showCharts) ...[
-                  _buildSectionTitle('Wellness Trend', Icons.trending_up_rounded, isDark),
+                  _buildSectionTitle(
+                      'Wellness Trend', Icons.trending_up_rounded, isDark),
                   const SizedBox(height: 12),
                   _buildWellnessTrendChart(state, isDark),
                   const SizedBox(height: 28),
-                  _buildSectionTitle('Category Breakdown', Icons.pie_chart_rounded, isDark),
+                  _buildSectionTitle(
+                      'Category Breakdown', Icons.pie_chart_rounded, isDark),
                   const SizedBox(height: 12),
                   _buildCategoryChart(state, isDark),
                   const SizedBox(height: 28),
-                  _buildSectionTitle('Tasks Completed', Icons.checklist_rounded, isDark),
+                  _buildSectionTitle(
+                      'Tasks Completed', Icons.checklist_rounded, isDark),
                   const SizedBox(height: 12),
                   _buildTasksChart(state, isDark),
                   const SizedBox(height: 28),
@@ -101,22 +109,34 @@ class _AnalyticsDashboardPageState extends ConsumerState<AnalyticsDashboardPage>
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text('Your Journey', style: GoogleFonts.outfit(fontSize: 12, color: Colors.white70)),
+                  Text('Your Journey',
+                      style: GoogleFonts.outfit(
+                          fontSize: 12, color: Colors.white70)),
                   const SizedBox(height: 4),
-                  Text('Wellness Analytics', style: GoogleFonts.playfairDisplay(fontSize: 22, color: Colors.white, fontWeight: FontWeight.w600)),
+                  Text('Wellness Analytics',
+                      style: GoogleFonts.playfairDisplay(
+                          fontSize: 22,
+                          color: Colors.white,
+                          fontWeight: FontWeight.w600)),
                 ],
               ),
               Container(
-                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
                 decoration: BoxDecoration(
                   color: Colors.white.withValues(alpha: 0.2),
                   borderRadius: BorderRadius.circular(16),
                 ),
                 child: Row(
                   children: [
-                    const Icon(Icons.local_fire_department, color: Colors.orangeAccent, size: 18),
+                    const Icon(Icons.local_fire_department,
+                        color: Colors.orangeAccent, size: 18),
                     const SizedBox(width: 4),
-                    Text('$streak day streak', style: GoogleFonts.outfit(fontSize: 13, color: Colors.white, fontWeight: FontWeight.w600)),
+                    Text('$streak days showing up',
+                        style: GoogleFonts.outfit(
+                            fontSize: 13,
+                            color: Colors.white,
+                            fontWeight: FontWeight.w600)),
                   ],
                 ),
               ),
@@ -130,16 +150,23 @@ class _AnalyticsDashboardPageState extends ConsumerState<AnalyticsDashboardPage>
   Widget _buildStatCards(AnalyticsState state, bool isDark) {
     return Row(
       children: [
-        Expanded(child: _statCard('Avg Wellness', '${state.data.avgWellness}/100', Icons.favorite_rounded, AppTheme.primaryColor, isDark)),
+        Expanded(
+            child: _statCard('Avg Wellness', '${state.data.avgWellness}/100',
+                Icons.favorite_rounded, AppTheme.primaryColor, isDark)),
         const SizedBox(width: 12),
-        Expanded(child: _statCard('Check-ins', '${state.data.totalCheckins}', Icons.assignment_rounded, AppTheme.secondaryColor, isDark)),
+        Expanded(
+            child: _statCard('Check-ins', '${state.data.totalCheckins}',
+                Icons.assignment_rounded, AppTheme.secondaryColor, isDark)),
         const SizedBox(width: 12),
-        Expanded(child: _statCard('Tasks Done', '${state.data.totalTasksDone}', Icons.task_alt_rounded, AppTheme.successColor, isDark)),
+        Expanded(
+            child: _statCard('Tasks Done', '${state.data.totalTasksDone}',
+                Icons.task_alt_rounded, AppTheme.successColor, isDark)),
       ],
     );
   }
 
-  Widget _statCard(String label, String value, IconData icon, Color color, bool isDark) {
+  Widget _statCard(
+      String label, String value, IconData icon, Color color, bool isDark) {
     return TweenAnimationBuilder<double>(
       duration: const Duration(milliseconds: 800),
       tween: Tween(begin: 0, end: 1),
@@ -151,15 +178,22 @@ class _AnalyticsDashboardPageState extends ConsumerState<AnalyticsDashboardPage>
           decoration: BoxDecoration(
             color: isDark ? AppTheme.darkCard : Colors.white,
             borderRadius: BorderRadius.circular(20),
-            border: Border.all(color: isDark ? AppTheme.darkBorder : AppTheme.lightBorder),
+            border: Border.all(
+                color: isDark ? AppTheme.darkBorder : AppTheme.lightBorder),
           ),
           child: Column(
             children: [
               Icon(icon, color: color, size: 24),
               const SizedBox(height: 8),
-              Text(value, style: GoogleFonts.outfit(fontSize: 18, fontWeight: FontWeight.w700, color: isDark ? Colors.white : AppTheme.primaryDark)),
+              Text(value,
+                  style: GoogleFonts.outfit(
+                      fontSize: 18,
+                      fontWeight: FontWeight.w700,
+                      color: isDark ? Colors.white : AppTheme.primaryDark)),
               const SizedBox(height: 4),
-              Text(label, style: GoogleFonts.outfit(fontSize: 11, color: Colors.grey), textAlign: TextAlign.center),
+              Text(label,
+                  style: GoogleFonts.outfit(fontSize: 11, color: Colors.grey),
+                  textAlign: TextAlign.center),
             ],
           ),
         ),
@@ -172,18 +206,22 @@ class _AnalyticsDashboardPageState extends ConsumerState<AnalyticsDashboardPage>
       children: [
         Icon(icon, size: 18, color: AppTheme.primaryColor),
         const SizedBox(width: 8),
-        Text(title, style: GoogleFonts.playfairDisplay(fontSize: 18, fontWeight: FontWeight.w600, color: isDark ? Colors.white : AppTheme.primaryDark)),
+        Text(title,
+            style: GoogleFonts.playfairDisplay(
+                fontSize: 18,
+                fontWeight: FontWeight.w600,
+                color: isDark ? Colors.white : AppTheme.primaryDark)),
       ],
     );
   }
 
   Color _colorForCategory(String name) {
     const colors = {
-      'Mood': Color(0xFF42C8B7),
-      'Energy': Color(0xFF00BFA5),
-      'Sleep': Color(0xFF1E6C64),
-      'Focus': Color(0xFF00BCD4),
-      'Calm': Color(0xFFE0F7F6),
+      'Mood': AppTheme.primaryColor,
+      'Energy': AppTheme.secondaryColor,
+      'Sleep': AppTheme.primaryDark,
+      'Focus': AppTheme.primaryColor,
+      'Calm': AppTheme.accentColor,
     };
     return colors[name] ?? AppTheme.primaryColor;
   }
@@ -196,7 +234,8 @@ class _AnalyticsDashboardPageState extends ConsumerState<AnalyticsDashboardPage>
       decoration: BoxDecoration(
         color: isDark ? AppTheme.darkCard : Colors.white,
         borderRadius: BorderRadius.circular(24),
-        border: Border.all(color: isDark ? AppTheme.darkBorder : AppTheme.lightBorder),
+        border: Border.all(
+            color: isDark ? AppTheme.darkBorder : AppTheme.lightBorder),
       ),
       child: LineChart(
         LineChartData(
@@ -205,7 +244,8 @@ class _AnalyticsDashboardPageState extends ConsumerState<AnalyticsDashboardPage>
             drawVerticalLine: false,
             horizontalInterval: 20,
             getDrawingHorizontalLine: (value) => FlLine(
-              color: (isDark ? Colors.white : Colors.black).withValues(alpha: 0.05),
+              color: (isDark ? Colors.white : Colors.black)
+                  .withValues(alpha: 0.05),
               strokeWidth: 1,
             ),
           ),
@@ -220,14 +260,16 @@ class _AnalyticsDashboardPageState extends ConsumerState<AnalyticsDashboardPage>
           maxY: 100,
           lineBarsData: [
             LineChartBarData(
-              spots: trend.map((p) => FlSpot(p.day.toDouble(), p.value)).toList(),
+              spots:
+                  trend.map((p) => FlSpot(p.day.toDouble(), p.value)).toList(),
               isCurved: true,
               color: AppTheme.primaryColor,
               barWidth: 3,
               isStrokeCapRound: true,
               dotData: FlDotData(
                 show: true,
-                getDotPainter: (spot, percent, barData, index) => FlDotCirclePainter(
+                getDotPainter: (spot, percent, barData, index) =>
+                    FlDotCirclePainter(
                   radius: 3,
                   color: AppTheme.primaryColor,
                   strokeWidth: 2,
@@ -244,10 +286,15 @@ class _AnalyticsDashboardPageState extends ConsumerState<AnalyticsDashboardPage>
           ],
           lineTouchData: LineTouchData(
             touchTooltipData: LineTouchTooltipData(
-              getTooltipItems: (spots) => spots.map((s) => LineTooltipItem(
-                '${s.y.toInt()}/100',
-                const TextStyle(color: Colors.white, fontWeight: FontWeight.w600, fontSize: 13),
-              )).toList(),
+              getTooltipItems: (spots) => spots
+                  .map((s) => LineTooltipItem(
+                        '${s.y.toInt()}/100',
+                        const TextStyle(
+                            color: Colors.white,
+                            fontWeight: FontWeight.w600,
+                            fontSize: 13),
+                      ))
+                  .toList(),
             ),
           ),
         ),
@@ -265,7 +312,8 @@ class _AnalyticsDashboardPageState extends ConsumerState<AnalyticsDashboardPage>
       decoration: BoxDecoration(
         color: isDark ? AppTheme.darkCard : Colors.white,
         borderRadius: BorderRadius.circular(24),
-        border: Border.all(color: isDark ? AppTheme.darkBorder : AppTheme.lightBorder),
+        border: Border.all(
+            color: isDark ? AppTheme.darkBorder : AppTheme.lightBorder),
       ),
       child: LineChart(
         LineChartData(
@@ -274,7 +322,8 @@ class _AnalyticsDashboardPageState extends ConsumerState<AnalyticsDashboardPage>
             drawVerticalLine: false,
             horizontalInterval: 20,
             getDrawingHorizontalLine: (value) => FlLine(
-              color: (isDark ? Colors.white : Colors.black).withValues(alpha: 0.05),
+              color: (isDark ? Colors.white : Colors.black)
+                  .withValues(alpha: 0.05),
               strokeWidth: 1,
             ),
           ),
@@ -287,21 +336,31 @@ class _AnalyticsDashboardPageState extends ConsumerState<AnalyticsDashboardPage>
           borderData: FlBorderData(show: false),
           minY: 30,
           maxY: 100,
-          lineBarsData: categories.map((cat) => LineChartBarData(
-            spots: List.generate(cat.values.length, (i) => FlSpot(i.toDouble(), cat.values[i])),
-            isCurved: true,
-            color: cat.color,
-            barWidth: 2.5,
-            isStrokeCapRound: true,
-            dotData: const FlDotData(show: false),
-          )).toList(),
+          lineBarsData: categories
+              .map((cat) => LineChartBarData(
+                    spots: List.generate(cat.values.length,
+                        (i) => FlSpot(i.toDouble(), cat.values[i])),
+                    isCurved: true,
+                    color: cat.color,
+                    barWidth: 2.5,
+                    isStrokeCapRound: true,
+                    dotData: const FlDotData(show: false),
+                  ))
+              .toList(),
           lineTouchData: LineTouchData(
             touchTooltipData: LineTouchTooltipData(
               tooltipMargin: 8,
-              getTooltipItems: (spots) => spots.asMap().entries.map((e) => LineTooltipItem(
-                '${categories[e.key].name}: ${e.value.y.toInt()}',
-                TextStyle(color: categories[e.key].color, fontWeight: FontWeight.w600, fontSize: 12),
-              )).toList(),
+              getTooltipItems: (spots) => spots
+                  .asMap()
+                  .entries
+                  .map((e) => LineTooltipItem(
+                        '${categories[e.key].name}: ${e.value.y.toInt()}',
+                        TextStyle(
+                            color: categories[e.key].color,
+                            fontWeight: FontWeight.w600,
+                            fontSize: 12),
+                      ))
+                  .toList(),
             ),
           ),
         ),
@@ -319,7 +378,8 @@ class _AnalyticsDashboardPageState extends ConsumerState<AnalyticsDashboardPage>
       decoration: BoxDecoration(
         color: isDark ? AppTheme.darkCard : Colors.white,
         borderRadius: BorderRadius.circular(24),
-        border: Border.all(color: isDark ? AppTheme.darkBorder : AppTheme.lightBorder),
+        border: Border.all(
+            color: isDark ? AppTheme.darkBorder : AppTheme.lightBorder),
       ),
       child: BarChart(
         BarChartData(
@@ -328,7 +388,8 @@ class _AnalyticsDashboardPageState extends ConsumerState<AnalyticsDashboardPage>
             drawVerticalLine: false,
             horizontalInterval: 2,
             getDrawingHorizontalLine: (value) => FlLine(
-              color: (isDark ? Colors.white : Colors.black).withValues(alpha: 0.05),
+              color: (isDark ? Colors.white : Colors.black)
+                  .withValues(alpha: 0.05),
               strokeWidth: 1,
             ),
           ),
@@ -341,30 +402,37 @@ class _AnalyticsDashboardPageState extends ConsumerState<AnalyticsDashboardPage>
           borderData: FlBorderData(show: false),
           minY: 0,
           maxY: 10,
-          barGroups: List.generate(tasksData.length, (i) => BarChartGroupData(
-            x: i,
-            barRods: [
-              BarChartRodData(
-                toY: tasksData[i].toDouble(),
-                color: _barColor(i),
-                width: 16,
-                borderRadius: const BorderRadius.only(
-                  topLeft: Radius.circular(8),
-                  topRight: Radius.circular(8),
-                ),
-                backDrawRodData: BackgroundBarChartRodData(
-                  show: true,
-                  toY: 10,
-                  color: (isDark ? Colors.white : Colors.black).withValues(alpha: 0.04),
-                ),
-              ),
-            ],
-          )),
+          barGroups: List.generate(
+              tasksData.length,
+              (i) => BarChartGroupData(
+                    x: i,
+                    barRods: [
+                      BarChartRodData(
+                        toY: tasksData[i].toDouble(),
+                        color: _barColor(i),
+                        width: 16,
+                        borderRadius: const BorderRadius.only(
+                          topLeft: Radius.circular(8),
+                          topRight: Radius.circular(8),
+                        ),
+                        backDrawRodData: BackgroundBarChartRodData(
+                          show: true,
+                          toY: 10,
+                          color: (isDark ? Colors.white : Colors.black)
+                              .withValues(alpha: 0.04),
+                        ),
+                      ),
+                    ],
+                  )),
           barTouchData: BarTouchData(
             touchTooltipData: BarTouchTooltipData(
-              getTooltipItem: (group, groupIndex, rod, rodIndex) => BarTooltipItem(
+              getTooltipItem: (group, groupIndex, rod, rodIndex) =>
+                  BarTooltipItem(
                 '${rod.toY.toInt()} tasks',
-                const TextStyle(color: Colors.white, fontWeight: FontWeight.w600, fontSize: 13),
+                const TextStyle(
+                    color: Colors.white,
+                    fontWeight: FontWeight.w600,
+                    fontSize: 13),
               ),
             ),
           ),
@@ -376,8 +444,16 @@ class _AnalyticsDashboardPageState extends ConsumerState<AnalyticsDashboardPage>
   }
 
   Color _barColor(int index) {
-    const colors = [0xFF42C8B7, 0xFF00BFA5, 0xFF1E6C64, 0xFF00BCD4, 0xFF42C8B7, 0xFF00BFA5, 0xFF1E6C64];
-    return Color(colors[index % colors.length]);
+    const colors = [
+      AppTheme.primaryColor,
+      AppTheme.secondaryColor,
+      AppTheme.primaryDark,
+      AppTheme.primaryColor,
+      AppTheme.primaryColor,
+      AppTheme.secondaryColor,
+      AppTheme.primaryDark
+    ];
+    return colors[index % colors.length];
   }
 
   Widget _buildInsightCard(bool isDark) {
@@ -392,7 +468,8 @@ class _AnalyticsDashboardPageState extends ConsumerState<AnalyticsDashboardPage>
           end: Alignment.bottomRight,
         ),
         borderRadius: BorderRadius.circular(24),
-        border: Border.all(color: isDark ? AppTheme.darkBorder : AppTheme.lightBorder),
+        border: Border.all(
+            color: isDark ? AppTheme.darkBorder : AppTheme.lightBorder),
       ),
       child: Row(
         children: [
@@ -403,18 +480,25 @@ class _AnalyticsDashboardPageState extends ConsumerState<AnalyticsDashboardPage>
               color: AppTheme.primaryColor.withValues(alpha: 0.1),
               borderRadius: BorderRadius.circular(16),
             ),
-            child: const Icon(Icons.auto_awesome_rounded, color: AppTheme.primaryColor, size: 24),
+            child: const Icon(Icons.auto_awesome_rounded,
+                color: AppTheme.primaryColor, size: 24),
           ),
           const SizedBox(width: 14),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text('AI Insight', style: GoogleFonts.outfit(fontSize: 14, fontWeight: FontWeight.w600,
-                  color: isDark ? Colors.white : AppTheme.primaryDark)),
+                Text('AI Insight',
+                    style: GoogleFonts.outfit(
+                        fontSize: 14,
+                        fontWeight: FontWeight.w600,
+                        color: isDark ? Colors.white : AppTheme.primaryDark)),
                 const SizedBox(height: 4),
-                Text('Your wellness scores are trending upward. Keep up the great work!',
-                  style: GoogleFonts.outfit(fontSize: 12, color: isDark ? Colors.white54 : Colors.black54)),
+                Text(
+                    'Your wellness scores are trending upward. Keep up the great work!',
+                    style: GoogleFonts.outfit(
+                        fontSize: 12,
+                        color: isDark ? Colors.white54 : Colors.black54)),
               ],
             ),
           ),

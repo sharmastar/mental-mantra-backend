@@ -3,7 +3,7 @@ version: "3.8"
 services:
   api:
     build:
-      context: ./server
+      context: ./backend-new
       dockerfile: Dockerfile
     ports:
       - "3000:3000"
@@ -30,7 +30,7 @@ services:
     networks:
       - mental_mantra_net
     volumes:
-      - ./server:/usr/src/app
+      - ./backend-new:/usr/src/app
       - /usr/src/app/node_modules
 
   postgres:

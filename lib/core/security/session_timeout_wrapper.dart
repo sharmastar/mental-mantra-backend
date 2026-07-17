@@ -1,9 +1,9 @@
-// lib/core/security/session_timeout_wrapper.dart
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mental_mantra/core/security/biometric_service.dart';
 import 'package:mental_mantra/core/storage/secure_storage.dart';
+import 'package:mental_mantra/core/theme/app_theme.dart';
 
 class SessionTimeoutWrapper extends ConsumerStatefulWidget {
   final Widget child;
@@ -16,7 +16,8 @@ class SessionTimeoutWrapper extends ConsumerStatefulWidget {
   });
 
   @override
-  ConsumerState<SessionTimeoutWrapper> createState() => _SessionTimeoutWrapperState();
+  ConsumerState<SessionTimeoutWrapper> createState() =>
+      _SessionTimeoutWrapperState();
 }
 
 class _SessionTimeoutWrapperState extends ConsumerState<SessionTimeoutWrapper> {
@@ -47,23 +48,22 @@ class _SessionTimeoutWrapperState extends ConsumerState<SessionTimeoutWrapper> {
 
   Future<void> _onTimeout() async {
     final isBioEnabled = await SecureStorage.isBiometricEnabled();
-    if (!isBioEnabled) return;
+    if (!isBioEnabled || !mounted) return;
 
     setState(() {
       _isLocked = true;
     });
 
     final authenticated = await BiometricService.instance.authenticate(
-      localizedReason: 'Session timed out due to inactivity. Please authenticate.',
+      localizedReason:
+          'Session timed out due to inactivity. Please authenticate.',
     );
 
-    if (authenticated) {
+    if (authenticated && mounted) {
       setState(() {
         _isLocked = false;
       });
       _startTimer();
-    } else {
-      // Keep locked until authenticated or user decides to authenticate again
     }
   }
 
@@ -88,32 +88,30 @@ class _SessionTimeoutWrapperState extends ConsumerState<SessionTimeoutWrapper> {
                       const Icon(
                         Icons.lock_outline_rounded,
                         size: 72,
-                        color: Color(0xFF6C63FF),
+                        color: AppTheme.primaryColor,
                       ),
                       const SizedBox(height: 24),
-                      const Text(
+                      Text(
                         'Session Locked',
-                        style: TextStyle(
-                          fontSize: 24,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.white,
-                          decoration: TextDecoration.none,
-                        ),
+                        style: Theme.of(context)
+                            .textTheme
+                            .headlineMedium
+                            ?.copyWith(
+                              color: Colors.white,
+                            ),
                       ),
                       const SizedBox(height: 12),
-                      const Text(
+                      Text(
                         'Mental Mantra was locked due to inactivity.',
-                        style: TextStyle(
-                          fontSize: 14,
-                          color: Colors.white70,
-                          decoration: TextDecoration.none,
-                        ),
+                        style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                              color: Colors.white70,
+                            ),
                         textAlign: TextAlign.center,
                       ),
                       const SizedBox(height: 32),
                       ElevatedButton.icon(
                         style: ElevatedButton.styleFrom(
-                          backgroundColor: const Color(0xFF6C63FF),
+                          backgroundColor: AppTheme.primaryColor,
                           padding: const EdgeInsets.symmetric(
                             horizontal: 32,
                             vertical: 14,
@@ -123,7 +121,8 @@ class _SessionTimeoutWrapperState extends ConsumerState<SessionTimeoutWrapper> {
                           ),
                         ),
                         onPressed: () async {
-                          final authenticated = await BiometricService.instance.authenticate(
+                          final authenticated =
+                              await BiometricService.instance.authenticate(
                             localizedReason: 'Unlock Mental Mantra',
                           );
                           if (authenticated) {
@@ -133,14 +132,14 @@ class _SessionTimeoutWrapperState extends ConsumerState<SessionTimeoutWrapper> {
                             _startTimer();
                           }
                         },
-                        icon: const Icon(Icons.fingerprint, color: Colors.white),
-                        label: const Text(
+                        icon:
+                            const Icon(Icons.fingerprint, color: Colors.white),
+                        label: Text(
                           'Unlock App',
-                          style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.white,
-                          ),
+                          style:
+                              Theme.of(context).textTheme.labelLarge?.copyWith(
+                                    color: Colors.white,
+                                  ),
                         ),
                       ),
                     ],

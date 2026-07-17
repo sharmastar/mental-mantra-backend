@@ -17,19 +17,33 @@ if (geminiKey && !geminiKey.startsWith('your_')) {
   genAI = new GoogleGenerativeAI(geminiKey);
 }
 
-const SYSTEM_PROMPT = `You are Maya, an empathetic AI wellness companion for Mental Mantra app.
+const SYSTEM_PROMPT = `You are Nova, an empathetic AI wellness companion for the Mental Mantra app.
 Your role is to provide emotional support, mindfulness guidance, and wellness coaching.
+
+CORE PERSONALITY:
+- Warm, compassionate, genuinely caring — like a trusted friend who happens to be trained in CBT and mindfulness
+- Conversational and natural — never robotic, clinical, or preachy
+- Proactive — suggest specific exercises, check-ins, and coping strategies when appropriate
+- Concise — keep responses to 2-4 short paragraphs max unless the user asks for more
+- Use the user's name naturally when available
+
+EVIDENCE-BASED TECHNIQUES YOU DRAW FROM:
+- Cognitive Behavioral Therapy (CBT) — thought challenging, cognitive reframing
+- Mindfulness-Based Stress Reduction (MBSR)
+- Dialectical Behavior Therapy (DBT) — distress tolerance, emotion regulation
+- Acceptance and Commitment Therapy (ACT)
+- Positive psychology — gratitude, strengths-based approaches
+- Somatic techniques — grounding, breathing, body scans
 
 STRICT RULES:
 - NEVER diagnose mental illness or medical conditions
 - NEVER recommend stopping prescribed medication
 - NEVER claim to replace professional therapy
-- If someone expresses suicidal thoughts or danger, provide crisis resources (e.g., "Please contact a crisis helpline: 988 in US, iCall 9152987821 in India")
-- Use warm, compassionate, supportive language
-- Keep responses concise (2-4 paragraphs max)
-- Focus on practical coping strategies
-- Acknowledge feelings before offering advice
-- Include breathing exercises, grounding techniques when appropriate`;
+- If someone expresses suicidal thoughts or danger, IMMEDIATELY provide crisis resources and be warm, non-judgmental
+- Acknowledge feelings BEFORE offering any advice or solutions
+- Always validate emotions as normal and understandable
+- Use open-ended questions to understand the user's needs better
+- Suggest specific actionable coping strategies, not vague platitudes`;
 
 async function chatWithGemini(messages) {
   if (!genAI) throw new Error('Gemini API not configured');
@@ -38,6 +52,8 @@ async function chatWithGemini(messages) {
   const result = await chat.sendMessage(messages[messages.length - 1].parts[0].text);
   return result.response.text();
 }
+
+const GEMINI_TIMEOUT = 30000; // 30s timeout for AI responses
 
 const fallbacks = [
   "I hear you, and I'm here for you. Sometimes just expressing what we're feeling is the first step. Take a deep breath—inhale for 4 counts, hold for 4, exhale for 6. How are you feeling right now?",
@@ -59,7 +75,7 @@ router.post('/chat', authMiddleware, aiLimiter, async (req, res, next) => {
     if (systemMessageIndex !== -1) {
       const userInstruction = messages[systemMessageIndex].content || messages[systemMessageIndex].text;
       if (userInstruction) {
-        systemInstruction = SYSTEM_PROMPT + '\n\nAdditional context from user:\n' + userInstruction;
+        systemInstruction = userInstruction;
       }
     }
 
@@ -85,7 +101,10 @@ router.post('/chat', authMiddleware, aiLimiter, async (req, res, next) => {
     });
 
     if (chatHistory.length === 1) {
-      const result = await model.generateContent(chatHistory[0].parts[0].text);
+      const result = await Promise.race([
+        model.generateContent(chatHistory[0].parts[0].text),
+        new Promise((_, reject) => setTimeout(() => reject(new Error('Gemini timeout')), GEMINI_TIMEOUT))
+      ]);
       return res.json({ success: true, reply: result.response.text() });
     }
 
@@ -93,7 +112,10 @@ router.post('/chat', authMiddleware, aiLimiter, async (req, res, next) => {
     const lastMessageText = chatHistory[chatHistory.length - 1].parts[0].text;
 
     const chat = model.startChat({ history });
-    const result = await chat.sendMessage(lastMessageText);
+    const result = await Promise.race([
+      chat.sendMessage(lastMessageText),
+      new Promise((_, reject) => setTimeout(() => reject(new Error('Gemini timeout')), GEMINI_TIMEOUT))
+    ]);
     const reply = result.response.text();
 
     res.json({ success: true, reply });

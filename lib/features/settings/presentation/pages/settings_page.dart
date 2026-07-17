@@ -30,7 +30,8 @@ class SettingsPage extends ConsumerWidget {
           const _SectionTitle(title: 'Preferences'),
           _SettingCard(isDark: isDark, children: [
             SwitchListTile(
-              secondary: Icon(isDark ? Icons.dark_mode : Icons.light_mode, color: AppTheme.primaryColor),
+              secondary: Icon(isDark ? Icons.dark_mode : Icons.light_mode,
+                  color: AppTheme.primaryColor),
               title: const Text('Dark Mode'),
               subtitle: Text(isDark ? 'Currently dark' : 'Currently light'),
               value: isDark,
@@ -39,7 +40,8 @@ class SettingsPage extends ConsumerWidget {
             ),
             const Divider(height: 1, indent: 52),
             SwitchListTile(
-              secondary: const Icon(Icons.vibration, color: AppTheme.primaryColor),
+              secondary:
+                  const Icon(Icons.vibration, color: AppTheme.primaryColor),
               title: const Text('Tactile Haptics'),
               subtitle: const Text('Enable soft haptic vibrations on touch'),
               value: ref.watch(soundHapticProvider),
@@ -48,11 +50,14 @@ class SettingsPage extends ConsumerWidget {
             ),
             const Divider(height: 1, indent: 52),
             SwitchListTile(
-              secondary: const Icon(Icons.music_note, color: AppTheme.primaryColor),
+              secondary:
+                  const Icon(Icons.music_note, color: AppTheme.primaryColor),
               title: const Text('Background Music (963 Hz)'),
-              subtitle: const Text('Play soft ambient solfeggio frequency app-wide'),
+              subtitle:
+                  const Text('Play soft ambient solfeggio frequency app-wide'),
               value: ref.watch(backgroundMusicProvider),
-              onChanged: (_) => ref.read(backgroundMusicProvider.notifier).toggle(),
+              onChanged: (_) =>
+                  ref.read(backgroundMusicProvider.notifier).toggle(),
               activeThumbColor: AppTheme.primaryColor,
             ),
           ]),
@@ -62,37 +67,43 @@ class SettingsPage extends ConsumerWidget {
           const _SectionTitle(title: 'Notifications'),
           _SettingCard(isDark: isDark, children: [
             SwitchListTile(
-              secondary: const Icon(Icons.notifications_outlined, color: AppTheme.primaryColor),
+              secondary: const Icon(Icons.notifications_outlined,
+                  color: AppTheme.primaryColor),
               title: const Text('Daily Reminders'),
               subtitle: const Text('Morning meditation, evening journal'),
               value: settings.dailyReminders,
               onChanged: (_) {
                 settingsNotifier.toggleDailyReminders();
-                _showSnack(context, 'Daily reminders ${!settings.dailyReminders ? 'enabled' : 'disabled'}');
+                _showSnack(context,
+                    'Daily reminders ${!settings.dailyReminders ? 'enabled' : 'disabled'}');
               },
               activeThumbColor: AppTheme.primaryColor,
             ),
             const Divider(height: 1, indent: 52),
             SwitchListTile(
-              secondary: const Icon(Icons.tips_and_updates_outlined, color: AppTheme.secondaryColor),
+              secondary: const Icon(Icons.tips_and_updates_outlined,
+                  color: AppTheme.secondaryColor),
               title: const Text('Wellness Tips'),
               subtitle: const Text('AI-powered personalized tips'),
               value: settings.wellnessTips,
               onChanged: (_) {
                 settingsNotifier.toggleWellnessTips();
-                _showSnack(context, 'Wellness tips ${!settings.wellnessTips ? 'enabled' : 'disabled'}');
+                _showSnack(context,
+                    'Wellness tips ${!settings.wellnessTips ? 'enabled' : 'disabled'}');
               },
               activeThumbColor: AppTheme.primaryColor,
             ),
             const Divider(height: 1, indent: 52),
             SwitchListTile(
-              secondary: const Icon(Icons.emoji_events_outlined, color: AppTheme.warningColor),
+              secondary: const Icon(Icons.emoji_events_outlined,
+                  color: AppTheme.warningColor),
               title: const Text('Achievement Alerts'),
               subtitle: const Text('Celebrate your milestones'),
               value: settings.achievementAlerts,
               onChanged: (_) {
                 settingsNotifier.toggleAchievementAlerts();
-                _showSnack(context, 'Achievement alerts ${!settings.achievementAlerts ? 'enabled' : 'disabled'}');
+                _showSnack(context,
+                    'Achievement alerts ${!settings.achievementAlerts ? 'enabled' : 'disabled'}');
               },
               activeThumbColor: AppTheme.primaryColor,
             ),
@@ -103,19 +114,22 @@ class SettingsPage extends ConsumerWidget {
           const _SectionTitle(title: 'Privacy & Security'),
           _SettingCard(isDark: isDark, children: [
             SwitchListTile(
-              secondary: const Icon(Icons.fingerprint, color: AppTheme.primaryColor),
+              secondary:
+                  const Icon(Icons.fingerprint, color: AppTheme.primaryColor),
               title: const Text('Biometric Login'),
               subtitle: const Text('Use fingerprint or face ID'),
               value: settings.biometricLogin,
               onChanged: (_) {
                 settingsNotifier.toggleBiometricLogin();
-                _showSnack(context, 'Biometric login ${!settings.biometricLogin ? 'enabled' : 'disabled'}');
+                _showSnack(context,
+                    'Biometric login ${!settings.biometricLogin ? 'enabled' : 'disabled'}');
               },
               activeThumbColor: AppTheme.primaryColor,
             ),
             const Divider(height: 1, indent: 52),
             ListTile(
-              leading: const Icon(Icons.cloud_sync_outlined, color: AppTheme.primaryColor),
+              leading: const Icon(Icons.cloud_sync_outlined,
+                  color: AppTheme.primaryColor),
               title: const Text('Cloud Backup & Sync'),
               subtitle: const Text('Manage database synchronization status'),
               trailing: const Icon(Icons.chevron_right, color: Colors.grey),
@@ -123,7 +137,8 @@ class SettingsPage extends ConsumerWidget {
             ),
             const Divider(height: 1, indent: 52),
             ListTile(
-              leading: const Icon(Icons.download_outlined, color: AppTheme.primaryColor),
+              leading: const Icon(Icons.download_outlined,
+                  color: AppTheme.primaryColor),
               title: const Text('Export My Data'),
               subtitle: const Text('Download a JSON archive of your entries'),
               trailing: const Icon(Icons.chevron_right, color: Colors.grey),
@@ -131,8 +146,10 @@ class SettingsPage extends ConsumerWidget {
             ),
             const Divider(height: 1, indent: 52),
             ListTile(
-              leading: const Icon(Icons.delete_outline, color: AppTheme.errorColor),
-              title: const Text('Delete Account', style: TextStyle(color: AppTheme.errorColor)),
+              leading:
+                  const Icon(Icons.delete_outline, color: AppTheme.errorColor),
+              title: const Text('Delete Account',
+                  style: TextStyle(color: AppTheme.errorColor)),
               trailing: const Icon(Icons.chevron_right, color: Colors.grey),
               onTap: () => _confirmDeleteAccount(context, ref),
             ),
@@ -143,13 +160,15 @@ class SettingsPage extends ConsumerWidget {
           const _SectionTitle(title: 'AI Companion'),
           _SettingCard(isDark: isDark, children: [
             SwitchListTile(
-              secondary: const Icon(Icons.psychology, color: AppTheme.primaryColor),
+              secondary:
+                  const Icon(Icons.psychology, color: AppTheme.primaryColor),
               title: const Text('AI Insights'),
               subtitle: const Text('Personalized analysis from your data'),
               value: settings.aiInsights,
               onChanged: (_) {
                 settingsNotifier.toggleAiInsights();
-                _showSnack(context, 'AI Insights ${!settings.aiInsights ? 'enabled' : 'disabled'}');
+                _showSnack(context,
+                    'AI Insights ${!settings.aiInsights ? 'enabled' : 'disabled'}');
               },
               activeThumbColor: AppTheme.primaryColor,
             ),
@@ -171,10 +190,13 @@ class SettingsPage extends ConsumerWidget {
                 const _SectionTitle(title: 'Administration'),
                 _SettingCard(isDark: isDark, children: [
                   ListTile(
-                    leading: const Icon(Icons.admin_panel_settings, color: AppTheme.primaryColor),
+                    leading: const Icon(Icons.admin_panel_settings,
+                        color: AppTheme.primaryColor),
                     title: const Text('Admin Dashboard'),
-                    subtitle: const Text('Manage users, content, and analytics'),
-                    trailing: const Icon(Icons.chevron_right, color: Colors.grey),
+                    subtitle:
+                        const Text('Manage users, content, and analytics'),
+                    trailing:
+                        const Icon(Icons.chevron_right, color: Colors.grey),
                     onTap: () => context.go(AppRoutes.admin),
                   ),
                 ]),
@@ -182,21 +204,26 @@ class SettingsPage extends ConsumerWidget {
               ],
             ),
 
-           // Crisis Support
+          // Crisis Support
           const _SectionTitle(title: 'Crisis Support & Safety'),
           _SettingCard(isDark: isDark, children: [
             ListTile(
-              leading: const Icon(Icons.phone_in_talk_outlined, color: AppTheme.errorColor),
-              title: const Text('Crisis Hotlines', style: TextStyle(color: AppTheme.errorColor, fontWeight: FontWeight.w600)),
+              leading: const Icon(Icons.phone_in_talk_outlined,
+                  color: AppTheme.errorColor),
+              title: const Text('Crisis Hotlines',
+                  style: TextStyle(
+                      color: AppTheme.errorColor, fontWeight: FontWeight.w600)),
               subtitle: const Text('Get immediate help if you are in distress'),
               trailing: const Icon(Icons.chevron_right, color: Colors.grey),
               onTap: () => _showCrisisSupportDialog(context),
             ),
             const Divider(height: 1, indent: 52),
             ListTile(
-              leading: const Icon(Icons.gavel_outlined, color: AppTheme.primaryColor),
+              leading: const Icon(Icons.gavel_outlined,
+                  color: AppTheme.primaryColor),
               title: const Text('Clinical Disclaimer'),
-              subtitle: const Text('Important medical information about this app'),
+              subtitle:
+                  const Text('Important medical information about this app'),
               trailing: const Icon(Icons.chevron_right, color: Colors.grey),
               onTap: () => _showDisclaimerDialog(context),
             ),
@@ -214,22 +241,27 @@ class SettingsPage extends ConsumerWidget {
             ),
             const Divider(height: 1, indent: 52),
             ListTile(
-              leading: const Icon(Icons.star_outline, color: AppTheme.warningColor),
+              leading:
+                  const Icon(Icons.star_outline, color: AppTheme.warningColor),
               title: const Text('Rate the App'),
               trailing: const Icon(Icons.chevron_right, color: Colors.grey),
-              onTap: () => _showSnack(context, 'Thank you for supporting Mental Mantra! ⭐⭐⭐⭐⭐'),
+              onTap: () => _showSnack(
+                  context, 'Thank you for supporting Mental Mantra! ⭐⭐⭐⭐⭐'),
             ),
             const Divider(height: 1, indent: 52),
             ListTile(
-              leading: const Icon(Icons.share_outlined, color: AppTheme.secondaryColor),
+              leading: const Icon(Icons.share_outlined,
+                  color: AppTheme.secondaryColor),
               title: const Text('Share with Friends'),
               trailing: const Icon(Icons.chevron_right, color: Colors.grey),
-              onTap: () => _showSnack(context, 'Sharing link copied to clipboard!'),
+              onTap: () =>
+                  _showSnack(context, 'Sharing link copied to clipboard!'),
             ),
             const Divider(height: 1, indent: 52),
             ListTile(
               leading: const Icon(Icons.logout, color: AppTheme.errorColor),
-              title: const Text('Sign Out', style: TextStyle(color: AppTheme.errorColor)),
+              title: const Text('Sign Out',
+                  style: TextStyle(color: AppTheme.errorColor)),
               trailing: const Icon(Icons.chevron_right, color: Colors.grey),
               onTap: () => _confirmSignOut(context, ref),
             ),
@@ -271,7 +303,8 @@ class SettingsPage extends ConsumerWidget {
               style: TextStyle(fontWeight: FontWeight.bold),
             ),
             SizedBox(height: 16),
-            Text('📞 Suicide & Crisis Lifeline: Call or text 988 (Available 24/7 in US & Canada)'),
+            Text(
+                '📞 Suicide & Crisis Lifeline: Call or text 988 (Available 24/7 in US & Canada)'),
             SizedBox(height: 8),
             Text('💬 Crisis Text Line: Text HOME to 741741 (Available 24/7)'),
             SizedBox(height: 8),
@@ -311,13 +344,16 @@ class SettingsPage extends ConsumerWidget {
       context: context,
       builder: (ctx) => AlertDialog(
         title: const Text('Export My Data'),
-        content: const Text('Your encrypted wellness profile, mood history, and journal logs will be prepared as a JSON archive.'),
+        content: const Text(
+            'Your encrypted wellness profile, mood history, and journal logs will be prepared as a JSON archive.'),
         actions: [
-          TextButton(onPressed: () => Navigator.pop(ctx), child: const Text('Cancel')),
+          TextButton(
+              onPressed: () => Navigator.pop(ctx), child: const Text('Cancel')),
           ElevatedButton(
             onPressed: () {
               Navigator.pop(ctx);
-              _showSnack(context, 'Exporting your data... Check your downloads folder soon.');
+              _showSnack(context,
+                  'Exporting your data... Check your downloads folder soon.');
             },
             child: const Text('Start Export'),
           ),
@@ -331,9 +367,11 @@ class SettingsPage extends ConsumerWidget {
       context: context,
       builder: (ctx) => AlertDialog(
         title: const Text('AI Companion Settings'),
-        content: const Text('AI Coach Tone is currently set to Supportive & Empathetic. You can customize detailed traits in your profile.'),
+        content: const Text(
+            'AI Coach Tone is currently set to Supportive & Empathetic. You can customize detailed traits in your profile.'),
         actions: [
-          TextButton(onPressed: () => Navigator.pop(ctx), child: const Text('OK')),
+          TextButton(
+              onPressed: () => Navigator.pop(ctx), child: const Text('OK')),
         ],
       ),
     );
@@ -344,9 +382,11 @@ class SettingsPage extends ConsumerWidget {
       context: context,
       builder: (ctx) => AlertDialog(
         title: const Text('Delete Account'),
-        content: const Text('This action cannot be undone. All your data will be permanently deleted.'),
+        content: const Text(
+            'This action cannot be undone. All your data will be permanently deleted.'),
         actions: [
-          TextButton(onPressed: () => Navigator.pop(ctx), child: const Text('Cancel')),
+          TextButton(
+              onPressed: () => Navigator.pop(ctx), child: const Text('Cancel')),
           TextButton(
             onPressed: () async {
               Navigator.pop(ctx);
@@ -367,7 +407,8 @@ class SettingsPage extends ConsumerWidget {
         title: const Text('Sign Out'),
         content: const Text('Are you sure you want to sign out?'),
         actions: [
-          TextButton(onPressed: () => Navigator.pop(ctx), child: const Text('Cancel')),
+          TextButton(
+              onPressed: () => Navigator.pop(ctx), child: const Text('Cancel')),
           TextButton(
             onPressed: () {
               Navigator.pop(ctx);
@@ -391,7 +432,9 @@ class _SectionTitle extends StatelessWidget {
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.only(left: 4, bottom: 8),
-      child: Text(title, style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w700, color: Colors.grey)),
+      child: Text(title,
+          style: const TextStyle(
+              fontSize: 14, fontWeight: FontWeight.w700, color: Colors.grey)),
     );
   }
 }
@@ -407,7 +450,8 @@ class _SettingCard extends StatelessWidget {
       decoration: BoxDecoration(
         color: isDark ? AppTheme.darkCard : AppTheme.lightSurface,
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: isDark ? AppTheme.darkBorder : AppTheme.lightBorder),
+        border: Border.all(
+            color: isDark ? AppTheme.darkBorder : AppTheme.lightBorder),
       ),
       child: Column(children: children),
     );

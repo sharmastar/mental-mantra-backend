@@ -10,7 +10,8 @@ class NutritionState {
     this.waterGlasses = 0,
   });
 
-  NutritionState copyWith({WellnessCategory? selectedCategory, int? waterGlasses}) {
+  NutritionState copyWith(
+      {WellnessCategory? selectedCategory, int? waterGlasses}) {
     return NutritionState(
       selectedCategory: selectedCategory ?? this.selectedCategory,
       waterGlasses: waterGlasses ?? this.waterGlasses,
@@ -42,6 +43,7 @@ class NutritionNotifier extends StateNotifier<NutritionState> {
   }
 }
 
-final nutritionProvider = StateNotifierProvider<NutritionNotifier, NutritionState>((ref) {
+final nutritionProvider =
+    StateNotifierProvider<NutritionNotifier, NutritionState>((ref) {
   return NutritionNotifier();
 });

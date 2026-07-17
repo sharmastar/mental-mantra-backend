@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Put, Body, UseGuards } from '@nestjs/common';
+import { Controller, Get, Post, Put, Delete, Body, UseGuards } from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiBearerAuth } from '@nestjs/swagger';
 import { UsersService } from './users.service';
 import { JwtAuthGuard } from '../common/guards/jwt-auth.guard';
@@ -44,5 +44,19 @@ export class UsersController {
   async updateFcmToken(@CurrentUser('id') userId: string, @Body() dto: FcmTokenDto) {
     await this.usersService.updateFcmToken(userId, dto.token);
     return { success: true };
+  }
+
+  @Delete('me')
+  @ApiOperation({ summary: 'Delete current user account' })
+  async deleteMe(@CurrentUser('id') userId: string) {
+    await this.usersService.deleteAccount(userId);
+    return { success: true, message: 'Account deleted successfully' };
+  }
+
+  @Get('me/dashboard')
+  @ApiOperation({ summary: 'Get aggregated dashboard data for startup' })
+  async getDashboard(@CurrentUser('id') userId: string) {
+    const data = await this.usersService.getDashboard(userId);
+    return { success: true, data };
   }
 }

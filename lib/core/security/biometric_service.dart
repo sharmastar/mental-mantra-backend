@@ -39,7 +39,7 @@ class BiometricService {
   Future<bool> authenticate({
     String localizedReason = 'Please authenticate to access Mental Mantra',
   }) async {
-    if (kIsWeb) return true;
+    if (kIsWeb) return false;
     try {
       return await _auth.authenticate(
         localizedReason: localizedReason,
@@ -54,7 +54,7 @@ class BiometricService {
       } else if (e.code == auth_error.notEnrolled) {
         debugPrint('No biometrics enrolled on device');
       } else if (e.code == auth_error.lockedOut ||
-                 e.code == auth_error.permanentlyLockedOut) {
+          e.code == auth_error.permanentlyLockedOut) {
         debugPrint('Biometrics locked out');
       } else {
         debugPrint('Biometric auth error: ${e.message}');

@@ -1,8 +1,10 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../data/models/yoga_class.dart';
 import '../../data/repositories/yoga_repository.dart';
 
-final yogaRepositoryProvider = Provider<YogaRepository>((ref) => YogaRepository());
+final yogaRepositoryProvider =
+    Provider<YogaRepository>((ref) => YogaRepository());
 
 class YogaState {
   final List<YogaClass> classes;
@@ -30,22 +32,26 @@ class YogaState {
     YogaLevel? filterLevel,
     bool clearError = false,
     bool clearCurrentSession = false,
-  }) => YogaState(
-    classes: classes ?? this.classes,
-    currentSession: clearCurrentSession ? null : (currentSession ?? this.currentSession),
-    isLoading: isLoading ?? this.isLoading,
-    error: clearError ? null : (error ?? this.error),
-    searchQuery: searchQuery ?? this.searchQuery,
-    filterLevel: filterLevel ?? this.filterLevel,
-  );
+  }) =>
+      YogaState(
+        classes: classes ?? this.classes,
+        currentSession: clearCurrentSession
+            ? null
+            : (currentSession ?? this.currentSession),
+        isLoading: isLoading ?? this.isLoading,
+        error: clearError ? null : (error ?? this.error),
+        searchQuery: searchQuery ?? this.searchQuery,
+        filterLevel: filterLevel ?? this.filterLevel,
+      );
 
   List<YogaClass> get filteredClasses {
     var result = classes;
     if (searchQuery.isNotEmpty) {
-      result = result.where((c) =>
-        c.title.toLowerCase().contains(searchQuery.toLowerCase()) ||
-        c.description.toLowerCase().contains(searchQuery.toLowerCase())
-      ).toList();
+      result = result
+          .where((c) =>
+              c.title.toLowerCase().contains(searchQuery.toLowerCase()) ||
+              c.description.toLowerCase().contains(searchQuery.toLowerCase()))
+          .toList();
     }
     if (filterLevel != null) {
       result = result.where((c) => c.level == filterLevel).toList();
@@ -65,7 +71,8 @@ class YogaNotifier extends StateNotifier<YogaState> {
       final classes = await _repository.getClasses();
       state = state.copyWith(classes: classes, isLoading: false);
     } catch (e) {
-      state = state.copyWith(isLoading: false, error: 'Failed to load yoga classes');
+      state = state.copyWith(
+          isLoading: false, error: 'Failed to load yoga classes');
     }
   }
 
@@ -96,7 +103,9 @@ class YogaNotifier extends StateNotifier<YogaState> {
     );
     try {
       await _repository.toggleFavorite(classId, newValue);
-    } catch (_) {}
+    } catch (e) {
+      debugPrint('YogaNotifier.toggleFavorite: $e');
+    }
   }
 
   void clearError() => state = state.copyWith(clearError: true);

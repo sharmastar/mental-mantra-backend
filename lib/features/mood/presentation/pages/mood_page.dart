@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:fl_chart/fl_chart.dart';
+import 'package:go_router/go_router.dart';
 import '../../../../core/theme/app_theme.dart';
+import '../../../../core/router/app_router.dart';
 import '../providers/mood_provider.dart';
 import '../../data/models/mood_entry.dart';
 
@@ -13,7 +15,8 @@ class MoodPage extends ConsumerStatefulWidget {
   ConsumerState<MoodPage> createState() => _MoodPageState();
 }
 
-class _MoodPageState extends ConsumerState<MoodPage> with SingleTickerProviderStateMixin {
+class _MoodPageState extends ConsumerState<MoodPage>
+    with SingleTickerProviderStateMixin {
   late TabController _tabController;
   int _selectedMood = -1;
   double _stressLevel = 5;
@@ -24,14 +27,50 @@ class _MoodPageState extends ConsumerState<MoodPage> with SingleTickerProviderSt
   final _noteCtrl = TextEditingController();
 
   final _moods = [
-    {'emoji': '😄', 'label': 'Great', 'value': 5, 'color': const Color(0xFF4CAF50)},
-    {'emoji': '🙂', 'label': 'Good', 'value': 4, 'color': const Color(0xFF8BC34A)},
-    {'emoji': '😐', 'label': 'Okay', 'value': 3, 'color': const Color(0xFFFFB547)},
-    {'emoji': '😞', 'label': 'Low', 'value': 2, 'color': const Color(0xFFFF7043)},
-    {'emoji': '😢', 'label': 'Sad', 'value': 1, 'color': const Color(0xFFE53935)},
+    {
+      'emoji': '😄',
+      'label': 'Great',
+      'value': 5,
+      'color': const Color(0xFF4CAF50)
+    },
+    {
+      'emoji': '🙂',
+      'label': 'Good',
+      'value': 4,
+      'color': const Color(0xFF8BC34A)
+    },
+    {
+      'emoji': '😐',
+      'label': 'Okay',
+      'value': 3,
+      'color': const Color(0xFFFFB547)
+    },
+    {
+      'emoji': '😞',
+      'label': 'Low',
+      'value': 2,
+      'color': const Color(0xFFFF7043)
+    },
+    {
+      'emoji': '😢',
+      'label': 'Sad',
+      'value': 1,
+      'color': const Color(0xFFE53935)
+    },
   ];
 
-  final _tags = ['Work', 'Relationships', 'Health', 'Sleep', 'Exercise', 'Food', 'Social', 'Weather', 'Money', 'Family'];
+  final _tags = [
+    'Work',
+    'Relationships',
+    'Health',
+    'Sleep',
+    'Exercise',
+    'Food',
+    'Social',
+    'Weather',
+    'Money',
+    'Family'
+  ];
 
   @override
   void initState() {
@@ -53,6 +92,18 @@ class _MoodPageState extends ConsumerState<MoodPage> with SingleTickerProviderSt
       backgroundColor: isDark ? AppTheme.darkBg : AppTheme.lightBg,
       appBar: AppBar(
         title: const Text('Mood Tracker'),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.timeline_outlined),
+            tooltip: 'Timeline',
+            onPressed: () => context.push(AppRoutes.moodTimeline),
+          ),
+          IconButton(
+            icon: const Icon(Icons.insights_outlined),
+            tooltip: 'AI Insights',
+            onPressed: () => context.push(AppRoutes.moodReport),
+          ),
+        ],
         bottom: TabBar(
           controller: _tabController,
           indicatorColor: AppTheme.primaryColor,
@@ -77,7 +128,11 @@ class _MoodPageState extends ConsumerState<MoodPage> with SingleTickerProviderSt
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text('How are you feeling right now?', style: TextStyle(fontSize: 20, fontWeight: FontWeight.w700)),
+          // AI Insights Banner
+          _buildInsightsBanner(context, isDark),
+          const SizedBox(height: 20),
+          const Text('How are you feeling right now?',
+              style: TextStyle(fontSize: 20, fontWeight: FontWeight.w700)),
           const SizedBox(height: 8),
           Text(
             _formatDate(),
@@ -94,13 +149,23 @@ class _MoodPageState extends ConsumerState<MoodPage> with SingleTickerProviderSt
                 onTap: () => setState(() => _selectedMood = entry.key),
                 child: AnimatedContainer(
                   duration: const Duration(milliseconds: 250),
-                  padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 16),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 12, vertical: 16),
                   decoration: BoxDecoration(
-                    color: isSelected ? color.withValues(alpha: 0.15) : Colors.transparent,
+                    color: isSelected
+                        ? color.withValues(alpha: 0.15)
+                        : Colors.transparent,
                     borderRadius: BorderRadius.circular(16),
-                    border: isSelected ? Border.all(color: color, width: 2.5) : null,
+                    border: isSelected
+                        ? Border.all(color: color, width: 2.5)
+                        : null,
                     boxShadow: isSelected
-                        ? [BoxShadow(color: color.withValues(alpha: 0.2), blurRadius: 12, spreadRadius: 2)]
+                        ? [
+                            BoxShadow(
+                                color: color.withValues(alpha: 0.2),
+                                blurRadius: 12,
+                                spreadRadius: 2)
+                          ]
                         : null,
                   ),
                   child: Column(
@@ -108,8 +173,10 @@ class _MoodPageState extends ConsumerState<MoodPage> with SingleTickerProviderSt
                       TweenAnimationBuilder<double>(
                         tween: Tween(begin: isSelected ? 1.0 : 0.9, end: 1.0),
                         duration: 300.ms,
-                        builder: (_, scale, child) => Transform.scale(scale: scale, child: child),
-                        child: Text(mood['emoji'] as String, style: TextStyle(fontSize: isSelected ? 38 : 30)),
+                        builder: (_, scale, child) =>
+                            Transform.scale(scale: scale, child: child),
+                        child: Text(mood['emoji'] as String,
+                            style: TextStyle(fontSize: isSelected ? 38 : 30)),
                       ),
                       const SizedBox(height: 6),
                       Text(
@@ -117,7 +184,8 @@ class _MoodPageState extends ConsumerState<MoodPage> with SingleTickerProviderSt
                         style: TextStyle(
                           fontSize: 11,
                           color: isSelected ? color : Colors.grey,
-                          fontWeight: isSelected ? FontWeight.w700 : FontWeight.w400,
+                          fontWeight:
+                              isSelected ? FontWeight.w700 : FontWeight.w400,
                         ),
                       ),
                     ],
@@ -129,35 +197,47 @@ class _MoodPageState extends ConsumerState<MoodPage> with SingleTickerProviderSt
           const SizedBox(height: 28),
           _buildVitalsSliders(isDark),
           const SizedBox(height: 28),
-          const Text('What\'s affecting your mood?', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600)),
+          const Text('What\'s affecting your mood?',
+              style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600)),
           const SizedBox(height: 12),
           Wrap(
-            spacing: 8, runSpacing: 8,
+            spacing: 8,
+            runSpacing: 8,
             children: _tags.map((tag) {
               final isSelected = _selectedTags.contains(tag);
               return FilterChip(
                 label: Text(tag),
                 selected: isSelected,
-                onSelected: (v) => setState(() => v ? _selectedTags.add(tag) : _selectedTags.remove(tag)),
+                onSelected: (v) => setState(() =>
+                    v ? _selectedTags.add(tag) : _selectedTags.remove(tag)),
                 selectedColor: AppTheme.primaryColor.withValues(alpha: 0.2),
                 checkmarkColor: AppTheme.primaryColor,
-                labelStyle: TextStyle(fontSize: 13, color: isSelected ? AppTheme.primaryColor : (isDark ? Colors.white70 : Colors.black87)),
+                labelStyle: TextStyle(
+                    fontSize: 13,
+                    color: isSelected
+                        ? AppTheme.primaryColor
+                        : (isDark ? Colors.white70 : Colors.black87)),
                 side: BorderSide(
-                  color: isSelected ? AppTheme.primaryColor : (isDark ? AppTheme.darkBorder : AppTheme.lightBorder),
+                  color: isSelected
+                      ? AppTheme.primaryColor
+                      : (isDark ? AppTheme.darkBorder : AppTheme.lightBorder),
                 ),
               );
             }).toList(),
           ).animate().fadeIn(duration: 400.ms, delay: 100.ms),
           const SizedBox(height: 24),
-          const Text('Add a note (optional)', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600)),
+          const Text('Add a note (optional)',
+              style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600)),
           const SizedBox(height: 12),
           TextField(
             controller: _noteCtrl,
             maxLines: 4,
             decoration: InputDecoration(
               hintText: 'What\'s on your mind?',
-              hintStyle: TextStyle(color: isDark ? Colors.white24 : Colors.black26),
-              border: OutlineInputBorder(borderRadius: BorderRadius.circular(14)),
+              hintStyle:
+                  TextStyle(color: isDark ? Colors.white24 : Colors.black26),
+              border:
+                  OutlineInputBorder(borderRadius: BorderRadius.circular(14)),
               filled: true,
               fillColor: isDark ? AppTheme.darkCard : AppTheme.lightCard,
             ),
@@ -169,7 +249,12 @@ class _MoodPageState extends ConsumerState<MoodPage> with SingleTickerProviderSt
             height: 56,
             child: DecoratedBox(
               decoration: BoxDecoration(
-                gradient: _selectedMood >= 0 ? AppTheme.primaryGradient : LinearGradient(colors: [Colors.grey.withValues(alpha: 0.3), Colors.grey.withValues(alpha: 0.3)]),
+                gradient: _selectedMood >= 0
+                    ? AppTheme.primaryGradient
+                    : LinearGradient(colors: [
+                        Colors.grey.withValues(alpha: 0.3),
+                        Colors.grey.withValues(alpha: 0.3)
+                      ]),
                 borderRadius: BorderRadius.circular(16),
               ),
               child: ElevatedButton(
@@ -210,9 +295,14 @@ class _MoodPageState extends ConsumerState<MoodPage> with SingleTickerProviderSt
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.transparent,
                   shadowColor: Colors.transparent,
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(16)),
                 ),
-                child: const Text('Save Mood', style: TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.w600)),
+                child: const Text('Save Mood',
+                    style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 16,
+                        fontWeight: FontWeight.w600)),
               ),
             ),
           ).animate().fadeIn(duration: 400.ms, delay: 200.ms),
@@ -244,7 +334,8 @@ class _MoodPageState extends ConsumerState<MoodPage> with SingleTickerProviderSt
                 color: AppTheme.primaryColor.withValues(alpha: 0.1),
                 borderRadius: BorderRadius.circular(20),
               ),
-              child: const Icon(Icons.mood_outlined, size: 40, color: AppTheme.primaryColor),
+              child: const Icon(Icons.mood_outlined,
+                  size: 40, color: AppTheme.primaryColor),
             ),
             const SizedBox(height: 24),
             const Text(
@@ -255,7 +346,8 @@ class _MoodPageState extends ConsumerState<MoodPage> with SingleTickerProviderSt
             Text(
               'Start logging your moods to see patterns and trends over time.',
               textAlign: TextAlign.center,
-              style: TextStyle(fontSize: 14, color: Colors.grey.shade500, height: 1.5),
+              style: TextStyle(
+                  fontSize: 14, color: Colors.grey.shade500, height: 1.5),
             ),
           ],
         ),
@@ -269,7 +361,8 @@ class _MoodPageState extends ConsumerState<MoodPage> with SingleTickerProviderSt
     if (last7.isEmpty) {
       return _buildEmptyHistory(isDark);
     }
-    final weekData = List.generate(last7.length, (i) => FlSpot(i.toDouble(), last7[i].moodValue.toDouble()));
+    final weekData = List.generate(last7.length,
+        (i) => FlSpot(i.toDouble(), last7[i].moodValue.toDouble()));
     final avg = weekData.fold(0.0, (sum, s) => sum + s.y) / weekData.length;
 
     final moodColors = {
@@ -290,20 +383,27 @@ class _MoodPageState extends ConsumerState<MoodPage> with SingleTickerProviderSt
             decoration: BoxDecoration(
               color: isDark ? AppTheme.darkCard : AppTheme.lightSurface,
               borderRadius: BorderRadius.circular(20),
-              border: Border.all(color: isDark ? AppTheme.darkBorder : AppTheme.lightBorder),
+              border: Border.all(
+                  color: isDark ? AppTheme.darkBorder : AppTheme.lightBorder),
             ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Row(
                   children: [
-                    const Icon(Icons.trending_up, color: AppTheme.primaryColor, size: 20),
+                    const Icon(Icons.trending_up,
+                        color: AppTheme.primaryColor, size: 20),
                     const SizedBox(width: 8),
-                    const Text('7-Day Mood Trend', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w700)),
+                    const Text('7-Day Mood Trend',
+                        style: TextStyle(
+                            fontSize: 16, fontWeight: FontWeight.w700)),
                     const Spacer(),
                     Text(
                       'Avg: ${avg.toStringAsFixed(1)}/5',
-                      style: const TextStyle(color: AppTheme.primaryColor, fontSize: 13, fontWeight: FontWeight.w600),
+                      style: const TextStyle(
+                          color: AppTheme.primaryColor,
+                          fontSize: 13,
+                          fontWeight: FontWeight.w600),
                     ),
                   ],
                 ),
@@ -312,7 +412,8 @@ class _MoodPageState extends ConsumerState<MoodPage> with SingleTickerProviderSt
                   height: 180,
                   child: LineChart(
                     LineChartData(
-                      minY: 1, maxY: 5,
+                      minY: 1,
+                      maxY: 5,
                       gridData: FlGridData(
                         show: true,
                         horizontalInterval: 1,
@@ -329,24 +430,34 @@ class _MoodPageState extends ConsumerState<MoodPage> with SingleTickerProviderSt
                             getTitlesWidget: (v, meta) {
                               const days = ['M', 'T', 'W', 'T', 'F', 'S', 'S'];
                               final i = v.toInt();
-                              if (i < 0 || i >= days.length) return const SizedBox();
+                              if (i < 0 || i >= days.length) {
+                                return const SizedBox();
+                              }
                               return Padding(
                                 padding: const EdgeInsets.only(top: 4),
-                                child: Text(days[i], style: const TextStyle(fontSize: 11, color: Colors.grey)),
+                                child: Text(days[i],
+                                    style: const TextStyle(
+                                        fontSize: 11, color: Colors.grey)),
                               );
                             },
                           ),
                         ),
-                        leftTitles: const AxisTitles(sideTitles: SideTitles(showTitles: false)),
-                        topTitles: const AxisTitles(sideTitles: SideTitles(showTitles: false)),
-                        rightTitles: const AxisTitles(sideTitles: SideTitles(showTitles: false)),
+                        leftTitles: const AxisTitles(
+                            sideTitles: SideTitles(showTitles: false)),
+                        topTitles: const AxisTitles(
+                            sideTitles: SideTitles(showTitles: false)),
+                        rightTitles: const AxisTitles(
+                            sideTitles: SideTitles(showTitles: false)),
                       ),
                       borderData: FlBorderData(show: false),
                       lineBarsData: [
                         LineChartBarData(
                           spots: weekData,
                           isCurved: true,
-                          gradient: const LinearGradient(colors: [AppTheme.primaryColor, AppTheme.accentColor]),
+                          gradient: const LinearGradient(colors: [
+                            AppTheme.primaryColor,
+                            AppTheme.accentColor
+                          ]),
                           barWidth: 3,
                           dotData: FlDotData(
                             getDotPainter: (s, p, b, i) => FlDotCirclePainter(
@@ -359,7 +470,10 @@ class _MoodPageState extends ConsumerState<MoodPage> with SingleTickerProviderSt
                           belowBarData: BarAreaData(
                             show: true,
                             gradient: LinearGradient(
-                              colors: [AppTheme.primaryColor.withValues(alpha: 0.2), Colors.transparent],
+                              colors: [
+                                AppTheme.primaryColor.withValues(alpha: 0.2),
+                                Colors.transparent
+                              ],
                               begin: Alignment.topCenter,
                               end: Alignment.bottomCenter,
                             ),
@@ -373,7 +487,8 @@ class _MoodPageState extends ConsumerState<MoodPage> with SingleTickerProviderSt
             ),
           ).animate().fadeIn(duration: 400.ms),
           const SizedBox(height: 24),
-          const Text('Recent Entries', style: TextStyle(fontSize: 18, fontWeight: FontWeight.w700)),
+          const Text('Recent Entries',
+              style: TextStyle(fontSize: 18, fontWeight: FontWeight.w700)),
           const SizedBox(height: 12),
           ...entries.take(10).toList().asMap().entries.map((entry) {
             final e = entry.value;
@@ -384,7 +499,8 @@ class _MoodPageState extends ConsumerState<MoodPage> with SingleTickerProviderSt
               decoration: BoxDecoration(
                 color: isDark ? AppTheme.darkCard : AppTheme.lightSurface,
                 borderRadius: BorderRadius.circular(16),
-                border: Border.all(color: isDark ? AppTheme.darkBorder : AppTheme.lightBorder),
+                border: Border.all(
+                    color: isDark ? AppTheme.darkBorder : AppTheme.lightBorder),
               ),
               child: Row(
                 children: [
@@ -396,20 +512,28 @@ class _MoodPageState extends ConsumerState<MoodPage> with SingleTickerProviderSt
                       children: [
                         Text(
                           e.moodLabel,
-                          style: TextStyle(fontWeight: FontWeight.w700, color: color, fontSize: 14),
+                          style: TextStyle(
+                              fontWeight: FontWeight.w700,
+                              color: color,
+                              fontSize: 14),
                         ),
                         const SizedBox(height: 2),
                         Text(
                           e.note.isNotEmpty ? e.note : 'No note',
-                          style: const TextStyle(fontSize: 13, color: Colors.grey),
+                          style:
+                              const TextStyle(fontSize: 13, color: Colors.grey),
                         ),
                       ],
                     ),
                   ),
-                  Text(_timeAgo(e.createdAt), style: const TextStyle(fontSize: 12, color: Colors.grey)),
+                  Text(_timeAgo(e.createdAt),
+                      style: const TextStyle(fontSize: 12, color: Colors.grey)),
                 ],
               ),
-            ).animate().fadeIn(duration: 300.ms, delay: (entry.key * 80).ms).slideX(begin: 0.1, end: 0);
+            )
+                .animate()
+                .fadeIn(duration: 300.ms, delay: (entry.key * 80).ms)
+                .slideX(begin: 0.1, end: 0);
           }),
         ],
       ),
@@ -422,12 +546,14 @@ class _MoodPageState extends ConsumerState<MoodPage> with SingleTickerProviderSt
       decoration: BoxDecoration(
         color: isDark ? AppTheme.darkCard : AppTheme.lightSurface,
         borderRadius: BorderRadius.circular(20),
-        border: Border.all(color: isDark ? AppTheme.darkBorder : AppTheme.lightBorder),
+        border: Border.all(
+            color: isDark ? AppTheme.darkBorder : AppTheme.lightBorder),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text('Vitals', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600)),
+          const Text('Vitals',
+              style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600)),
           const SizedBox(height: 16),
           _buildSliderRow(
             icon: Icons.whatshot,
@@ -497,7 +623,9 @@ class _MoodPageState extends ConsumerState<MoodPage> with SingleTickerProviderSt
         const SizedBox(width: 12),
         SizedBox(
           width: 52,
-          child: Text(label, style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w500)),
+          child: Text(label,
+              style:
+                  const TextStyle(fontSize: 13, fontWeight: FontWeight.w500)),
         ),
         Expanded(
           child: SliderTheme(
@@ -537,8 +665,93 @@ class _MoodPageState extends ConsumerState<MoodPage> with SingleTickerProviderSt
 
   String _formatDate() {
     final now = DateTime.now();
-    const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-    const days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
+    const months = [
+      'Jan',
+      'Feb',
+      'Mar',
+      'Apr',
+      'May',
+      'Jun',
+      'Jul',
+      'Aug',
+      'Sep',
+      'Oct',
+      'Nov',
+      'Dec'
+    ];
+    const days = [
+      'Monday',
+      'Tuesday',
+      'Wednesday',
+      'Thursday',
+      'Friday',
+      'Saturday',
+      'Sunday'
+    ];
     return '${days[now.weekday - 1]}, ${months[now.month - 1]} ${now.day}';
+  }
+
+  Widget _buildInsightsBanner(BuildContext context, bool isDark) {
+    return Row(
+      children: [
+        Expanded(
+          child: GestureDetector(
+            onTap: () => context.push(AppRoutes.moodTimeline),
+            child: Container(
+              padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  colors: [
+                    AppTheme.primaryColor.withAlpha(200),
+                    AppTheme.primaryColor.withAlpha(140)
+                  ],
+                ),
+                borderRadius: BorderRadius.circular(14),
+              ),
+              child: const Row(
+                children: [
+                  Icon(Icons.timeline, color: Colors.white, size: 20),
+                  SizedBox(width: 8),
+                  Text('Timeline',
+                      style: TextStyle(
+                          color: Colors.white,
+                          fontWeight: FontWeight.w600,
+                          fontSize: 13)),
+                ],
+              ),
+            ),
+          ).animate().fadeIn().slideX(begin: -0.05),
+        ),
+        const SizedBox(width: 10),
+        Expanded(
+          child: GestureDetector(
+            onTap: () => context.push(AppRoutes.moodReport),
+            child: Container(
+              padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  colors: [
+                    const Color(0xFF7C4DFF).withAlpha(200),
+                    const Color(0xFF7C4DFF).withAlpha(140)
+                  ],
+                ),
+                borderRadius: BorderRadius.circular(14),
+              ),
+              child: const Row(
+                children: [
+                  Icon(Icons.insights, color: Colors.white, size: 20),
+                  SizedBox(width: 8),
+                  Text('AI Insights',
+                      style: TextStyle(
+                          color: Colors.white,
+                          fontWeight: FontWeight.w600,
+                          fontSize: 13)),
+                ],
+              ),
+            ),
+          ).animate().fadeIn().slideX(begin: 0.05),
+        ),
+      ],
+    );
   }
 }

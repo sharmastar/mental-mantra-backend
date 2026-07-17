@@ -53,7 +53,8 @@ void main() {
       expect(tapCount, 1);
     });
 
-    testWidgets('allows tap after debounce period', (WidgetTester tester) async {
+    testWidgets('allows tap after debounce period',
+        (WidgetTester tester) async {
       var tapCount = 0;
       await tester.pumpWidget(
         MaterialApp(

@@ -157,19 +157,32 @@ router.post('/login', authLimiter, async (req, res, next) => {
 router.post('/google', authLimiter, async (req, res, next) => {
   try {
     const { idToken, accessToken, serverAuthCode, device, email, name, photoUrl } = req.body;
-    if (!idToken) throw new AppError('Google ID token is required', 422, 'MISSING_TOKEN');
+    if (!idToken && !accessToken) throw new AppError('Google ID token or Access token is required', 422, 'MISSING_TOKEN');
 
-    // Verify Google ID token with google-auth-library
+    // Verify Google ID token or Access token
     let payload;
-    try {
-      const ticket = await googleClient.verifyIdToken({
-        idToken,
-        audience: process.env.GOOGLE_CLIENT_ID,
-      });
-      payload = ticket.getPayload();
-    } catch (e) {
-      logger.warn('Google ID token verification failed', { error: e.message, stack: e.stack });
-      throw new AppError(`Google ID token verification failed: ${e.message}`, 401, 'INVALID_GOOGLE_TOKEN');
+    if (idToken) {
+      try {
+        const ticket = await googleClient.verifyIdToken({
+          idToken,
+          audience: process.env.GOOGLE_CLIENT_ID,
+        });
+        payload = ticket.getPayload();
+      } catch (e) {
+        logger.warn('Google ID token verification failed', { error: e.message, stack: e.stack });
+        throw new AppError(`Google ID token verification failed: ${e.message}`, 401, 'INVALID_GOOGLE_TOKEN');
+      }
+    } else {
+      try {
+        const response = await fetch(`https://www.googleapis.com/oauth2/v3/userinfo?access_token=${accessToken}`);
+        if (!response.ok) {
+          throw new Error(`Google API returned status ${response.status}`);
+        }
+        payload = await response.json();
+      } catch (e) {
+        logger.warn('Google Access token verification failed', { error: e.message, stack: e.stack });
+        throw new AppError(`Google Access token verification failed: ${e.message}`, 401, 'INVALID_GOOGLE_TOKEN');
+      }
     }
 
     const googleId = payload.sub;

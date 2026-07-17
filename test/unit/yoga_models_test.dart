@@ -48,8 +48,10 @@ void main() {
     });
 
     test('copyWith updates only specified fields', () {
-      const original = YogaClass(id: 'y1', title: 'Morning Flow', description: 'Energizing flow');
-      final copy = original.copyWith(title: 'Evening Flow', durationMinutes: 45);
+      const original = YogaClass(
+          id: 'y1', title: 'Morning Flow', description: 'Energizing flow');
+      final copy =
+          original.copyWith(title: 'Evening Flow', durationMinutes: 45);
       expect(copy.title, 'Evening Flow');
       expect(copy.durationMinutes, 45);
       expect(copy.description, original.description);
@@ -64,7 +66,8 @@ void main() {
     });
 
     test('durationLabel returns formatted string', () {
-      const c = YogaClass(id: 'y1', title: 'Test', description: 'Test', durationMinutes: 45);
+      const c = YogaClass(
+          id: 'y1', title: 'Test', description: 'Test', durationMinutes: 45);
       expect(c.durationLabel, '45 min');
     });
   });

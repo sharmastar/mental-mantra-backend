@@ -22,16 +22,16 @@ class Achievement {
   });
 
   factory Achievement.fromJson(Map<String, dynamic> json) => Achievement(
-    id: json['id'] ?? '',
-    title: json['title'] ?? '',
-    description: json['description'] ?? '',
-    icon: json['icon'] ?? '🏆',
-    category: json['category'] ?? '',
-    criteria: AchievementCriteria.fromJson(json['criteria'] ?? {}),
-    points: json['points'] ?? 0,
-    tier: json['tier'] ?? 'bronze',
-    isHidden: json['isHidden'] ?? false,
-  );
+        id: json['id'] ?? '',
+        title: json['title'] ?? '',
+        description: json['description'] ?? '',
+        icon: json['icon'] ?? '🏆',
+        category: json['category'] ?? '',
+        criteria: AchievementCriteria.fromJson(json['criteria'] ?? {}),
+        points: json['points'] ?? 0,
+        tier: json['tier'] ?? 'bronze',
+        isHidden: json['isHidden'] ?? false,
+      );
 }
 
 class AchievementCriteria {
@@ -39,13 +39,15 @@ class AchievementCriteria {
   final int threshold;
   final String scope;
 
-  const AchievementCriteria({required this.type, required this.threshold, required this.scope});
+  const AchievementCriteria(
+      {required this.type, required this.threshold, required this.scope});
 
-  factory AchievementCriteria.fromJson(Map<String, dynamic> json) => AchievementCriteria(
-    type: json['type'] ?? 'count',
-    threshold: json['threshold'] ?? 1,
-    scope: json['scope'] ?? 'lifetime',
-  );
+  factory AchievementCriteria.fromJson(Map<String, dynamic> json) =>
+      AchievementCriteria(
+        type: json['type'] ?? 'count',
+        threshold: json['threshold'] ?? 1,
+        scope: json['scope'] ?? 'lifetime',
+      );
 }
 
 class UserAchievement {
@@ -65,16 +67,19 @@ class UserAchievement {
     this.currentValue = 0,
   });
 
-  factory UserAchievement.fromJson(Map<String, dynamic> json) => UserAchievement(
-    userId: json['userId'] ?? '',
-    achievementId: json['achievementId'] ?? '',
-    unlockedAt: (json['unlockedAt'] as dynamic)?.toDate(),
-    progress: (json['progress'] ?? 0.0).toDouble(),
-    isCompleted: json['isCompleted'] ?? false,
-    currentValue: json['currentValue'] ?? 0,
-  );
+  factory UserAchievement.fromJson(Map<String, dynamic> json) =>
+      UserAchievement(
+        userId: json['userId'] ?? '',
+        achievementId: json['achievementId'] ?? '',
+        unlockedAt: (json['unlockedAt'] as dynamic)?.toDate(),
+        progress: (json['progress'] ?? 0.0).toDouble(),
+        isCompleted: json['isCompleted'] ?? false,
+        currentValue: json['currentValue'] ?? 0,
+      );
 
-  factory UserAchievement.create(String userId, String achievementId) => UserAchievement(
-    userId: userId, achievementId: achievementId,
-  );
+  factory UserAchievement.create(String userId, String achievementId) =>
+      UserAchievement(
+        userId: userId,
+        achievementId: achievementId,
+      );
 }

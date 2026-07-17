@@ -69,7 +69,9 @@ class ClassificationEngine {
   };
 
   static ClassificationResult classifyUserDomain(OnboardingData data) {
-    final scores = <UserDomain, double>{for (final d in UserDomain.values) d: 0.0};
+    final scores = <UserDomain, double>{
+      for (final d in UserDomain.values) d: 0.0
+    };
 
     _scoreEmotionalCheckin(data.emotionalCheckin, scores);
     _scoreSleepAndEnergy(data.sleepEnergy, scores);
@@ -85,12 +87,13 @@ class ClassificationEngine {
       ..sort((a, b) => b.value.compareTo(a.value));
 
     final primary = sorted[0].key;
-    final secondary = sorted.length > 1 && sorted[1].value > 0 ? sorted[1].key : null;
+    final secondary =
+        sorted.length > 1 && sorted[1].value > 0 ? sorted[1].key : null;
     final maxScore = sorted.isNotEmpty ? sorted[0].value : 0.0;
 
     final riskLevel = _computeRiskLevel(data, maxScore);
-    final requiresEscalation = data.coping.requiresCrisisEscalation ||
-        riskLevel == RiskLevel.critical;
+    final requiresEscalation =
+        data.coping.requiresCrisisEscalation || riskLevel == RiskLevel.critical;
     final crisisTriggered = data.coping.selfHarmIdeation == 'Often';
 
     return ClassificationResult(
@@ -307,8 +310,7 @@ class ClassificationEngine {
     }
   }
 
-  static void _scoreBody(
-      BodySection section, Map<UserDomain, double> scores) {
+  static void _scoreBody(BodySection section, Map<UserDomain, double> scores) {
     if (section.eatingHabits == 'Very unhealthy' ||
         section.eatingHabits == 'Mostly unhealthy') {
       scores[UserDomain.lowMotivation] =

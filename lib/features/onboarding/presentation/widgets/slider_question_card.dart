@@ -49,8 +49,9 @@ class _SliderQuestionCardState extends State<SliderQuestionCard> {
 
   String _getInterpretationText(double val) {
     final intVal = val.round();
-    final isConfidence = widget.question.id == '48' || widget.question.questionText.toLowerCase().contains('confidence');
-    
+    final isConfidence = widget.question.id == '48' ||
+        widget.question.questionText.toLowerCase().contains('confidence');
+
     if (isConfidence) {
       if (intVal <= 2) return 'Feeling very insecure or doubtful 🌧️';
       if (intVal <= 4) return 'A bit shaky, room to grow 🌱';
@@ -90,13 +91,12 @@ class _SliderQuestionCardState extends State<SliderQuestionCard> {
           child: Container(
             padding: const EdgeInsets.all(24),
             decoration: BoxDecoration(
-              color: isLight 
-                  ? Colors.white 
-                  : Colors.white.withValues(alpha: 0.05),
+              color:
+                  isLight ? Colors.white : Colors.white.withValues(alpha: 0.05),
               borderRadius: BorderRadius.circular(24),
               border: Border.all(
-                color: isLight 
-                    ? Colors.grey.withValues(alpha: 0.15) 
+                color: isLight
+                    ? Colors.grey.withValues(alpha: 0.15)
                     : Colors.white.withValues(alpha: 0.08),
               ),
               boxShadow: isLight
@@ -126,7 +126,8 @@ class _SliderQuestionCardState extends State<SliderQuestionCard> {
                   duration: const Duration(milliseconds: 300),
                   child: Text(
                     _getInterpretationText(_currentValue),
-                    key: ValueKey<String>(_getInterpretationText(_currentValue)),
+                    key:
+                        ValueKey<String>(_getInterpretationText(_currentValue)),
                     textAlign: TextAlign.center,
                     style: TextStyle(
                       fontSize: 16,
@@ -140,18 +141,21 @@ class _SliderQuestionCardState extends State<SliderQuestionCard> {
                   data: SliderTheme.of(context).copyWith(
                     trackHeight: 6,
                     activeTrackColor: primaryColor,
-                    inactiveTrackColor: isLight 
-                        ? Colors.grey.withValues(alpha: 0.2) 
+                    inactiveTrackColor: isLight
+                        ? Colors.grey.withValues(alpha: 0.2)
                         : Colors.white.withValues(alpha: 0.1),
                     thumbColor: primaryColor,
                     thumbShape: const RoundSliderThumbShape(
                       enabledThumbRadius: 14,
                     ),
                     overlayColor: primaryColor.withValues(alpha: 0.15),
-                    overlayShape: const RoundSliderOverlayShape(overlayRadius: 28),
-                    tickMarkShape: const RoundSliderTickMarkShape(tickMarkRadius: 2),
+                    overlayShape:
+                        const RoundSliderOverlayShape(overlayRadius: 28),
+                    tickMarkShape:
+                        const RoundSliderTickMarkShape(tickMarkRadius: 2),
                     activeTickMarkColor: Colors.white24,
-                    inactiveTickMarkColor: isLight ? Colors.black12 : Colors.white12,
+                    inactiveTickMarkColor:
+                        isLight ? Colors.black12 : Colors.white12,
                   ),
                   child: Slider(
                     value: _currentValue,

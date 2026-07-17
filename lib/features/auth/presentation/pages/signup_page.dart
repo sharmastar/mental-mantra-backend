@@ -29,6 +29,7 @@ class _SignupPageState extends ConsumerState<SignupPage>
   bool _obscureConfirm = true;
   bool _agreeToTerms = false;
   bool _isSubmitting = false;
+  bool _isGoogleLoading = false;
 
   late AnimationController _fadeController;
   late Animation<double> _fadeAnimation;
@@ -41,11 +42,13 @@ class _SignupPageState extends ConsumerState<SignupPage>
       vsync: this,
       duration: const Duration(milliseconds: 600),
     );
-    _fadeAnimation = CurvedAnimation(parent: _fadeController, curve: Curves.easeOut);
+    _fadeAnimation =
+        CurvedAnimation(parent: _fadeController, curve: Curves.easeOut);
     _slideAnimation = Tween<Offset>(
       begin: const Offset(0, 0.06),
       end: Offset.zero,
-    ).animate(CurvedAnimation(parent: _fadeController, curve: Curves.easeOutCubic));
+    ).animate(
+        CurvedAnimation(parent: _fadeController, curve: Curves.easeOutCubic));
     _fadeController.forward();
   }
 
@@ -67,7 +70,8 @@ class _SignupPageState extends ConsumerState<SignupPage>
 
   String? _emailValidator(String? value) {
     if (value == null || value.trim().isEmpty) return 'Please enter your email';
-    final emailRegex = RegExp(r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$');
+    final emailRegex =
+        RegExp(r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$');
     if (!emailRegex.hasMatch(value.trim())) return 'Please enter a valid email';
     return null;
   }
@@ -75,9 +79,13 @@ class _SignupPageState extends ConsumerState<SignupPage>
   String? _passwordValidator(String? value) {
     if (value == null || value.isEmpty) return 'Please enter a password';
     if (value.length < 8) return 'At least 8 characters required';
-    if (!RegExp(r'[A-Z]').hasMatch(value)) return 'Must include an uppercase letter';
+    if (!RegExp(r'[A-Z]').hasMatch(value)) {
+      return 'Must include an uppercase letter';
+    }
     if (!RegExp(r'[0-9]').hasMatch(value)) return 'Must include a number';
-    if (!RegExp(r'[^A-Za-z0-9]').hasMatch(value)) return 'Must include a special character';
+    if (!RegExp(r'[^A-Za-z0-9]').hasMatch(value)) {
+      return 'Must include a special character';
+    }
     return null;
   }
 
@@ -96,12 +104,14 @@ class _SignupPageState extends ConsumerState<SignupPage>
             children: [
               Icon(Icons.info_outline_rounded, color: Colors.white, size: 20),
               SizedBox(width: 12),
-              Expanded(child: Text('Please agree to the Terms & Privacy Policy')),
+              Expanded(
+                  child: Text('Please agree to the Terms & Privacy Policy')),
             ],
           ),
           backgroundColor: AppTheme.primaryColor,
           behavior: SnackBarBehavior.floating,
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
           margin: const EdgeInsets.only(bottom: 20, left: 20, right: 20),
         ),
       );
@@ -110,11 +120,12 @@ class _SignupPageState extends ConsumerState<SignupPage>
     if (_isSubmitting) return;
     setState(() => _isSubmitting = true);
     try {
-      final success = await ref.read(authStateProvider.notifier).signUpWithEmail(
-            name: _nameCtrl.text.trim(),
-            email: _emailCtrl.text.trim(),
-            password: _passwordCtrl.text,
-          );
+      final success =
+          await ref.read(authStateProvider.notifier).signUpWithEmail(
+                name: _nameCtrl.text.trim(),
+                email: _emailCtrl.text.trim(),
+                password: _passwordCtrl.text,
+              );
       if (success && mounted) {
         HapticFeedback.mediumImpact();
         context.go(AppRoutes.onboarding);
@@ -125,15 +136,20 @@ class _SignupPageState extends ConsumerState<SignupPage>
           SnackBar(
             content: Row(
               children: [
-                const Icon(Icons.error_outline_rounded, color: Colors.white, size: 20),
+                const Icon(Icons.error_outline_rounded,
+                    color: Colors.white, size: 20),
                 const SizedBox(width: 12),
                 Expanded(child: Text('Something went wrong: ${e.toString()}')),
               ],
             ),
-            backgroundColor: const Color(0xFFE06B7A),
+            backgroundColor: AppTheme.errorColor,
             behavior: SnackBarBehavior.floating,
-            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
-            margin: EdgeInsets.only(bottom: MediaQuery.of(context).size.height * 0.05, left: 20, right: 20),
+            shape:
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
+            margin: EdgeInsets.only(
+                bottom: MediaQuery.of(context).size.height * 0.05,
+                left: 20,
+                right: 20),
             duration: const Duration(seconds: 4),
           ),
         );
@@ -144,10 +160,11 @@ class _SignupPageState extends ConsumerState<SignupPage>
   }
 
   Future<void> _googleSignIn() async {
-    if (_isSubmitting) return;
-    setState(() => _isSubmitting = true);
+    if (_isGoogleLoading) return;
+    setState(() => _isGoogleLoading = true);
     try {
-      final success = await ref.read(authStateProvider.notifier).signInWithGoogle();
+      final success =
+          await ref.read(authStateProvider.notifier).signInWithGoogle();
       if (success && mounted) {
         HapticFeedback.mediumImpact();
         context.go(AppRoutes.onboarding);
@@ -158,21 +175,26 @@ class _SignupPageState extends ConsumerState<SignupPage>
           SnackBar(
             content: Row(
               children: [
-                const Icon(Icons.error_outline_rounded, color: Colors.white, size: 20),
+                const Icon(Icons.error_outline_rounded,
+                    color: Colors.white, size: 20),
                 const SizedBox(width: 12),
                 Expanded(child: Text('Google sign-in failed: ${e.toString()}')),
               ],
             ),
-            backgroundColor: const Color(0xFFE06B7A),
+            backgroundColor: AppTheme.errorColor,
             behavior: SnackBarBehavior.floating,
-            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
-            margin: EdgeInsets.only(bottom: MediaQuery.of(context).size.height * 0.05, left: 20, right: 20),
+            shape:
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
+            margin: EdgeInsets.only(
+                bottom: MediaQuery.of(context).size.height * 0.05,
+                left: 20,
+                right: 20),
             duration: const Duration(seconds: 4),
           ),
         );
       }
     } finally {
-      if (mounted) setState(() => _isSubmitting = false);
+      if (mounted) setState(() => _isGoogleLoading = false);
     }
   }
 
@@ -183,20 +205,26 @@ class _SignupPageState extends ConsumerState<SignupPage>
     final size = MediaQuery.of(context).size;
 
     ref.listen(authStateProvider, (prev, next) {
-      if (next.errorMessage != null && prev?.errorMessage != next.errorMessage) {
+      if (next.errorMessage != null &&
+          prev?.errorMessage != next.errorMessage) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Row(
               children: [
-                const Icon(Icons.error_outline_rounded, color: Colors.white, size: 20),
+                const Icon(Icons.error_outline_rounded,
+                    color: Colors.white, size: 20),
                 const SizedBox(width: 12),
-                Expanded(child: Text(next.errorMessage!, style: const TextStyle(color: Colors.white))),
+                Expanded(
+                    child: Text(next.errorMessage!,
+                        style: const TextStyle(color: Colors.white))),
               ],
             ),
-            backgroundColor: const Color(0xFFE06B7A),
+            backgroundColor: AppTheme.errorColor,
             behavior: SnackBarBehavior.floating,
-            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
-            margin: EdgeInsets.only(bottom: size.height * 0.05, left: 20, right: 20),
+            shape:
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
+            margin: EdgeInsets.only(
+                bottom: size.height * 0.05, left: 20, right: 20),
             duration: const Duration(seconds: 3),
           ),
         );
@@ -207,17 +235,7 @@ class _SignupPageState extends ConsumerState<SignupPage>
     return Scaffold(
       body: Container(
         decoration: BoxDecoration(
-          gradient: isDark
-              ? const LinearGradient(
-                  colors: [Color(0xFF12101E), Color(0xFF1A1530), Color(0xFF221D3D)],
-                  begin: Alignment.topCenter,
-                  end: Alignment.bottomCenter,
-                )
-              : const LinearGradient(
-                  colors: [Color(0xFFF8F7FC), Color(0xFFF0EBFF)],
-                  begin: Alignment.topCenter,
-                  end: Alignment.bottomCenter,
-                ),
+          gradient: isDark ? AppTheme.nightGradient : AppTheme.sunriseGradient,
         ),
         child: SafeArea(
           child: FadeTransition(
@@ -235,7 +253,6 @@ class _SignupPageState extends ConsumerState<SignupPage>
                   children: [
                     // Logo
                     _buildLogo(isDark),
-                    SizedBox(height: size.height * 0.03),
 
                     // Heading
                     Text(
@@ -243,7 +260,9 @@ class _SignupPageState extends ConsumerState<SignupPage>
                       style: GoogleFonts.playfairDisplay(
                         fontSize: 32,
                         fontWeight: FontWeight.w700,
-                        color: isDark ? const Color(0xFFF0EEFF) : const Color(0xFF1A1530),
+                        color: isDark
+                            ? AppTheme.accentColor
+                            : AppTheme.primaryDark,
                       ),
                     ),
                     const SizedBox(height: 8),
@@ -251,7 +270,8 @@ class _SignupPageState extends ConsumerState<SignupPage>
                       'Start your journey towards a better you',
                       style: TextStyle(
                         fontSize: 16,
-                        color: isDark ? const Color(0xFF9E97B0) : const Color(0xFF6B6580),
+                        color:
+                            isDark ? AppTheme.lavender : AppTheme.primaryDark,
                         fontWeight: FontWeight.w400,
                       ),
                     ),
@@ -259,13 +279,16 @@ class _SignupPageState extends ConsumerState<SignupPage>
 
                     // Form Card
                     Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 28),
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 24, vertical: 28),
                       decoration: BoxDecoration(
                         color: isDark ? AppTheme.darkCard : Colors.white,
                         borderRadius: BorderRadius.circular(24),
                         boxShadow: [
                           BoxShadow(
-                            color: (isDark ? Colors.black : AppTheme.primaryColor).withValues(alpha: isDark ? 0.3 : 0.06),
+                            color:
+                                (isDark ? Colors.black : AppTheme.primaryColor)
+                                    .withValues(alpha: isDark ? 0.3 : 0.06),
                             blurRadius: isDark ? 40 : 24,
                             offset: const Offset(0, 8),
                           ),
@@ -305,11 +328,16 @@ class _SignupPageState extends ConsumerState<SignupPage>
                               validator: _passwordValidator,
                               suffixIcon: IconButton(
                                 icon: Icon(
-                                  _obscurePassword ? Icons.visibility_off_rounded : Icons.visibility_rounded,
-                                  color: isDark ? const Color(0xFF6B6580) : const Color(0xFF9E97B0),
+                                  _obscurePassword
+                                      ? Icons.visibility_off_rounded
+                                      : Icons.visibility_rounded,
+                                  color: isDark
+                                      ? AppTheme.lavender
+                                      : AppTheme.primaryDark,
                                   size: 22,
                                 ),
-                                onPressed: () => setState(() => _obscurePassword = !_obscurePassword),
+                                onPressed: () => setState(
+                                    () => _obscurePassword = !_obscurePassword),
                               ),
                             ),
                             const SizedBox(height: 16),
@@ -324,11 +352,16 @@ class _SignupPageState extends ConsumerState<SignupPage>
                               validator: _confirmValidator,
                               suffixIcon: IconButton(
                                 icon: Icon(
-                                  _obscureConfirm ? Icons.visibility_off_rounded : Icons.visibility_rounded,
-                                  color: isDark ? const Color(0xFF6B6580) : const Color(0xFF9E97B0),
+                                  _obscureConfirm
+                                      ? Icons.visibility_off_rounded
+                                      : Icons.visibility_rounded,
+                                  color: isDark
+                                      ? AppTheme.lavender
+                                      : AppTheme.primaryDark,
                                   size: 22,
                                 ),
-                                onPressed: () => setState(() => _obscureConfirm = !_obscureConfirm),
+                                onPressed: () => setState(
+                                    () => _obscureConfirm = !_obscureConfirm),
                               ),
                             ),
                             const SizedBox(height: 20),
@@ -342,13 +375,17 @@ class _SignupPageState extends ConsumerState<SignupPage>
                                   width: 24,
                                   child: Checkbox(
                                     value: _agreeToTerms,
-                                    onChanged: (v) => setState(() => _agreeToTerms = v ?? false),
+                                    onChanged: (v) => setState(
+                                        () => _agreeToTerms = v ?? false),
                                     activeColor: AppTheme.primaryColor,
                                     checkColor: Colors.white,
                                     side: BorderSide(
-                                      color: isDark ? AppTheme.darkBorder : AppTheme.lightBorder,
+                                      color: isDark
+                                          ? AppTheme.darkBorder
+                                          : AppTheme.lightBorder,
                                     ),
-                                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
+                                    shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(5)),
                                   ),
                                 ),
                                 const SizedBox(width: 10),
@@ -358,7 +395,9 @@ class _SignupPageState extends ConsumerState<SignupPage>
                                     child: RichText(
                                       text: TextSpan(
                                         style: TextStyle(
-                                          color: isDark ? const Color(0xFF9E97B0) : const Color(0xFF6B6580),
+                                          color: isDark
+                                              ? AppTheme.lavender
+                                              : AppTheme.primaryDark,
                                           fontSize: 13,
                                           height: 1.4,
                                         ),
@@ -402,26 +441,36 @@ class _SignupPageState extends ConsumerState<SignupPage>
                     // Divider
                     Row(
                       children: [
-                        Expanded(child: Divider(color: isDark ? const Color(0xFF2D2852) : const Color(0xFFE0DBF0))),
+                        Expanded(
+                            child: Divider(
+                                color: isDark
+                                    ? AppTheme.darkBorder
+                                    : AppTheme.lightBorder)),
                         Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 16),
                           child: Text(
                             'OR',
                             style: TextStyle(
-                              color: isDark ? const Color(0xFF6B6580) : const Color(0xFF9E97B0),
+                              color: isDark
+                                  ? AppTheme.lavender
+                                  : AppTheme.primaryDark,
                               fontSize: 13,
                               fontWeight: FontWeight.w500,
                               letterSpacing: 2,
                             ),
                           ),
                         ),
-                        Expanded(child: Divider(color: isDark ? const Color(0xFF2D2852) : const Color(0xFFE0DBF0))),
+                        Expanded(
+                            child: Divider(
+                                color: isDark
+                                    ? AppTheme.darkBorder
+                                    : AppTheme.lightBorder)),
                       ],
                     ),
                     const SizedBox(height: 20),
 
                     GoogleSignInButton(
-                      isLoading: isLoading,
+                      isLoading: _isGoogleLoading,
                       onPressed: _googleSignIn,
                     ),
                     const SizedBox(height: 28),
@@ -433,7 +482,9 @@ class _SignupPageState extends ConsumerState<SignupPage>
                         Text(
                           'Already have an account? ',
                           style: TextStyle(
-                            color: isDark ? const Color(0xFF9E97B0) : const Color(0xFF6B6580),
+                            color: isDark
+                                ? AppTheme.lavender
+                                : AppTheme.primaryDark,
                             fontSize: 15,
                           ),
                         ),
@@ -460,10 +511,14 @@ class _SignupPageState extends ConsumerState<SignupPage>
       ),
     );
   }
+
   Widget _buildLogo(bool isDark) {
-    return const AppLogo(
-      width: 140,
-      height: 140,
+    return Container(
+      margin: const EdgeInsets.only(top: 48, bottom: 24),
+      child: const AppLogo(
+        width: 220,
+        variant: LogoVariant.full,
+      ),
     );
   }
 }

@@ -24,7 +24,8 @@ class SkeletonLoader extends StatelessWidget {
     final isDark = Theme.of(context).brightness == Brightness.dark;
     return Shimmer.fromColors(
       baseColor: baseColor ?? (isDark ? Colors.white10 : Colors.grey[300]!),
-      highlightColor: highlightColor ?? (isDark ? Colors.white12 : Colors.grey[100]!),
+      highlightColor:
+          highlightColor ?? (isDark ? Colors.white12 : Colors.grey[100]!),
       child: Container(
         width: width,
         height: height,
@@ -50,25 +51,29 @@ class SkeletonListLoader extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Column(
-      children: List.generate(itemCount, (i) => Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
-        child: Row(
-          children: [
-            const SkeletonLoader(width: 48, height: 48, borderRadius: 12),
-            const SizedBox(width: 12),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  SkeletonLoader(width: double.infinity, height: 14),
-                  const SizedBox(height: 8),
-                  SkeletonLoader(width: 120, height: 10),
-                ],
-              ),
-            ),
-          ],
-        ),
-      )),
+      children: List.generate(
+          itemCount,
+          (i) => Padding(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
+                child: Row(
+                  children: [
+                    const SkeletonLoader(
+                        width: 48, height: 48, borderRadius: 12),
+                    const SizedBox(width: 12),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          SkeletonLoader(width: double.infinity, height: 14),
+                          const SizedBox(height: 8),
+                          SkeletonLoader(width: 120, height: 10),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              )),
     );
   }
 }
@@ -98,9 +103,13 @@ class SkeletonCardLoader extends StatelessWidget {
           const SizedBox(height: 16),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: List.generate(3, (i) => SkeletonLoader(
-              width: 80, height: 32, borderRadius: 8,
-            )),
+            children: List.generate(
+                3,
+                (i) => SkeletonLoader(
+                      width: 80,
+                      height: 32,
+                      borderRadius: 8,
+                    )),
           ),
         ],
       ),

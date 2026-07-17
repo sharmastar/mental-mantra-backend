@@ -1,4 +1,5 @@
 // lib/core/storage/hive_storage.dart
+import 'package:flutter/foundation.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:path_provider/path_provider.dart';
 
@@ -16,18 +17,33 @@ class HiveStorage {
   static const String goalsBoxName = 'goals_box';
   static const String cacheBoxName = 'cache_box';
 
-  static late Box<dynamic> _userBox;
-  static late Box<dynamic> _settingsBox;
-  static late Box<dynamic> _cacheBox;
+  static Box<dynamic>? _userBox;
+  static Box<dynamic>? _settingsBox;
+  static Box<dynamic>? _cacheBox;
+
+  static bool _initialized = false;
 
   static Future<void> init() async {
-    final dir = await getApplicationDocumentsDirectory();
-    await Hive.initFlutter(dir.path);
+    if (_initialized) return;
+    try {
+      if (kIsWeb) {
+        await Hive.initFlutter();
+      } else {
+        final dir = await getApplicationDocumentsDirectory();
+        await Hive.initFlutter(dir.path);
+      }
 
-    _userBox = await Hive.openBox<dynamic>(userBoxName);
-    _settingsBox = await Hive.openBox<dynamic>(settingsBoxName);
-    _cacheBox = await Hive.openBox<dynamic>(cacheBoxName);
+      _userBox = await Hive.openBox<dynamic>(userBoxName);
+      _settingsBox = await Hive.openBox<dynamic>(settingsBoxName);
+      _cacheBox = await Hive.openBox<dynamic>(cacheBoxName);
+      _initialized = true;
+    } catch (e) {
+      debugPrint('[HiveStorage] Init failed: $e');
+      rethrow;
+    }
   }
+
+  static bool get isInitialized => _initialized;
 
   static Future<Box<dynamic>> openBox(String name) async {
     if (Hive.isBoxOpen(name)) return Hive.box<dynamic>(name);
@@ -35,48 +51,49 @@ class HiveStorage {
   }
 
   // ── User Box ──────────────────────────────────────────────────────
-  static Box<dynamic> get userBox => _userBox;
+  static Box<dynamic>? get userBox => _userBox;
 
   static Future<void> saveUser(Map<String, dynamic> data) async {
-    await _userBox.putAll(data);
+    await _userBox?.putAll(data);
   }
 
   static Map<String, dynamic> getUser() {
-    return Map<String, dynamic>.from(_userBox.toMap());
+    if (_userBox == null) return {};
+    return Map<String, dynamic>.from(_userBox!.toMap());
   }
 
-  static Future<void> clearUser() async => _userBox.clear();
+  static Future<void> clearUser() async => _userBox?.clear();
 
   // ── Settings Box ──────────────────────────────────────────────────
-  static Box<dynamic> get settingsBox => _settingsBox;
+  static Box<dynamic>? get settingsBox => _settingsBox;
 
   static Future<void> saveSetting(String key, dynamic value) async {
-    await _settingsBox.put(key, value);
+    await _settingsBox?.put(key, value);
   }
 
   static dynamic getSetting(String key, {dynamic defaultValue}) {
-    return _settingsBox.get(key, defaultValue: defaultValue);
+    return _settingsBox?.get(key, defaultValue: defaultValue);
   }
 
   // ── Cache Box ─────────────────────────────────────────────────────
-  static Box<dynamic> get cacheBox => _cacheBox;
+  static Box<dynamic>? get cacheBox => _cacheBox;
 
   static Future<void> saveCache(String key, dynamic value) async {
-    await _cacheBox.put(key, value);
+    await _cacheBox?.put(key, value);
   }
 
-  static dynamic getCache(String key) => _cacheBox.get(key);
+  static dynamic getCache(String key) => _cacheBox?.get(key);
 
-  static Future<void> deleteCache(String key) async => _cacheBox.delete(key);
+  static Future<void> deleteCache(String key) async => _cacheBox?.delete(key);
 
-  static Future<void> clearCache() async => _cacheBox.clear();
+  static Future<void> clearCache() async => _cacheBox?.clear();
 
   // ── Onboarding ────────────────────────────────────────────────────
   static Future<void> saveOnboardingData(Map<String, dynamic> data) async {
     final box = await openBox('onboarding_box');
     await box.putAll(data);
     if (data.containsKey('wellness_result')) {
-      await _cacheBox.put('wellness_result', data['wellness_result']);
+      await _cacheBox!.put('wellness_result', data['wellness_result']);
     }
   }
 
@@ -86,12 +103,14 @@ class HiveStorage {
   }
 
   // ── Mood Cache ────────────────────────────────────────────────────
-  static Future<void> saveMoodEntry(String date, Map<String, dynamic> entry) async {
+  static Future<void> saveMoodEntry(
+      String date, Map<String, dynamic> entry) async {
     final box = await openBox(moodBoxName);
     await box.put(date, entry);
   }
 
-  static Future<List<Map<String, dynamic>>> getRecentMoods({int days = 7}) async {
+  static Future<List<Map<String, dynamic>>> getRecentMoods(
+      {int days = 7}) async {
     final box = await openBox(moodBoxName);
     final results = <Map<String, dynamic>>[];
     final keys = box.keys.toList()..sort((a, b) => b.compareTo(a));
@@ -121,35 +140,36 @@ class HiveStorage {
 
   // ── AI Coach Service Cache ────────────────────────────────────────
   static Future<void> saveWellnessProfile(Map<String, dynamic> data) async {
-    await _cacheBox.put('wellness_profile', data);
+    await _cacheBox!.put('wellness_profile', data);
   }
 
   static Future<Map<String, dynamic>> getWellnessProfile() async {
-    final data = _cacheBox.get('wellness_profile');
+    final data = _cacheBox!.get('wellness_profile');
     return data != null ? Map<String, dynamic>.from(data) : {};
   }
 
   static Future<void> saveDailyPlan(Map<String, dynamic> data) async {
-    await _cacheBox.put('daily_plan', data);
+    await _cacheBox!.put('daily_plan', data);
   }
 
   static Future<Map<String, dynamic>?> getDailyPlan() async {
-    final data = _cacheBox.get('daily_plan');
+    final data = _cacheBox!.get('daily_plan');
     return data != null ? Map<String, dynamic>.from(data) : null;
   }
 
   static Future<Map<String, dynamic>?> getLastCheckin() async {
-    final data = _cacheBox.get('last_checkin');
+    final data = _cacheBox!.get('last_checkin');
     return data != null ? Map<String, dynamic>.from(data) : null;
   }
 
   static Future<Map<String, dynamic>> getWeekData() async {
-    final data = _cacheBox.get('week_data');
+    final data = _cacheBox!.get('week_data');
     return data != null ? Map<String, dynamic>.from(data) : {};
   }
 
   // ── Chat History ──────────────────────────────────────────────────
-  static Future<void> saveChatHistory(List<Map<String, dynamic>> messages) async {
+  static Future<void> saveChatHistory(
+      List<Map<String, dynamic>> messages) async {
     final box = await openBox(chatBoxName);
     await box.put('chat_history', messages);
   }
@@ -172,18 +192,18 @@ class HiveStorage {
   static const String classificationBoxName = 'classification_box';
 
   static Future<void> saveClassificationV2(Map<String, dynamic> data) async {
-    await _cacheBox.put('classification_result_v2', data);
+    await _cacheBox!.put('classification_result_v2', data);
   }
 
   static Map<String, dynamic>? getClassificationV2() {
-    final data = _cacheBox.get('classification_result_v2');
+    final data = _cacheBox!.get('classification_result_v2');
     return data is Map<String, dynamic> ? data : null;
   }
 
   // ── Cleanup ───────────────────────────────────────────────────────
   static Future<void> clearAll() async {
-    await _userBox.clear();
-    await _settingsBox.clear();
-    await _cacheBox.clear();
+    await _userBox?.clear();
+    await _settingsBox?.clear();
+    await _cacheBox?.clear();
   }
 }

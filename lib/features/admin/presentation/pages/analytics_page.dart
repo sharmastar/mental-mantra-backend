@@ -30,9 +30,23 @@ class AnalyticsPage extends ConsumerWidget {
               children: [
                 _buildPeriodSelector(isDark),
                 const SizedBox(height: 20),
-                _buildChartCard(isDark, theme, 'Daily Active Users', '${state.stats.activeUsers}', state.dailyUserSpots, Colors.blue, '+12%'),
+                _buildChartCard(
+                    isDark,
+                    theme,
+                    'Daily Active Users',
+                    '${state.stats.activeUsers}',
+                    state.dailyUserSpots,
+                    Colors.blue,
+                    '+12%'),
                 const SizedBox(height: 16),
-                _buildChartCard(isDark, theme, 'Sessions Completed', '${state.stats.totalContentItems * 100}', state.sessionsCompletedSpots, AppTheme.primaryColor, '+8%'),
+                _buildChartCard(
+                    isDark,
+                    theme,
+                    'Sessions Completed',
+                    '${state.stats.totalContentItems * 100}',
+                    state.sessionsCompletedSpots,
+                    AppTheme.primaryColor,
+                    '+8%'),
                 const SizedBox(height: 16),
                 _buildDistributionCard(isDark, theme),
                 const SizedBox(height: 16),
@@ -49,7 +63,8 @@ class AnalyticsPage extends ConsumerWidget {
       decoration: BoxDecoration(
         color: isDark ? AppTheme.darkCard : Colors.white,
         borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: isDark ? AppTheme.darkBorder : AppTheme.lightBorder),
+        border: Border.all(
+            color: isDark ? AppTheme.darkBorder : AppTheme.lightBorder),
       ),
       child: Row(
         children: ['7D', '30D', '90D', '1Y'].map((p) {
@@ -62,8 +77,14 @@ class AnalyticsPage extends ConsumerWidget {
                   color: selected ? AppTheme.primaryColor : Colors.transparent,
                   borderRadius: BorderRadius.circular(8),
                 ),
-                child: Text(p, textAlign: TextAlign.center,
-                  style: TextStyle(color: selected ? Colors.white : (isDark ? Colors.white70 : Colors.black54), fontWeight: FontWeight.w600, fontSize: 13)),
+                child: Text(p,
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                        color: selected
+                            ? Colors.white
+                            : (isDark ? Colors.white70 : Colors.black54),
+                        fontWeight: FontWeight.w600,
+                        fontSize: 13)),
               ),
             ),
           );
@@ -72,24 +93,34 @@ class AnalyticsPage extends ConsumerWidget {
     );
   }
 
-  Widget _buildChartCard(bool isDark, ThemeData theme, String title, String total, List<FlSpot> spots, Color color, String change) {
+  Widget _buildChartCard(bool isDark, ThemeData theme, String title,
+      String total, List<FlSpot> spots, Color color, String change) {
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
         color: isDark ? AppTheme.darkCard : Colors.white,
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: isDark ? AppTheme.darkBorder : AppTheme.lightBorder),
+        border: Border.all(
+            color: isDark ? AppTheme.darkBorder : AppTheme.lightBorder),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Row(children: [
-            Text(title, style: theme.textTheme.titleSmall?.copyWith(fontWeight: FontWeight.bold)),
+            Text(title,
+                style: theme.textTheme.titleSmall
+                    ?.copyWith(fontWeight: FontWeight.bold)),
             const Spacer(),
-            Text(change, style: const TextStyle(color: Colors.green, fontSize: 13, fontWeight: FontWeight.w600)),
+            Text(change,
+                style: const TextStyle(
+                    color: Colors.green,
+                    fontSize: 13,
+                    fontWeight: FontWeight.w600)),
           ]),
           const SizedBox(height: 8),
-          Text(total, style: theme.textTheme.headlineSmall?.copyWith(fontWeight: FontWeight.bold)),
+          Text(total,
+              style: theme.textTheme.headlineSmall
+                  ?.copyWith(fontWeight: FontWeight.bold)),
           const SizedBox(height: 16),
           SizedBox(
             height: 180,
@@ -98,13 +129,19 @@ class AnalyticsPage extends ConsumerWidget {
                 gridData: FlGridData(
                   show: true,
                   drawVerticalLine: false,
-                  getDrawingHorizontalLine: (v) => FlLine(color: isDark ? Colors.white10 : Colors.black12, strokeWidth: 1),
+                  getDrawingHorizontalLine: (v) => FlLine(
+                      color: isDark ? Colors.white10 : Colors.black12,
+                      strokeWidth: 1),
                 ),
                 titlesData: const FlTitlesData(
-                  bottomTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
-                  leftTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
-                  topTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
-                  rightTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
+                  bottomTitles:
+                      AxisTitles(sideTitles: SideTitles(showTitles: false)),
+                  leftTitles:
+                      AxisTitles(sideTitles: SideTitles(showTitles: false)),
+                  topTitles:
+                      AxisTitles(sideTitles: SideTitles(showTitles: false)),
+                  rightTitles:
+                      AxisTitles(sideTitles: SideTitles(showTitles: false)),
                 ),
                 borderData: FlBorderData(show: false),
                 lineBarsData: [
@@ -117,7 +154,13 @@ class AnalyticsPage extends ConsumerWidget {
                     dotData: const FlDotData(show: false),
                     belowBarData: BarAreaData(
                       show: true,
-                      gradient: LinearGradient(colors: [color.withValues(alpha: 0.2), color.withValues(alpha: 0)], begin: Alignment.topCenter, end: Alignment.bottomCenter),
+                      gradient: LinearGradient(
+                          colors: [
+                            color.withValues(alpha: 0.2),
+                            color.withValues(alpha: 0)
+                          ],
+                          begin: Alignment.topCenter,
+                          end: Alignment.bottomCenter),
                     ),
                   ),
                 ],
@@ -134,8 +177,8 @@ class AnalyticsPage extends ConsumerWidget {
       {'label': 'Meditation', 'value': 38, 'color': AppTheme.primaryColor},
       {'label': 'Music Therapy', 'value': 22, 'color': AppTheme.secondaryColor},
       {'label': 'Journal', 'value': 18, 'color': AppTheme.accentColor},
-      {'label': 'Yoga', 'value': 12, 'color': const Color(0xFFFFB547)},
-      {'label': 'AI Chat', 'value': 10, 'color': const Color(0xFF9C27B0)},
+      {'label': 'Yoga', 'value': 12, 'color': AppTheme.warningColor},
+      {'label': 'AI Chat', 'value': 10, 'color': AppTheme.errorColor},
     ];
     final total = features.fold(0, (s, f) => s + (f['value'] as int));
 
@@ -144,12 +187,15 @@ class AnalyticsPage extends ConsumerWidget {
       decoration: BoxDecoration(
         color: isDark ? AppTheme.darkCard : Colors.white,
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: isDark ? AppTheme.darkBorder : AppTheme.lightBorder),
+        border: Border.all(
+            color: isDark ? AppTheme.darkBorder : AppTheme.lightBorder),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text('Feature Distribution', style: theme.textTheme.titleSmall?.copyWith(fontWeight: FontWeight.bold)),
+          Text('Feature Distribution',
+              style: theme.textTheme.titleSmall
+                  ?.copyWith(fontWeight: FontWeight.bold)),
           const SizedBox(height: 16),
           ...features.map((f) {
             final pct = (f['value'] as int) / total;
@@ -159,15 +205,22 @@ class AnalyticsPage extends ConsumerWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Row(children: [
-                    Expanded(child: Text(f['label'] as String, style: const TextStyle(fontSize: 13))),
-                    Text('${f['value']}%', style: TextStyle(fontSize: 13, fontWeight: FontWeight.w600, color: f['color'] as Color)),
+                    Expanded(
+                        child: Text(f['label'] as String,
+                            style: const TextStyle(fontSize: 13))),
+                    Text('${f['value']}%',
+                        style: TextStyle(
+                            fontSize: 13,
+                            fontWeight: FontWeight.w600,
+                            color: f['color'] as Color)),
                   ]),
                   const SizedBox(height: 4),
                   ClipRRect(
                     borderRadius: BorderRadius.circular(4),
                     child: LinearProgressIndicator(
                       value: pct,
-                      backgroundColor: (f['color'] as Color).withValues(alpha: 0.1),
+                      backgroundColor:
+                          (f['color'] as Color).withValues(alpha: 0.1),
                       valueColor: AlwaysStoppedAnimation(f['color'] as Color),
                       minHeight: 6,
                     ),
@@ -183,10 +236,26 @@ class AnalyticsPage extends ConsumerWidget {
 
   Widget _buildStatsGrid(bool isDark, ThemeData theme, dynamic stats) {
     final items = [
-      {'label': 'Total Users', 'value': '${stats.totalUsers}', 'icon': Icons.people},
-      {'label': 'Active Users', 'value': '${stats.activeUsers}', 'icon': Icons.person_pin},
-      {'label': 'New (30d)', 'value': '${stats.newUsersThisMonth}', 'icon': Icons.person_add},
-      {'label': 'Content Items', 'value': '${stats.totalContentItems}', 'icon': Icons.library_books},
+      {
+        'label': 'Total Users',
+        'value': '${stats.totalUsers}',
+        'icon': Icons.people
+      },
+      {
+        'label': 'Active Users',
+        'value': '${stats.activeUsers}',
+        'icon': Icons.person_pin
+      },
+      {
+        'label': 'New (30d)',
+        'value': '${stats.newUsersThisMonth}',
+        'icon': Icons.person_add
+      },
+      {
+        'label': 'Content Items',
+        'value': '${stats.totalContentItems}',
+        'icon': Icons.library_books
+      },
     ];
 
     return GridView.builder(
@@ -206,16 +275,28 @@ class AnalyticsPage extends ConsumerWidget {
           decoration: BoxDecoration(
             color: isDark ? AppTheme.darkCard : Colors.white,
             borderRadius: BorderRadius.circular(14),
-            border: Border.all(color: isDark ? AppTheme.darkBorder : AppTheme.lightBorder),
+            border: Border.all(
+                color: isDark ? AppTheme.darkBorder : AppTheme.lightBorder),
           ),
           child: Row(children: [
-            Container(padding: const EdgeInsets.all(8), decoration: BoxDecoration(color: AppTheme.primaryColor.withValues(alpha: 0.1), borderRadius: BorderRadius.circular(10)),
-              child: Icon(item['icon'] as IconData, color: AppTheme.primaryColor, size: 20)),
+            Container(
+                padding: const EdgeInsets.all(8),
+                decoration: BoxDecoration(
+                    color: AppTheme.primaryColor.withValues(alpha: 0.1),
+                    borderRadius: BorderRadius.circular(10)),
+                child: Icon(item['icon'] as IconData,
+                    color: AppTheme.primaryColor, size: 20)),
             const SizedBox(width: 12),
-            Column(crossAxisAlignment: CrossAxisAlignment.start, mainAxisAlignment: MainAxisAlignment.center, children: [
-              Text(item['value'] as String, style: theme.textTheme.titleLarge?.copyWith(fontWeight: FontWeight.bold)),
-              Text(item['label'] as String, style: const TextStyle(fontSize: 11, color: Colors.grey)),
-            ]),
+            Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(item['value'] as String,
+                      style: theme.textTheme.titleLarge
+                          ?.copyWith(fontWeight: FontWeight.bold)),
+                  Text(item['label'] as String,
+                      style: const TextStyle(fontSize: 11, color: Colors.grey)),
+                ]),
           ]),
         );
       },

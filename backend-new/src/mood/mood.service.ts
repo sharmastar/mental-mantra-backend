@@ -1,13 +1,14 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../common/prisma.service';
+import { CreateMoodDto } from './dto/create-mood.dto';
 
 @Injectable()
 export class MoodService {
   constructor(private readonly prisma: PrismaService) {}
 
-  async create(userId: string, data: { mood: number; emoji?: string; label: string; note?: string; tags?: string[] }) {
+  async create(userId: string, dto: CreateMoodDto) {
     const entry = await this.prisma.moodEntry.create({
-      data: { userId, mood: data.mood, emoji: data.emoji || '😐', label: data.label, note: data.note, tags: data.tags ? JSON.stringify(data.tags) : '[]' },
+      data: { userId, mood: dto.mood, emoji: dto.emoji || '😐', label: dto.label, note: dto.note, tags: dto.tags ? JSON.stringify(dto.tags) : '[]' },
     });
     await this.prisma.user.update({ where: { id: userId }, data: { totalPoints: { increment: 10 } } });
     return this.parseTags(entry);

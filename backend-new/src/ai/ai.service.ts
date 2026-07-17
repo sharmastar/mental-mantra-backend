@@ -1,5 +1,6 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { GoogleGenerativeAI } from '@google/generative-ai';
+import { PrismaService } from '../common/prisma.service';
 
 const SYSTEM_PROMPT = `You are Maya, an empathetic AI wellness companion for Mental Mantra app.
 Your role is to provide emotional support, mindfulness guidance, and wellness coaching.
@@ -26,26 +27,30 @@ export class AiService {
   private readonly logger = new Logger(AiService.name);
   private genAI: GoogleGenerativeAI | null = null;
 
-  constructor() {
+  constructor(private readonly prisma: PrismaService) {
     const key = process.env.GEMINI_API_KEY;
     if (key && !key.startsWith('your_')) {
       this.genAI = new GoogleGenerativeAI(key);
     }
   }
 
-  async chat(messages: any[]) {
+  async chat(userId: string, messages: any[]) {
     if (!messages || !Array.isArray(messages) || messages.length === 0) {
       return { reply: 'Please provide a message to start the conversation.' };
     }
 
-    let systemInstruction = SYSTEM_PROMPT;
-    const systemIdx = messages.findIndex(m => m.role === 'system');
-    if (systemIdx !== -1 && messages[systemIdx].content) {
-      systemInstruction += '\n\nAdditional context:\n' + messages[systemIdx].content;
+    // Securely retrieve user context from the database instead of client system messages
+    const user = await this.prisma.user.findUnique({ where: { id: userId } });
+    let additionalContext = '';
+    if (user) {
+      additionalContext = `\n\nUser Context:\n- Name: ${user.nickname || user.name}\n- Primary Challenge: ${user.primaryChallenge || 'General wellness'}\n- Focus Areas: ${user.goalTags || '[]'}`;
     }
 
+    const systemInstruction = SYSTEM_PROMPT + additionalContext;
+
+    // Filter out client-supplied system role messages to prevent prompt injection attacks
     const history = messages
-      .filter(m => m.role !== 'system')
+      .filter(m => m.role !== 'system' && (m.role === 'user' || m.role === 'assistant'))
       .map(m => ({ role: m.role === 'assistant' ? 'model' : 'user', parts: [{ text: m.content || m.text || '' }] }));
 
     if (!this.genAI || history.length === 0) {

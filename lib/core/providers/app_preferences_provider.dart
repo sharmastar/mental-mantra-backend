@@ -42,10 +42,12 @@ class AppPreferences {
       notificationsEnabled: notificationsEnabled ?? this.notificationsEnabled,
       soundEnabled: soundEnabled ?? this.soundEnabled,
       hapticsEnabled: hapticsEnabled ?? this.hapticsEnabled,
-      backgroundMusicEnabled: backgroundMusicEnabled ?? this.backgroundMusicEnabled,
+      backgroundMusicEnabled:
+          backgroundMusicEnabled ?? this.backgroundMusicEnabled,
       themeMode: themeMode ?? this.themeMode,
       dataSaverMode: dataSaverMode ?? this.dataSaverMode,
-      autoDownloadMeditations: autoDownloadMeditations ?? this.autoDownloadMeditations,
+      autoDownloadMeditations:
+          autoDownloadMeditations ?? this.autoDownloadMeditations,
       analyticsEnabled: analyticsEnabled ?? this.analyticsEnabled,
     );
   }
@@ -69,7 +71,9 @@ class AppPreferencesNotifier extends StateNotifier<AppPreferences> {
         autoDownloadMeditations: prefs.getBool('auto_download') ?? false,
         analyticsEnabled: prefs.getBool('analytics_enabled') ?? true,
       );
-    } catch (_) {}
+    } catch (e) {
+      debugPrint('AppPreferencesNotifier._load: $e');
+    }
   }
 
   Future<void> update(AppPreferences Function(AppPreferences) updater) async {
@@ -86,14 +90,21 @@ class AppPreferencesNotifier extends StateNotifier<AppPreferences> {
     await prefs.setBool('analytics_enabled', newState.analyticsEnabled);
   }
 
-  Future<void> toggleNotifications() async => update((p) => p.copyWith(notificationsEnabled: !p.notificationsEnabled));
-  Future<void> toggleSound() async => update((p) => p.copyWith(soundEnabled: !p.soundEnabled));
-  Future<void> toggleHaptics() async => update((p) => p.copyWith(hapticsEnabled: !p.hapticsEnabled));
-  Future<void> toggleBackgroundMusic() async => update((p) => p.copyWith(backgroundMusicEnabled: !p.backgroundMusicEnabled));
-  Future<void> setThemeMode(int mode) async => update((p) => p.copyWith(themeMode: mode));
-  Future<void> toggleDataSaver() async => update((p) => p.copyWith(dataSaverMode: !p.dataSaverMode));
+  Future<void> toggleNotifications() async =>
+      update((p) => p.copyWith(notificationsEnabled: !p.notificationsEnabled));
+  Future<void> toggleSound() async =>
+      update((p) => p.copyWith(soundEnabled: !p.soundEnabled));
+  Future<void> toggleHaptics() async =>
+      update((p) => p.copyWith(hapticsEnabled: !p.hapticsEnabled));
+  Future<void> toggleBackgroundMusic() async => update(
+      (p) => p.copyWith(backgroundMusicEnabled: !p.backgroundMusicEnabled));
+  Future<void> setThemeMode(int mode) async =>
+      update((p) => p.copyWith(themeMode: mode));
+  Future<void> toggleDataSaver() async =>
+      update((p) => p.copyWith(dataSaverMode: !p.dataSaverMode));
 }
 
-final appPreferencesProvider = StateNotifierProvider<AppPreferencesNotifier, AppPreferences>((ref) {
+final appPreferencesProvider =
+    StateNotifierProvider<AppPreferencesNotifier, AppPreferences>((ref) {
   return AppPreferencesNotifier();
 });

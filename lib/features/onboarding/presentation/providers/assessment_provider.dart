@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../data/models/assessment_question.dart';
 import '../../data/assessment_data.dart';
@@ -87,13 +88,13 @@ class AssessmentState {
 
 class AssessmentNotifier extends StateNotifier<AssessmentState> {
   final AiCoachService _aiService = AiCoachService();
-  final Debouncer _saveDebouncer = Debouncer(delay: const Duration(milliseconds: 800));
+  final Debouncer _saveDebouncer =
+      Debouncer(delay: const Duration(milliseconds: 800));
   final Set<String> _injectedAdaptiveIds = {};
-  late List<AssessmentQuestion> _visibleQuestions;
+  List<AssessmentQuestion> _visibleQuestions =
+      List.from(AssessmentData.questions);
 
-  AssessmentNotifier() : super(const AssessmentState()) {
-    _visibleQuestions = List.from(AssessmentData.questions);
-  }
+  AssessmentNotifier() : super(const AssessmentState());
 
   void setConsentAccepted(bool val) {
     state = state.copyWith(consentAccepted: val);
@@ -229,7 +230,9 @@ class AssessmentNotifier extends StateNotifier<AssessmentState> {
         'answers': state.answers.toJson(),
         'consentAccepted': state.consentAccepted,
       });
-    } catch (_) {}
+    } catch (e) {
+      debugPrint('AssessmentNotifier.saveProgress: $e');
+    }
   }
 
   Future<void> restoreSavedProgress() async {
@@ -249,13 +252,16 @@ class AssessmentNotifier extends StateNotifier<AssessmentState> {
           relationshipStatus: saved['relationshipStatus'] as String? ?? '',
           livingSituation: saved['livingSituation'] as String? ?? '',
           consentAccepted: saved['consentAccepted'] as bool? ?? false,
-          answers: AssessmentAnswers(Map<String, dynamic>.from(saved['answers'] as Map? ?? {})),
+          answers: AssessmentAnswers(
+              Map<String, dynamic>.from(saved['answers'] as Map? ?? {})),
         );
         if (restoredStep > 0) {
           setConsentAccepted(true);
         }
       }
-    } catch (_) {}
+    } catch (e) {
+      debugPrint('AssessmentNotifier.restoreSavedProgress: $e');
+    }
   }
 
   Future<WellnessResult> generateResult() async {
@@ -268,7 +274,9 @@ class AssessmentNotifier extends StateNotifier<AssessmentState> {
   String? get validationError {
     final step = state.currentStep;
     if (step == 0) {
-      return state.consentAccepted ? null : 'Please accept the consent agreement to proceed.';
+      return state.consentAccepted
+          ? null
+          : 'Please accept the consent agreement to proceed.';
     }
 
     final q = currentQuestion;
@@ -277,12 +285,16 @@ class AssessmentNotifier extends StateNotifier<AssessmentState> {
     if (q.id == 'nickname') {
       final val = state.answers.getSingle('nickname') ?? state.nickname;
       if (val.trim().isEmpty) return 'Please enter your name or nickname.';
-      if (val.trim().length < 2) return 'Nickname must be at least 2 characters.';
+      if (val.trim().length < 2) {
+        return 'Nickname must be at least 2 characters.';
+      }
       return null;
     }
 
     if (q.isOptional) return null;
-    if (!state.answers.hasAnswer(q.id)) return 'Please provide an answer to proceed.';
+    if (!state.answers.hasAnswer(q.id)) {
+      return 'Please provide an answer to proceed.';
+    }
     return null;
   }
 
@@ -306,7 +318,8 @@ class AssessmentNotifier extends StateNotifier<AssessmentState> {
       final responses = state.answers.toJson().entries.map((entry) {
         final q = _visibleQuestions.firstWhere(
           (q) => q.id == entry.key,
-          orElse: () => AssessmentQuestion(id: entry.key, question: entry.key, type: ''),
+          orElse: () =>
+              AssessmentQuestion(id: entry.key, question: entry.key, type: ''),
         );
         return AssessmentResponse(
           questionId: entry.key,
@@ -316,7 +329,8 @@ class AssessmentNotifier extends StateNotifier<AssessmentState> {
         );
       }).toList();
       final profile = await _aiService.calculateWellnessProfile(responses);
-      state = state.copyWith(profile: profile, isLoading: false, isComplete: true);
+      state =
+          state.copyWith(profile: profile, isLoading: false, isComplete: true);
     } catch (e) {
       state = state.copyWith(
         isLoading: false,
@@ -333,7 +347,8 @@ class AssessmentNotifier extends StateNotifier<AssessmentState> {
   }
 }
 
-final assessmentProvider = StateNotifierProvider<AssessmentNotifier, AssessmentState>((ref) {
+final assessmentProvider =
+    StateNotifierProvider<AssessmentNotifier, AssessmentState>((ref) {
   return AssessmentNotifier();
 });
 
@@ -346,10 +361,12 @@ final wellnessResultProvider = Provider<WellnessResult?>((ref) {
   final user = ref.watch(currentUserProvider);
   if (user == null || !user.onboardingCompleted) return null;
   try {
-    final data = HiveStorage.cacheBox.get('wellness_result');
+    final data = HiveStorage.cacheBox!.get('wellness_result');
     if (data != null) {
       return WellnessResult.fromJson(Map<String, dynamic>.from(data));
     }
-  } catch (_) {}
+  } catch (e) {
+    debugPrint('wellnessResultProvider: $e');
+  }
   return null;
 });

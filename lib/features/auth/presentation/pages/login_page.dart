@@ -25,9 +25,11 @@ class _LoginPageState extends ConsumerState<LoginPage>
   final _formKey = GlobalKey<FormState>();
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
-  final Throttler _signInThrottle = Throttler(interval: const Duration(milliseconds: 1000));
+  final Throttler _signInThrottle =
+      Throttler(interval: const Duration(milliseconds: 1000));
   bool _obscurePassword = true;
   bool _rememberMe = false;
+  bool _isGoogleLoading = false;
 
   late AnimationController _fadeController;
   late Animation<double> _fadeAnimation;
@@ -40,11 +42,13 @@ class _LoginPageState extends ConsumerState<LoginPage>
       vsync: this,
       duration: const Duration(milliseconds: 600),
     );
-    _fadeAnimation = CurvedAnimation(parent: _fadeController, curve: Curves.easeOut);
+    _fadeAnimation =
+        CurvedAnimation(parent: _fadeController, curve: Curves.easeOut);
     _slideAnimation = Tween<Offset>(
       begin: const Offset(0, 0.06),
       end: Offset.zero,
-    ).animate(CurvedAnimation(parent: _fadeController, curve: Curves.easeOutCubic));
+    ).animate(
+        CurvedAnimation(parent: _fadeController, curve: Curves.easeOutCubic));
     _fadeController.forward();
   }
 
@@ -75,11 +79,12 @@ class _LoginPageState extends ConsumerState<LoginPage>
     if (!_formKey.currentState!.validate()) return;
     if (!_signInThrottle.tryRun()) return;
     try {
-      final success = await ref.read(authStateProvider.notifier).signInWithEmail(
-            email: _emailController.text.trim(),
-            password: _passwordController.text,
-            rememberMe: _rememberMe,
-          );
+      final success =
+          await ref.read(authStateProvider.notifier).signInWithEmail(
+                email: _emailController.text.trim(),
+                password: _passwordController.text,
+                rememberMe: _rememberMe,
+              );
       if (success && mounted) _onSignInSuccess();
     } catch (e) {
       if (mounted) _showError('Sign-in failed: ${e.toString()}');
@@ -87,12 +92,16 @@ class _LoginPageState extends ConsumerState<LoginPage>
   }
 
   void _onGoogleSignIn() async {
-    if (!_signInThrottle.tryRun()) return;
+    if (!_signInThrottle.tryRun() || _isGoogleLoading) return;
+    setState(() => _isGoogleLoading = true);
     try {
-      final success = await ref.read(authStateProvider.notifier).signInWithGoogle();
+      final success =
+          await ref.read(authStateProvider.notifier).signInWithGoogle();
       if (success && mounted) _onSignInSuccess();
     } catch (e) {
       if (mounted) _showError('Google sign-in failed: ${e.toString()}');
+    } finally {
+      if (mounted) setState(() => _isGoogleLoading = false);
     }
   }
 
@@ -102,15 +111,19 @@ class _LoginPageState extends ConsumerState<LoginPage>
       SnackBar(
         content: Row(
           children: [
-            const Icon(Icons.error_outline_rounded, color: Colors.white, size: 20),
+            const Icon(Icons.error_outline_rounded,
+                color: Colors.white, size: 20),
             const SizedBox(width: 12),
-            Expanded(child: Text(message, style: const TextStyle(color: Colors.white))),
+            Expanded(
+                child:
+                    Text(message, style: const TextStyle(color: Colors.white))),
           ],
         ),
-        backgroundColor: const Color(0xFFE06B7A),
+        backgroundColor: AppTheme.errorColor,
         behavior: SnackBarBehavior.floating,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
-        margin: EdgeInsets.only(bottom: size.height * 0.05, left: 20, right: 20),
+        margin:
+            EdgeInsets.only(bottom: size.height * 0.05, left: 20, right: 20),
         duration: const Duration(seconds: 4),
       ),
     );
@@ -118,7 +131,8 @@ class _LoginPageState extends ConsumerState<LoginPage>
 
   String? _emailValidator(String? value) {
     if (value == null || value.trim().isEmpty) return 'Please enter your email';
-    final emailRegex = RegExp(r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$');
+    final emailRegex =
+        RegExp(r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$');
     if (!emailRegex.hasMatch(value.trim())) return 'Please enter a valid email';
     return null;
   }
@@ -135,19 +149,24 @@ class _LoginPageState extends ConsumerState<LoginPage>
     final size = MediaQuery.of(context).size;
 
     ref.listen(authStateProvider, (prev, next) {
-      if (next.errorMessage != null && prev?.errorMessage != next.errorMessage) {
+      if (next.errorMessage != null &&
+          prev?.errorMessage != next.errorMessage) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Row(
               children: [
-                const Icon(Icons.error_outline_rounded, color: Colors.white, size: 20),
+                const Icon(Icons.error_outline_rounded,
+                    color: Colors.white, size: 20),
                 const SizedBox(width: 12),
-                Expanded(child: Text(next.errorMessage!, style: const TextStyle(color: Colors.white))),
+                Expanded(
+                    child: Text(next.errorMessage!,
+                        style: const TextStyle(color: Colors.white))),
               ],
             ),
-            backgroundColor: const Color(0xFFE06B7A),
+            backgroundColor: AppTheme.errorColor,
             behavior: SnackBarBehavior.floating,
-            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
+            shape:
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
             margin: EdgeInsets.only(
               bottom: size.height * 0.05,
               left: 20,
@@ -163,17 +182,7 @@ class _LoginPageState extends ConsumerState<LoginPage>
     return Scaffold(
       body: Container(
         decoration: BoxDecoration(
-          gradient: isDark
-              ? const LinearGradient(
-                  colors: [Color(0xFF12101E), Color(0xFF1A1530), Color(0xFF221D3D)],
-                  begin: Alignment.topCenter,
-                  end: Alignment.bottomCenter,
-                )
-              : const LinearGradient(
-                  colors: [Color(0xFFF8F7FC), Color(0xFFF0EBFF)],
-                  begin: Alignment.topCenter,
-                  end: Alignment.bottomCenter,
-                ),
+          gradient: isDark ? AppTheme.nightGradient : AppTheme.sunriseGradient,
         ),
         child: SafeArea(
           child: FadeTransition(
@@ -191,7 +200,6 @@ class _LoginPageState extends ConsumerState<LoginPage>
                   children: [
                     // Logo
                     _buildLogo(isDark),
-                    SizedBox(height: size.height * 0.04),
 
                     // Heading
                     Text(
@@ -199,7 +207,9 @@ class _LoginPageState extends ConsumerState<LoginPage>
                       style: GoogleFonts.playfairDisplay(
                         fontSize: 32,
                         fontWeight: FontWeight.w700,
-                        color: isDark ? const Color(0xFFF0EEFF) : const Color(0xFF1A1530),
+                        color: isDark
+                            ? AppTheme.accentColor
+                            : AppTheme.primaryDark,
                       ),
                     ),
                     const SizedBox(height: 8),
@@ -207,7 +217,8 @@ class _LoginPageState extends ConsumerState<LoginPage>
                       'Login to continue your wellness journey',
                       style: TextStyle(
                         fontSize: 16,
-                        color: isDark ? const Color(0xFF9E97B0) : const Color(0xFF6B6580),
+                        color:
+                            isDark ? AppTheme.lavender : AppTheme.primaryDark,
                         fontWeight: FontWeight.w400,
                       ),
                     ),
@@ -215,13 +226,16 @@ class _LoginPageState extends ConsumerState<LoginPage>
 
                     // Form Card
                     Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 32),
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 24, vertical: 32),
                       decoration: BoxDecoration(
                         color: isDark ? AppTheme.darkCard : Colors.white,
                         borderRadius: BorderRadius.circular(24),
                         boxShadow: [
                           BoxShadow(
-                            color: (isDark ? Colors.black : AppTheme.primaryColor).withValues(alpha: isDark ? 0.3 : 0.06),
+                            color:
+                                (isDark ? Colors.black : AppTheme.primaryColor)
+                                    .withValues(alpha: isDark ? 0.3 : 0.06),
                             blurRadius: isDark ? 40 : 24,
                             offset: const Offset(0, 8),
                           ),
@@ -253,11 +267,16 @@ class _LoginPageState extends ConsumerState<LoginPage>
                               validator: _passwordValidator,
                               suffixIcon: IconButton(
                                 icon: Icon(
-                                  _obscurePassword ? Icons.visibility_off_rounded : Icons.visibility_rounded,
-                                  color: isDark ? const Color(0xFF6B6580) : const Color(0xFF9E97B0),
+                                  _obscurePassword
+                                      ? Icons.visibility_off_rounded
+                                      : Icons.visibility_rounded,
+                                  color: isDark
+                                      ? AppTheme.lavender
+                                      : AppTheme.primaryDark,
                                   size: 22,
                                 ),
-                                onPressed: () => setState(() => _obscurePassword = !_obscurePassword),
+                                onPressed: () => setState(
+                                    () => _obscurePassword = !_obscurePassword),
                               ),
                             ),
                             const SizedBox(height: 4),
@@ -273,13 +292,18 @@ class _LoginPageState extends ConsumerState<LoginPage>
                                       width: 24,
                                       child: Checkbox(
                                         value: _rememberMe,
-                                        onChanged: (v) => setState(() => _rememberMe = v ?? false),
+                                        onChanged: (v) => setState(
+                                            () => _rememberMe = v ?? false),
                                         activeColor: AppTheme.primaryColor,
                                         checkColor: Colors.white,
                                         side: BorderSide(
-                                          color: isDark ? AppTheme.darkBorder : AppTheme.lightBorder,
+                                          color: isDark
+                                              ? AppTheme.darkBorder
+                                              : AppTheme.lightBorder,
                                         ),
-                                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
+                                        shape: RoundedRectangleBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(5)),
                                       ),
                                     ),
                                     const SizedBox(width: 8),
@@ -287,17 +311,21 @@ class _LoginPageState extends ConsumerState<LoginPage>
                                       'Remember me',
                                       style: TextStyle(
                                         fontSize: 13,
-                                        color: isDark ? const Color(0xFF9E97B0) : const Color(0xFF6B6580),
+                                        color: isDark
+                                            ? AppTheme.lavender
+                                            : AppTheme.primaryDark,
                                       ),
                                     ),
                                   ],
                                 ),
                                 TextButton(
-                                  onPressed: () => context.push(AppRoutes.forgotPassword),
+                                  onPressed: () =>
+                                      context.push(AppRoutes.forgotPassword),
                                   style: TextButton.styleFrom(
                                     padding: EdgeInsets.zero,
                                     minimumSize: Size.zero,
-                                    tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                                    tapTargetSize:
+                                        MaterialTapTargetSize.shrinkWrap,
                                   ),
                                   child: const Text(
                                     'Forgot password?',
@@ -326,27 +354,37 @@ class _LoginPageState extends ConsumerState<LoginPage>
                     // Divider
                     Row(
                       children: [
-                        Expanded(child: Divider(color: isDark ? const Color(0xFF2D2852) : const Color(0xFFE0DBF0))),
+                        Expanded(
+                            child: Divider(
+                                color: isDark
+                                    ? AppTheme.darkBorder
+                                    : AppTheme.lightBorder)),
                         Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 16),
                           child: Text(
                             'OR',
                             style: TextStyle(
-                              color: isDark ? const Color(0xFF6B6580) : const Color(0xFF9E97B0),
+                              color: isDark
+                                  ? AppTheme.lavender
+                                  : AppTheme.primaryDark,
                               fontSize: 13,
                               fontWeight: FontWeight.w500,
                               letterSpacing: 2,
                             ),
                           ),
                         ),
-                        Expanded(child: Divider(color: isDark ? const Color(0xFF2D2852) : const Color(0xFFE0DBF0))),
+                        Expanded(
+                            child: Divider(
+                                color: isDark
+                                    ? AppTheme.darkBorder
+                                    : AppTheme.lightBorder)),
                       ],
                     ),
                     const SizedBox(height: 20),
 
                     // Google Sign In
                     GoogleSignInButton(
-                      isLoading: isLoading,
+                      isLoading: _isGoogleLoading,
                       onPressed: _onGoogleSignIn,
                     ),
                     const SizedBox(height: 32),
@@ -358,7 +396,9 @@ class _LoginPageState extends ConsumerState<LoginPage>
                         Text(
                           "Don't have an account? ",
                           style: TextStyle(
-                            color: isDark ? const Color(0xFF9E97B0) : const Color(0xFF6B6580),
+                            color: isDark
+                                ? AppTheme.lavender
+                                : AppTheme.primaryDark,
                             fontSize: 15,
                           ),
                         ),
@@ -385,10 +425,14 @@ class _LoginPageState extends ConsumerState<LoginPage>
       ),
     );
   }
+
   Widget _buildLogo(bool isDark) {
-    return const AppLogo(
-      width: 150,
-      height: 150,
+    return Container(
+      margin: const EdgeInsets.only(top: 48, bottom: 24),
+      child: const AppLogo(
+        width: 220,
+        variant: LogoVariant.full,
+      ),
     );
   }
 }

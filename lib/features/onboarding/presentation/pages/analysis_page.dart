@@ -5,13 +5,15 @@ import '../../../../shared/widgets/app_logo.dart';
 class AnalysisPage extends StatefulWidget {
   final VoidCallback onComplete;
   final Future<void>? analysisFuture;
-  const AnalysisPage({super.key, required this.onComplete, this.analysisFuture});
+  const AnalysisPage(
+      {super.key, required this.onComplete, this.analysisFuture});
 
   @override
   State<AnalysisPage> createState() => _AnalysisPageState();
 }
 
-class _AnalysisPageState extends State<AnalysisPage> with SingleTickerProviderStateMixin {
+class _AnalysisPageState extends State<AnalysisPage>
+    with SingleTickerProviderStateMixin {
   late AnimationController _animController;
   late Animation<double> _fadeAnim;
   String _statusText = 'Analyzing your responses...';
@@ -20,8 +22,10 @@ class _AnalysisPageState extends State<AnalysisPage> with SingleTickerProviderSt
   @override
   void initState() {
     super.initState();
-    _animController = AnimationController(vsync: this, duration: const Duration(seconds: 3));
-    _fadeAnim = Tween<double>(begin: 0, end: 1).animate(CurvedAnimation(parent: _animController, curve: Curves.easeIn));
+    _animController =
+        AnimationController(vsync: this, duration: const Duration(seconds: 3));
+    _fadeAnim = Tween<double>(begin: 0, end: 1).animate(
+        CurvedAnimation(parent: _animController, curve: Curves.easeIn));
     _animController.forward();
     _simulateAnalysis();
   }
@@ -106,7 +110,9 @@ class _AnalysisPageState extends State<AnalysisPage> with SingleTickerProviderSt
                       width: 160,
                       height: 160,
                     )
-                        .animate(onPlay: (controller) => controller.repeat(reverse: true))
+                        .animate(
+                            onPlay: (controller) =>
+                                controller.repeat(reverse: true))
                         .scale(
                           begin: const Offset(0.92, 0.92),
                           end: const Offset(1.08, 1.08),
@@ -114,7 +120,9 @@ class _AnalysisPageState extends State<AnalysisPage> with SingleTickerProviderSt
                           curve: Curves.easeInOut,
                         )
                         .then()
-                        .shimmer(duration: 1800.ms, color: isDark ? Colors.white12 : Colors.white54),
+                        .shimmer(
+                            duration: 1800.ms,
+                            color: isDark ? Colors.white12 : Colors.white54),
                   ),
                 ),
                 const SizedBox(height: 24),
@@ -123,8 +131,10 @@ class _AnalysisPageState extends State<AnalysisPage> with SingleTickerProviderSt
                   child: LinearProgressIndicator(
                     value: _progress,
                     minHeight: 6,
-                    backgroundColor: isDark ? const Color(0xFF1F585B) : Colors.grey[200],
-                    valueColor: AlwaysStoppedAnimation<Color>(theme.primaryColor),
+                    backgroundColor:
+                        isDark ? const Color(0xFF1F585B) : Colors.grey[200],
+                    valueColor:
+                        AlwaysStoppedAnimation<Color>(theme.primaryColor),
                   ),
                 ),
                 const SizedBox(height: 24),

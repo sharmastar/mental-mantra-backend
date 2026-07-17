@@ -5,6 +5,7 @@ import 'package:mental_mantra/features/onboarding/data/models/assessment_questio
 import 'package:mental_mantra/features/onboarding/data/assessment_data.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mental_mantra/features/music/providers/background_music_provider.dart';
+import '../../../../core/theme/app_theme.dart';
 
 class AssessmentPage extends ConsumerStatefulWidget {
   final void Function(List<AssessmentResponse> responses) onComplete;
@@ -14,7 +15,8 @@ class AssessmentPage extends ConsumerStatefulWidget {
   ConsumerState<AssessmentPage> createState() => _AssessmentPageState();
 }
 
-class _AssessmentPageState extends ConsumerState<AssessmentPage> with TickerProviderStateMixin {
+class _AssessmentPageState extends ConsumerState<AssessmentPage>
+    with TickerProviderStateMixin {
   final PageController _pageController = PageController();
   final Map<String, dynamic> _answers = {};
   final Map<String, TextEditingController> _textControllers = {};
@@ -29,15 +31,16 @@ class _AssessmentPageState extends ConsumerState<AssessmentPage> with TickerProv
   final List<AssessmentQuestion> _questions = AssessmentData.questions;
 
   // Theme colors
-  static const Color _purple = Color(0xFF623CE7);
-  static const Color _purpleMid = Color(0xFFEDE7FD);
-  static const Color _titleColor = Color(0xFF2B2062);
-  static const Color _subtitleColor = Color(0xFF6B6196);
+  static const Color _purple = AppTheme.primaryColor;
+  static const Color _purpleMid = AppTheme.accentColor;
+  static const Color _titleColor = AppTheme.primaryDark;
+  static const Color _subtitleColor = AppTheme.secondaryColor;
 
   @override
   void initState() {
     super.initState();
-    _encourageController = AnimationController(vsync: this, duration: const Duration(milliseconds: 200));
+    _encourageController = AnimationController(
+        vsync: this, duration: const Duration(milliseconds: 200));
     _encourageOpacity = Tween<double>(begin: 0, end: 1).animate(
       CurvedAnimation(parent: _encourageController, curve: Curves.easeInOut),
     );
@@ -47,19 +50,25 @@ class _AssessmentPageState extends ConsumerState<AssessmentPage> with TickerProv
   void dispose() {
     _pageController.dispose();
     _encourageController.dispose();
-    for (final c in _textControllers.values) { c.dispose(); }
+    for (final c in _textControllers.values) {
+      c.dispose();
+    }
     super.dispose();
   }
 
   void _nextPage() {
     final q = _questions[_currentPage];
-    if (!q.isOptional && (_answers[q.id] == null || (_answers[q.id] is List && (_answers[q.id] as List).isEmpty))) {
+    if (!q.isOptional &&
+        (_answers[q.id] == null ||
+            (_answers[q.id] is List && (_answers[q.id] as List).isEmpty))) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text('Please answer to continue', style: GoogleFonts.outfit()),
+          content:
+              Text('Please answer to continue', style: GoogleFonts.outfit()),
           backgroundColor: _purple,
           behavior: SnackBarBehavior.floating,
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
         ),
       );
       return;
@@ -95,7 +104,9 @@ class _AssessmentPageState extends ConsumerState<AssessmentPage> with TickerProv
 
   void _advanceToNextPage() {
     if (_currentPage < _questions.length - 1) {
-      _pageController.nextPage(duration: const Duration(milliseconds: 450), curve: Curves.easeInOutCubic);
+      _pageController.nextPage(
+          duration: const Duration(milliseconds: 450),
+          curve: Curves.easeInOutCubic);
     } else {
       _submit();
     }
@@ -104,15 +115,21 @@ class _AssessmentPageState extends ConsumerState<AssessmentPage> with TickerProv
   void _previousPage() {
     if (_currentPage > 0) {
       HapticFeedback.lightImpact();
-      _pageController.previousPage(duration: const Duration(milliseconds: 350), curve: Curves.easeInOut);
+      _pageController.previousPage(
+          duration: const Duration(milliseconds: 350), curve: Curves.easeInOut);
     }
   }
 
   void _submit() {
     setState(() => _isSubmitting = true);
-    final responses = _questions.map((q) => AssessmentResponse(
-      questionId: q.id, question: q.question, type: q.type, answer: _answers[q.id],
-    )).toList();
+    final responses = _questions
+        .map((q) => AssessmentResponse(
+              questionId: q.id,
+              question: q.question,
+              type: q.type,
+              answer: _answers[q.id],
+            ))
+        .toList();
     widget.onComplete(responses);
   }
 
@@ -121,7 +138,7 @@ class _AssessmentPageState extends ConsumerState<AssessmentPage> with TickerProv
     final progress = (_currentPage + 1) / _questions.length;
 
     return Scaffold(
-      backgroundColor: const Color(0xFFF9F8FD),
+      backgroundColor: AppTheme.lightBg,
       body: Stack(
         children: [
           SafeArea(
@@ -134,7 +151,8 @@ class _AssessmentPageState extends ConsumerState<AssessmentPage> with TickerProv
                     children: [
                       if (_currentPage > 0)
                         IconButton(
-                          icon: const Icon(Icons.arrow_back_ios_rounded, size: 20, color: _titleColor),
+                          icon: const Icon(Icons.arrow_back_ios_rounded,
+                              size: 20, color: _titleColor),
                           onPressed: _previousPage,
                         )
                       else
@@ -147,11 +165,13 @@ class _AssessmentPageState extends ConsumerState<AssessmentPage> with TickerProv
                             tween: Tween(begin: 0, end: progress),
                             duration: const Duration(milliseconds: 400),
                             curve: Curves.easeInOut,
-                            builder: (context, value, _) => LinearProgressIndicator(
+                            builder: (context, value, _) =>
+                                LinearProgressIndicator(
                               value: value,
                               minHeight: 6,
                               backgroundColor: _purpleMid,
-                              valueColor: const AlwaysStoppedAnimation<Color>(_purple),
+                              valueColor:
+                                  const AlwaysStoppedAnimation<Color>(_purple),
                             ),
                           ),
                         ),
@@ -159,20 +179,30 @@ class _AssessmentPageState extends ConsumerState<AssessmentPage> with TickerProv
                       const SizedBox(width: 12),
                       Text(
                         '${_currentPage + 1}/${_questions.length}',
-                        style: GoogleFonts.outfit(fontSize: 13, color: _subtitleColor, fontWeight: FontWeight.w600),
+                        style: GoogleFonts.outfit(
+                            fontSize: 13,
+                            color: _subtitleColor,
+                            fontWeight: FontWeight.w600),
                       ),
                       const SizedBox(width: 4),
                       IconButton(
                         icon: Icon(
-                          ref.watch(backgroundMusicProvider) ? Icons.music_note : Icons.music_note_outlined,
+                          ref.watch(backgroundMusicProvider)
+                              ? Icons.music_note
+                              : Icons.music_note_outlined,
                           size: 20,
-                          color: ref.watch(backgroundMusicProvider) ? _purple : _subtitleColor,
+                          color: ref.watch(backgroundMusicProvider)
+                              ? _purple
+                              : _subtitleColor,
                         ),
-                        onPressed: () => ref.read(backgroundMusicProvider.notifier).toggle(),
+                        onPressed: () =>
+                            ref.read(backgroundMusicProvider.notifier).toggle(),
                         padding: EdgeInsets.zero,
                         constraints: const BoxConstraints(),
                         splashRadius: 16,
-                        tooltip: ref.watch(backgroundMusicProvider) ? 'Mute Background Music' : 'Play Background Music',
+                        tooltip: ref.watch(backgroundMusicProvider)
+                            ? 'Mute Background Music'
+                            : 'Play Background Music',
                       ),
                     ],
                   ),
@@ -185,7 +215,8 @@ class _AssessmentPageState extends ConsumerState<AssessmentPage> with TickerProv
                     physics: const NeverScrollableScrollPhysics(),
                     onPageChanged: (i) => setState(() => _currentPage = i),
                     itemCount: _questions.length,
-                    itemBuilder: (context, index) => _buildQuestionPage(_questions[index]),
+                    itemBuilder: (context, index) =>
+                        _buildQuestionPage(_questions[index]),
                   ),
                 ),
 
@@ -204,7 +235,9 @@ class _AssessmentPageState extends ConsumerState<AssessmentPage> with TickerProv
                               HapticFeedback.lightImpact();
                               _advanceToNextPage();
                             },
-                            child: Text('Skip for now', style: GoogleFonts.outfit(color: _subtitleColor, fontSize: 14)),
+                            child: Text('Skip for now',
+                                style: GoogleFonts.outfit(
+                                    color: _subtitleColor, fontSize: 14)),
                           ),
                         ),
                       SizedBox(
@@ -215,21 +248,32 @@ class _AssessmentPageState extends ConsumerState<AssessmentPage> with TickerProv
                           style: ElevatedButton.styleFrom(
                             backgroundColor: _purple,
                             foregroundColor: Colors.white,
-                            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(16)),
                             elevation: 0,
                           ),
                           child: _isSubmitting
-                              ? const SizedBox(height: 22, width: 22, child: CircularProgressIndicator(strokeWidth: 2.5, color: Colors.white))
+                              ? const SizedBox(
+                                  height: 22,
+                                  width: 22,
+                                  child: CircularProgressIndicator(
+                                      strokeWidth: 2.5, color: Colors.white))
                               : Row(
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
                                     Text(
-                                      _currentPage == _questions.length - 1 ? 'See My Results' : 'Continue',
-                                      style: GoogleFonts.outfit(fontSize: 16, fontWeight: FontWeight.w600),
+                                      _currentPage == _questions.length - 1
+                                          ? 'See My Results'
+                                          : 'Continue',
+                                      style: GoogleFonts.outfit(
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.w600),
                                     ),
                                     const SizedBox(width: 8),
                                     Icon(
-                                      _currentPage == _questions.length - 1 ? Icons.auto_awesome : Icons.arrow_forward_rounded,
+                                      _currentPage == _questions.length - 1
+                                          ? Icons.auto_awesome
+                                          : Icons.arrow_forward_rounded,
                                       size: 20,
                                     ),
                                   ],
@@ -253,12 +297,16 @@ class _AssessmentPageState extends ConsumerState<AssessmentPage> with TickerProv
                   alignment: Alignment.center,
                   child: Container(
                     margin: const EdgeInsets.symmetric(horizontal: 48),
-                    padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 28),
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 32, vertical: 28),
                     decoration: BoxDecoration(
                       color: Colors.white,
                       borderRadius: BorderRadius.circular(24),
                       boxShadow: [
-                        BoxShadow(color: _purple.withValues(alpha: 0.15), blurRadius: 30, offset: const Offset(0, 10)),
+                        BoxShadow(
+                            color: _purple.withValues(alpha: 0.15),
+                            blurRadius: 30,
+                            offset: const Offset(0, 10)),
                       ],
                     ),
                     child: Text(
@@ -308,7 +356,11 @@ class _AssessmentPageState extends ConsumerState<AssessmentPage> with TickerProv
                 children: [
                   const Icon(Icons.shield_outlined, size: 14, color: _purple),
                   const SizedBox(width: 4),
-                  Text('Your answer is confidential', style: GoogleFonts.outfit(fontSize: 12, color: _purple, fontWeight: FontWeight.w500)),
+                  Text('Your answer is confidential',
+                      style: GoogleFonts.outfit(
+                          fontSize: 12,
+                          color: _purple,
+                          fontWeight: FontWeight.w500)),
                 ],
               ),
             ),
@@ -316,7 +368,11 @@ class _AssessmentPageState extends ConsumerState<AssessmentPage> with TickerProv
           // Question text
           Text(
             q.question,
-            style: GoogleFonts.outfit(fontSize: 22, fontWeight: FontWeight.w700, color: _titleColor, height: 1.3),
+            style: GoogleFonts.outfit(
+                fontSize: 22,
+                fontWeight: FontWeight.w700,
+                color: _titleColor,
+                height: 1.3),
           ),
 
           // Subtitle
@@ -324,7 +380,8 @@ class _AssessmentPageState extends ConsumerState<AssessmentPage> with TickerProv
             const SizedBox(height: 8),
             Text(
               q.subtext!,
-              style: GoogleFonts.outfit(fontSize: 14, color: _subtitleColor, height: 1.4),
+              style: GoogleFonts.outfit(
+                  fontSize: 14, color: _subtitleColor, height: 1.4),
             ),
           ],
           const SizedBox(height: 28),
@@ -345,7 +402,8 @@ class _AssessmentPageState extends ConsumerState<AssessmentPage> with TickerProv
 
   // ── Text Input ────────────────────────────────────────────
   Widget _buildTextInput(AssessmentQuestion q) {
-    _textControllers.putIfAbsent(q.id, () => TextEditingController(text: _answers[q.id] as String? ?? ''));
+    _textControllers.putIfAbsent(q.id,
+        () => TextEditingController(text: _answers[q.id] as String? ?? ''));
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -355,19 +413,26 @@ class _AssessmentPageState extends ConsumerState<AssessmentPage> with TickerProv
           style: GoogleFonts.outfit(fontSize: 18, color: _titleColor),
           decoration: InputDecoration(
             hintText: 'Type your name here...',
-            hintStyle: GoogleFonts.outfit(color: _subtitleColor.withValues(alpha: 0.5)),
-            border: OutlineInputBorder(borderRadius: BorderRadius.circular(16), borderSide: BorderSide(color: _purple.withValues(alpha: 0.2))),
-            focusedBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(16), borderSide: const BorderSide(color: _purple, width: 2)),
+            hintStyle: GoogleFonts.outfit(
+                color: _subtitleColor.withValues(alpha: 0.5)),
+            border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(16),
+                borderSide: BorderSide(color: _purple.withValues(alpha: 0.2))),
+            focusedBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(16),
+                borderSide: const BorderSide(color: _purple, width: 2)),
             filled: true,
             fillColor: Colors.white,
-            contentPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+            contentPadding:
+                const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
           ),
           onChanged: (v) => _answers[q.id] = v,
         ),
         // Suggested nicknames
         if (q.suggestedNames != null && q.suggestedNames!.isNotEmpty) ...[
           const SizedBox(height: 16),
-          Text('Or pick a name you like:', style: GoogleFonts.outfit(fontSize: 13, color: _subtitleColor)),
+          Text('Or pick a name you like:',
+              style: GoogleFonts.outfit(fontSize: 13, color: _subtitleColor)),
           const SizedBox(height: 10),
           Wrap(
             spacing: 8,
@@ -384,12 +449,23 @@ class _AssessmentPageState extends ConsumerState<AssessmentPage> with TickerProv
                 },
                 child: AnimatedContainer(
                   duration: const Duration(milliseconds: 200),
-                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
                   decoration: BoxDecoration(
                     color: isSelected ? _purple : Colors.white,
                     borderRadius: BorderRadius.circular(24),
-                    border: Border.all(color: isSelected ? _purple : _purple.withValues(alpha: 0.2)),
-                    boxShadow: isSelected ? [BoxShadow(color: _purple.withValues(alpha: 0.2), blurRadius: 8, offset: const Offset(0, 3))] : null,
+                    border: Border.all(
+                        color: isSelected
+                            ? _purple
+                            : _purple.withValues(alpha: 0.2)),
+                    boxShadow: isSelected
+                        ? [
+                            BoxShadow(
+                                color: _purple.withValues(alpha: 0.2),
+                                blurRadius: 8,
+                                offset: const Offset(0, 3))
+                          ]
+                        : null,
                   ),
                   child: Text(
                     name,
@@ -425,42 +501,62 @@ class _AssessmentPageState extends ConsumerState<AssessmentPage> with TickerProv
               duration: const Duration(milliseconds: 200),
               padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
               decoration: BoxDecoration(
-                color: selected ? _purple.withValues(alpha: 0.08) : Colors.white,
+                color:
+                    selected ? _purple.withValues(alpha: 0.08) : Colors.white,
                 borderRadius: BorderRadius.circular(16),
                 border: Border.all(
-                  color: selected ? _purple : const Color(0xFFE5E1F0),
+                  color: selected ? _purple : AppTheme.lightBorder,
                   width: selected ? 2 : 1,
                 ),
-                boxShadow: selected ? [BoxShadow(color: _purple.withValues(alpha: 0.08), blurRadius: 8, offset: const Offset(0, 2))] : null,
+                boxShadow: selected
+                    ? [
+                        BoxShadow(
+                            color: _purple.withValues(alpha: 0.08),
+                            blurRadius: 8,
+                            offset: const Offset(0, 2))
+                      ]
+                    : null,
               ),
               child: Row(
                 children: [
                   if (option.icon != null) ...[
-                    Icon(option.icon, size: 22, color: selected ? _purple : _subtitleColor),
+                    Icon(option.icon,
+                        size: 22, color: selected ? _purple : _subtitleColor),
                     const SizedBox(width: 14),
                   ],
                   Expanded(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(option.label, style: GoogleFonts.outfit(fontSize: 15, fontWeight: FontWeight.w600, color: selected ? _purple : _titleColor)),
+                        Text(option.label,
+                            style: GoogleFonts.outfit(
+                                fontSize: 15,
+                                fontWeight: FontWeight.w600,
+                                color: selected ? _purple : _titleColor)),
                         if (option.subtitle != null)
                           Padding(
                             padding: const EdgeInsets.only(top: 2),
-                            child: Text(option.subtitle!, style: GoogleFonts.outfit(fontSize: 12, color: _subtitleColor)),
+                            child: Text(option.subtitle!,
+                                style: GoogleFonts.outfit(
+                                    fontSize: 12, color: _subtitleColor)),
                           ),
                       ],
                     ),
                   ),
                   AnimatedContainer(
                     duration: const Duration(milliseconds: 200),
-                    width: 22, height: 22,
+                    width: 22,
+                    height: 22,
                     decoration: BoxDecoration(
                       shape: BoxShape.circle,
                       color: selected ? _purple : Colors.transparent,
-                      border: Border.all(color: selected ? _purple : const Color(0xFFD0C9E4), width: 2),
+                      border: Border.all(
+                          color: selected ? _purple : AppTheme.lightBorder,
+                          width: 2),
                     ),
-                    child: selected ? const Icon(Icons.check, size: 14, color: Colors.white) : null,
+                    child: selected
+                        ? const Icon(Icons.check, size: 14, color: Colors.white)
+                        : null,
                   ),
                 ],
               ),
@@ -505,7 +601,7 @@ class _AssessmentPageState extends ConsumerState<AssessmentPage> with TickerProv
               color: isSelected ? _purple.withValues(alpha: 0.1) : Colors.white,
               borderRadius: BorderRadius.circular(24),
               border: Border.all(
-                color: isSelected ? _purple : const Color(0xFFE5E1F0),
+                color: isSelected ? _purple : AppTheme.lightBorder,
                 width: isSelected ? 1.5 : 1,
               ),
             ),
@@ -513,7 +609,11 @@ class _AssessmentPageState extends ConsumerState<AssessmentPage> with TickerProv
               mainAxisSize: MainAxisSize.min,
               children: [
                 if (option.icon != null) ...[
-                  Icon(option.icon, size: 16, color: isSelected ? _purple : (option.color ?? _subtitleColor)),
+                  Icon(option.icon,
+                      size: 16,
+                      color: isSelected
+                          ? _purple
+                          : (option.color ?? _subtitleColor)),
                   const SizedBox(width: 6),
                 ],
                 Flexible(
@@ -521,7 +621,8 @@ class _AssessmentPageState extends ConsumerState<AssessmentPage> with TickerProv
                     option.label,
                     style: GoogleFonts.outfit(
                       fontSize: 13,
-                      fontWeight: isSelected ? FontWeight.w600 : FontWeight.w500,
+                      fontWeight:
+                          isSelected ? FontWeight.w600 : FontWeight.w500,
                       color: isSelected ? _purple : _titleColor,
                     ),
                   ),
@@ -549,13 +650,14 @@ class _AssessmentPageState extends ConsumerState<AssessmentPage> with TickerProv
         final index = frequencyOptions.indexOf(option);
         // Color gradient from green (Never) → red (Almost Always)
         final gradientColors = [
-          const Color(0xFF4CAF50),
-          const Color(0xFF8BC34A),
-          const Color(0xFFFFC107),
-          const Color(0xFFFF9800),
-          const Color(0xFFE53935),
+          AppTheme.successColor,
+          AppTheme.primaryLight,
+          AppTheme.warningColor,
+          AppTheme.secondaryColor,
+          AppTheme.errorColor,
         ];
-        final indicatorColor = gradientColors[index.clamp(0, gradientColors.length - 1)];
+        final indicatorColor =
+            gradientColors[index.clamp(0, gradientColors.length - 1)];
 
         return Padding(
           padding: const EdgeInsets.only(bottom: 10),
@@ -569,19 +671,24 @@ class _AssessmentPageState extends ConsumerState<AssessmentPage> with TickerProv
               duration: const Duration(milliseconds: 200),
               padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
               decoration: BoxDecoration(
-                color: isSelected ? indicatorColor.withValues(alpha: 0.08) : Colors.white,
+                color: isSelected
+                    ? indicatorColor.withValues(alpha: 0.08)
+                    : Colors.white,
                 borderRadius: BorderRadius.circular(16),
                 border: Border.all(
-                  color: isSelected ? indicatorColor : const Color(0xFFE5E1F0),
+                  color: isSelected ? indicatorColor : AppTheme.lightBorder,
                   width: isSelected ? 2 : 1,
                 ),
               ),
               child: Row(
                 children: [
                   Container(
-                    width: 12, height: 12,
+                    width: 12,
+                    height: 12,
                     decoration: BoxDecoration(
-                      color: isSelected ? indicatorColor : indicatorColor.withValues(alpha: 0.3),
+                      color: isSelected
+                          ? indicatorColor
+                          : indicatorColor.withValues(alpha: 0.3),
                       shape: BoxShape.circle,
                     ),
                   ),
@@ -591,13 +698,15 @@ class _AssessmentPageState extends ConsumerState<AssessmentPage> with TickerProv
                       option.label,
                       style: GoogleFonts.outfit(
                         fontSize: 15,
-                        fontWeight: isSelected ? FontWeight.w700 : FontWeight.w500,
+                        fontWeight:
+                            isSelected ? FontWeight.w700 : FontWeight.w500,
                         color: isSelected ? indicatorColor : _titleColor,
                       ),
                     ),
                   ),
                   if (isSelected)
-                    Icon(Icons.check_circle_rounded, size: 22, color: indicatorColor),
+                    Icon(Icons.check_circle_rounded,
+                        size: 22, color: indicatorColor),
                 ],
               ),
             ),
@@ -619,7 +728,8 @@ class _AssessmentPageState extends ConsumerState<AssessmentPage> with TickerProv
           child: Center(
             child: Text(
               '$val',
-              style: GoogleFonts.outfit(fontSize: 48, fontWeight: FontWeight.bold, color: _purple),
+              style: GoogleFonts.outfit(
+                  fontSize: 48, fontWeight: FontWeight.bold, color: _purple),
             ),
           ),
         ),
@@ -633,7 +743,8 @@ class _AssessmentPageState extends ConsumerState<AssessmentPage> with TickerProv
             thumbShape: const RoundSliderThumbShape(enabledThumbRadius: 10),
           ),
           child: Slider(
-            min: min.toDouble(), max: max.toDouble(),
+            min: min.toDouble(),
+            max: max.toDouble(),
             divisions: max - min,
             value: val.toDouble(),
             onChanged: (v) => setState(() => _answers[q.id] = v.round()),
@@ -644,8 +755,17 @@ class _AssessmentPageState extends ConsumerState<AssessmentPage> with TickerProv
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              SizedBox(width: 100, child: Text(q.sliderStartLabel ?? '', style: GoogleFonts.outfit(fontSize: 12, color: _subtitleColor))),
-              SizedBox(width: 100, child: Text(q.sliderEndLabel ?? '', textAlign: TextAlign.right, style: GoogleFonts.outfit(fontSize: 12, color: _subtitleColor))),
+              SizedBox(
+                  width: 100,
+                  child: Text(q.sliderStartLabel ?? '',
+                      style: GoogleFonts.outfit(
+                          fontSize: 12, color: _subtitleColor))),
+              SizedBox(
+                  width: 100,
+                  child: Text(q.sliderEndLabel ?? '',
+                      textAlign: TextAlign.right,
+                      style: GoogleFonts.outfit(
+                          fontSize: 12, color: _subtitleColor))),
             ],
           ),
         ),

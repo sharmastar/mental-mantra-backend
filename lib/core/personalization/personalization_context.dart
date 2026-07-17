@@ -52,7 +52,8 @@ class PersonalizationContext {
 
   bool get hasClassification => primaryDomain != null;
 
-  bool get needsCrisisAttention => riskLevel == 'high' || riskLevel == 'critical';
+  bool get needsCrisisAttention =>
+      riskLevel == 'high' || riskLevel == 'critical';
 
   String get domainGreeting {
     if (!hasClassification) return 'Welcome back. How are you feeling today?';

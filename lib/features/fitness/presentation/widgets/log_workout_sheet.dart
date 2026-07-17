@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:mental_mantra/core/theme/app_theme.dart';
 import '../../data/models/fitness_record.dart';
 import '../providers/fitness_provider.dart';
 
@@ -38,31 +39,39 @@ class _LogWorkoutSheetState extends ConsumerState<LogWorkoutSheet> {
         children: [
           Center(
             child: Container(
-              width: 40, height: 4,
-              decoration: BoxDecoration(color: Colors.grey[400], borderRadius: BorderRadius.circular(2)),
+              width: 40,
+              height: 4,
+              decoration: BoxDecoration(
+                  color: Colors.grey[400],
+                  borderRadius: BorderRadius.circular(2)),
             ),
           ),
           const SizedBox(height: 20),
-          const Text('Log Workout', style: TextStyle(fontSize: 22, fontWeight: FontWeight.w700)),
+          const Text('Log Workout',
+              style: TextStyle(fontSize: 22, fontWeight: FontWeight.w700)),
           const SizedBox(height: 20),
           Wrap(
             spacing: 8,
             runSpacing: 8,
-            children: WorkoutType.values.map((t) => ChoiceChip(
-              label: Text(t.label),
-              selected: _type == t,
-              onSelected: (_) => setState(() => _type = t),
-            )).toList(),
+            children: WorkoutType.values
+                .map((t) => ChoiceChip(
+                      label: Text(t.label),
+                      selected: _type == t,
+                      onSelected: (_) => setState(() => _type = t),
+                    ))
+                .toList(),
           ),
           const SizedBox(height: 16),
           Row(
             children: [
               Expanded(
-                child: _buildNumberField('Duration (min)', _durationMinutes, (v) => _durationMinutes = v),
+                child: _buildNumberField('Duration (min)', _durationMinutes,
+                    (v) => _durationMinutes = v),
               ),
               const SizedBox(width: 12),
               Expanded(
-                child: _buildNumberField('Calories', _caloriesBurned.round(), (v) => _caloriesBurned = v.toDouble()),
+                child: _buildNumberField('Calories', _caloriesBurned.round(),
+                    (v) => _caloriesBurned = v.toDouble()),
               ),
             ],
           ),
@@ -72,8 +81,10 @@ class _LogWorkoutSheetState extends ConsumerState<LogWorkoutSheet> {
             decoration: InputDecoration(
               hintText: 'Notes (optional)',
               filled: true,
-              fillColor: isDark ? const Color(0xFF153C3E) : const Color(0xFFF2F8F7),
-              border: OutlineInputBorder(borderRadius: BorderRadius.circular(12), borderSide: BorderSide.none),
+              fillColor: isDark ? AppTheme.darkCard : AppTheme.lightBg,
+              border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(12),
+                  borderSide: BorderSide.none),
             ),
             maxLines: 2,
           ),
@@ -83,11 +94,13 @@ class _LogWorkoutSheetState extends ConsumerState<LogWorkoutSheet> {
             child: FilledButton(
               onPressed: _onLogWorkout,
               style: FilledButton.styleFrom(
-                backgroundColor: const Color(0xFF42C8B7),
+                backgroundColor: AppTheme.primaryColor,
                 padding: const EdgeInsets.symmetric(vertical: 16),
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12)),
               ),
-              child: const Text('Save Workout', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600)),
+              child: const Text('Save Workout',
+                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600)),
             ),
           ),
         ],
@@ -95,7 +108,8 @@ class _LogWorkoutSheetState extends ConsumerState<LogWorkoutSheet> {
     );
   }
 
-  Widget _buildNumberField(String label, int value, void Function(int) onChanged) {
+  Widget _buildNumberField(
+      String label, int value, void Function(int) onChanged) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -107,7 +121,9 @@ class _LogWorkoutSheetState extends ConsumerState<LogWorkoutSheet> {
               icon: const Icon(Icons.remove_circle_outline),
               onPressed: value > 0 ? () => onChanged(value - 5) : null,
             ),
-            Text('$value', style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w600)),
+            Text('$value',
+                style:
+                    const TextStyle(fontSize: 18, fontWeight: FontWeight.w600)),
             IconButton(
               icon: const Icon(Icons.add_circle_outline),
               onPressed: () => onChanged(value + 5),
@@ -126,7 +142,8 @@ class _LogWorkoutSheetState extends ConsumerState<LogWorkoutSheet> {
       notes: _notesController.text.isEmpty ? null : _notesController.text,
       startedAt: DateTime.now(),
     );
-    final success = await ref.read(fitnessProvider.notifier).logWorkout(session);
+    final success =
+        await ref.read(fitnessProvider.notifier).logWorkout(session);
     if (success && mounted) Navigator.of(context).pop();
   }
 }
@@ -134,14 +151,22 @@ class _LogWorkoutSheetState extends ConsumerState<LogWorkoutSheet> {
 extension on WorkoutType {
   String get label {
     switch (this) {
-      case WorkoutType.walking: return 'Walking';
-      case WorkoutType.running: return 'Running';
-      case WorkoutType.cycling: return 'Cycling';
-      case WorkoutType.yoga: return 'Yoga';
-      case WorkoutType.strength: return 'Strength';
-      case WorkoutType.meditation: return 'Meditation';
-      case WorkoutType.stretching: return 'Stretching';
-      case WorkoutType.other: return 'Other';
+      case WorkoutType.walking:
+        return 'Walking';
+      case WorkoutType.running:
+        return 'Running';
+      case WorkoutType.cycling:
+        return 'Cycling';
+      case WorkoutType.yoga:
+        return 'Yoga';
+      case WorkoutType.strength:
+        return 'Strength';
+      case WorkoutType.meditation:
+        return 'Meditation';
+      case WorkoutType.stretching:
+        return 'Stretching';
+      case WorkoutType.other:
+        return 'Other';
     }
   }
 }

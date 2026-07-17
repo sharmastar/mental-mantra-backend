@@ -15,17 +15,18 @@ router.get('/me', async (req, res, next) => {
       select: {
         id: true, email: true, name: true, nickname: true, displayName: true,
         photoUrl: true, role: true, emailVerified: true, onboardingCompleted: true,
-        age: true, gender: true, country: true, primaryChallenge: true, goals: true,
+        age: true, gender: true, country: true, primaryChallenge: true, goalTags: true,
         streakDays: true, longestStreak: true, totalPoints: true, level: true,
         isPremium: true, createdAt: true, lastActiveAt: true,
       },
     });
     if (user) {
       try {
-        user.goals = user.goals ? JSON.parse(user.goals) : [];
+        user.goals = user.goalTags ? JSON.parse(user.goalTags) : [];
       } catch (e) {
-        user.goals = user.goals ? user.goals.split(',').filter(Boolean) : [];
+        user.goals = user.goalTags ? user.goalTags.split(',').filter(Boolean) : [];
       }
+      delete user.goalTags;
     }
     res.json({ success: true, data: { ...user, uid: user.id, displayName: user.name } });
   } catch (err) { next(err); }
@@ -48,10 +49,11 @@ router.put('/me', async (req, res, next) => {
     });
     if (updated) {
       try {
-        updated.goals = updated.goals ? JSON.parse(updated.goals) : [];
+        updated.goals = updated.goalTags ? JSON.parse(updated.goalTags) : [];
       } catch (e) {
-        updated.goals = updated.goals ? updated.goals.split(',').filter(Boolean) : [];
+        updated.goals = updated.goalTags ? updated.goalTags.split(',').filter(Boolean) : [];
       }
+      delete updated.goalTags;
     }
     res.json({ success: true, data: { ...updated, uid: updated.id } });
   } catch (err) { next(err); }
@@ -65,7 +67,7 @@ router.post('/me/onboarding', async (req, res, next) => {
       where: { id: req.user.id },
       data: {
         nickname, age, gender,
-        goals: goals ? JSON.stringify(goals) : '[]',
+        goalTags: goals ? JSON.stringify(goals) : '[]',
         primaryChallenge,
         onboardingCompleted: true,
       },

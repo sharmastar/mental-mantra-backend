@@ -17,7 +17,7 @@ class _VentingSpacePageState extends State<VentingSpacePage> {
 
   void _burnThoughts() {
     if (_controller.text.trim().isEmpty) return;
-    
+
     // Unfocus keyboard
     FocusScope.of(context).unfocus();
     HapticFeedback.heavyImpact();
@@ -51,7 +51,7 @@ class _VentingSpacePageState extends State<VentingSpacePage> {
   @override
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
-    
+
     return Scaffold(
       backgroundColor: isDark ? AppTheme.darkBg : AppTheme.lightBg,
       appBar: AppBar(
@@ -98,7 +98,9 @@ class _VentingSpacePageState extends State<VentingSpacePage> {
                             color: isDark ? AppTheme.darkCard : Colors.white,
                             borderRadius: BorderRadius.circular(20),
                             border: Border.all(
-                              color: isDark ? AppTheme.darkBorder : Colors.grey.withValues(alpha: 0.2),
+                              color: isDark
+                                  ? AppTheme.darkBorder
+                                  : Colors.grey.withValues(alpha: 0.2),
                             ),
                           ),
                           child: TextField(
@@ -129,15 +131,23 @@ class _VentingSpacePageState extends State<VentingSpacePage> {
                         width: double.infinity,
                         height: 56,
                         child: ElevatedButton.icon(
-                          onPressed: _controller.text.trim().isNotEmpty ? _burnThoughts : null,
-                          icon: const Icon(Icons.local_fire_department, color: Colors.white),
+                          onPressed: _controller.text.trim().isNotEmpty
+                              ? _burnThoughts
+                              : null,
+                          icon: const Icon(Icons.local_fire_department,
+                              color: Colors.white),
                           label: const Text(
                             'Burn These Thoughts',
-                            style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.white),
+                            style: TextStyle(
+                                fontSize: 18,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.white),
                           ),
                           style: ElevatedButton.styleFrom(
-                            backgroundColor: const Color(0xFFE53935), // Red/Fire color
-                            disabledBackgroundColor: Colors.grey.withValues(alpha: 0.3),
+                            backgroundColor:
+                                AppTheme.errorColor, // Red/Fire color
+                            disabledBackgroundColor:
+                                Colors.grey.withValues(alpha: 0.3),
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(16),
                             ),
@@ -204,7 +214,8 @@ class _VentingSpacePageState extends State<VentingSpacePage> {
                                 textAlign: TextAlign.center,
                                 style: TextStyle(
                                   fontSize: 18,
-                                  color: isDark ? Colors.white70 : Colors.black54,
+                                  color:
+                                      isDark ? Colors.white70 : Colors.black54,
                                   height: 1.5,
                                 ),
                               ),
@@ -212,11 +223,13 @@ class _VentingSpacePageState extends State<VentingSpacePage> {
                               OutlinedButton(
                                 onPressed: _reset,
                                 style: OutlinedButton.styleFrom(
-                                  padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 16),
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 32, vertical: 16),
                                   shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(16),
                                   ),
-                                  side: const BorderSide(color: AppTheme.primaryColor),
+                                  side: const BorderSide(
+                                      color: AppTheme.primaryColor),
                                 ),
                                 child: const Text(
                                   'Return',

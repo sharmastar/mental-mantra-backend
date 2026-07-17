@@ -2,6 +2,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:mental_mantra/core/config/app_config.dart';
 import 'package:mental_mantra/services/sync/sync_queue_service.dart';
+import 'package:mental_mantra/core/utils/connectivity.dart';
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
@@ -11,6 +12,7 @@ void main() {
 
     setUp(() async {
       SharedPreferences.setMockInitialValues({});
+      ConnectivityUtil.overrideHasInternet = true;
       // Re-initialize AppConfig to fetch the mocked SharedPreferences
       await AppConfig.init();
       notifier = SyncQueueNotifier();
@@ -32,10 +34,13 @@ void main() {
       );
 
       expect(notifier.state.pendingCount, 1);
-      expect(notifier.state.statusMessage, contains('1 changes pending backup'));
+      expect(
+          notifier.state.statusMessage, contains('1 changes pending backup'));
     });
 
-    test('addToQueue overwrites previous pending item for same collection/docId', () async {
+    test(
+        'addToQueue overwrites previous pending item for same collection/docId',
+        () async {
       await notifier.addToQueue(
         collection: 'journals',
         docId: 'doc_123',

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import '../../data/models/assessment_question.dart';
+import '../../../../core/theme/app_theme.dart';
 
 class SensitiveQuestionCard extends StatelessWidget {
   final AssessmentQuestion question;
@@ -26,7 +27,7 @@ class SensitiveQuestionCard extends StatelessWidget {
         decoration: BoxDecoration(
           color: Theme.of(context).brightness == Brightness.light
               ? Colors.white
-              : const Color(0xFF1A1A2E),
+              : AppTheme.darkBg,
           borderRadius: BorderRadius.circular(24),
           border: Border.all(
             color: Theme.of(context).brightness == Brightness.light
@@ -51,10 +52,11 @@ class SensitiveQuestionCard extends StatelessWidget {
                 width: 64,
                 height: 64,
                 decoration: BoxDecoration(
-                  color: const Color(0xFFFF6B9D).withValues(alpha: 0.15),
+                  color: AppTheme.errorColor.withValues(alpha: 0.15),
                   borderRadius: BorderRadius.circular(20),
                 ),
-                child: const Icon(Icons.favorite, color: Color(0xFFFF6B9D), size: 32),
+                child: const Icon(Icons.favorite,
+                    color: AppTheme.errorColor, size: 32),
               ),
               const SizedBox(height: 20),
               Text(
@@ -63,7 +65,7 @@ class SensitiveQuestionCard extends StatelessWidget {
                   fontSize: 22,
                   fontWeight: FontWeight.w700,
                   color: Theme.of(context).brightness == Brightness.light
-                      ? const Color(0xFF1A1A2E)
+                      ? AppTheme.darkBg
                       : Colors.white,
                 ),
               ),
@@ -86,7 +88,7 @@ class SensitiveQuestionCard extends StatelessWidget {
                 icon: Icons.phone,
                 title: 'Vandrevala Foundation',
                 subtitle: '1860-266-2345',
-                color: const Color(0xFF6C63FF),
+                color: AppTheme.primaryColor,
               ),
               const SizedBox(height: 10),
               _resourceCard(
@@ -94,7 +96,7 @@ class SensitiveQuestionCard extends StatelessWidget {
                 icon: Icons.phone_in_talk,
                 title: 'iCall Helpline',
                 subtitle: '+91-9152987821',
-                color: const Color(0xFF00BFA5),
+                color: AppTheme.secondaryColor,
               ),
               const SizedBox(height: 10),
               _resourceCard(
@@ -102,7 +104,7 @@ class SensitiveQuestionCard extends StatelessWidget {
                 icon: Icons.language,
                 title: 'Global Crisis Support',
                 subtitle: 'findahelpline.com',
-                color: const Color(0xFFFF6B9D),
+                color: AppTheme.errorColor,
               ),
               const SizedBox(height: 24),
               SizedBox(
@@ -110,12 +112,15 @@ class SensitiveQuestionCard extends StatelessWidget {
                 child: ElevatedButton(
                   onPressed: () => Navigator.of(ctx).pop(),
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color(0xFF6C63FF),
+                    backgroundColor: AppTheme.primaryColor,
                     foregroundColor: Colors.white,
                     padding: const EdgeInsets.symmetric(vertical: 16),
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(16)),
                   ),
-                  child: const Text('I Understand', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600)),
+                  child: const Text('I Understand',
+                      style:
+                          TextStyle(fontSize: 16, fontWeight: FontWeight.w600)),
                 ),
               ),
               const SizedBox(height: 8),
@@ -155,9 +160,12 @@ class SensitiveQuestionCard extends StatelessWidget {
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(title, style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 15)),
+              Text(title,
+                  style: const TextStyle(
+                      fontWeight: FontWeight.w600, fontSize: 15)),
               const SizedBox(height: 2),
-              Text(subtitle, style: const TextStyle(color: Colors.white54, fontSize: 13)),
+              Text(subtitle,
+                  style: const TextStyle(color: Colors.white54, fontSize: 13)),
             ],
           ),
         ],
@@ -177,25 +185,28 @@ class SensitiveQuestionCard extends StatelessWidget {
             width: double.infinity,
             padding: const EdgeInsets.all(14),
             decoration: BoxDecoration(
-              color: const Color(0xFFFF6B9D).withValues(alpha: 0.1),
+              color: AppTheme.errorColor.withValues(alpha: 0.1),
               borderRadius: BorderRadius.circular(14),
-              border: Border.all(color: const Color(0xFFFF6B9D).withValues(alpha: 0.25)),
+              border: Border.all(
+                  color: AppTheme.errorColor.withValues(alpha: 0.25)),
             ),
             child: Row(
               children: [
-                const Icon(Icons.favorite, color: Color(0xFFFF6B9D), size: 20),
+                const Icon(Icons.favorite,
+                    color: AppTheme.errorColor, size: 20),
                 const SizedBox(width: 10),
                 Expanded(
                   child: Text(
                     'If you need immediate support, crisis helplines are available 24/7. Tap to view.',
                     style: TextStyle(
                       fontSize: 12,
-                      color: isLight ? const Color(0xFF1A1A2E) : Colors.white70,
+                      color: isLight ? AppTheme.darkBg : Colors.white70,
                       height: 1.4,
                     ),
                   ),
                 ),
-                const Icon(Icons.chevron_right, color: Color(0xFFFF6B9D), size: 20),
+                const Icon(Icons.chevron_right,
+                    color: AppTheme.errorColor, size: 20),
               ],
             ),
           ),
@@ -209,7 +220,8 @@ class SensitiveQuestionCard extends StatelessWidget {
               final isSelected = selectedValue == option.value;
 
               return Padding(
-                padding: EdgeInsets.only(bottom: index == question.options.length - 1 ? 0 : 10),
+                padding: EdgeInsets.only(
+                    bottom: index == question.options.length - 1 ? 0 : 10),
                 child: TweenAnimationBuilder<double>(
                   tween: Tween(begin: 0, end: 1),
                   duration: Duration(milliseconds: 300 + (index * 50)),
@@ -230,13 +242,22 @@ class SensitiveQuestionCard extends StatelessWidget {
                     },
                     child: AnimatedContainer(
                       duration: const Duration(milliseconds: 250),
-                      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 20, vertical: 16),
                       decoration: BoxDecoration(
                         color: isSelected
                             ? (isLight
-                                ? Theme.of(context).colorScheme.primary.withValues(alpha: 0.12)
-                                : Theme.of(context).colorScheme.primary.withValues(alpha: 0.2))
-                            : (isLight ? Colors.white : Colors.white.withValues(alpha: 0.06)),
+                                ? Theme.of(context)
+                                    .colorScheme
+                                    .primary
+                                    .withValues(alpha: 0.12)
+                                : Theme.of(context)
+                                    .colorScheme
+                                    .primary
+                                    .withValues(alpha: 0.2))
+                            : (isLight
+                                ? Colors.white
+                                : Colors.white.withValues(alpha: 0.06)),
                         borderRadius: BorderRadius.circular(16),
                         border: Border.all(
                           color: isSelected
@@ -254,12 +275,16 @@ class SensitiveQuestionCard extends StatelessWidget {
                               option.label,
                               style: TextStyle(
                                 fontSize: 15,
-                                fontWeight: isSelected ? FontWeight.w600 : FontWeight.w400,
+                                fontWeight: isSelected
+                                    ? FontWeight.w600
+                                    : FontWeight.w400,
                                 color: isLight
                                     ? (isSelected
                                         ? Theme.of(context).colorScheme.primary
-                                        : const Color(0xFF1A1A2E))
-                                    : (isSelected ? Colors.white : Colors.white70),
+                                        : AppTheme.darkBg)
+                                    : (isSelected
+                                        ? Colors.white
+                                        : Colors.white70),
                               ),
                             ),
                           ),
@@ -275,12 +300,15 @@ class SensitiveQuestionCard extends StatelessWidget {
                               border: Border.all(
                                 color: isSelected
                                     ? Theme.of(context).colorScheme.primary
-                                    : (isLight ? Colors.grey.withValues(alpha: 0.4) : Colors.white38),
+                                    : (isLight
+                                        ? Colors.grey.withValues(alpha: 0.4)
+                                        : Colors.white38),
                                 width: 2,
                               ),
                             ),
                             child: isSelected
-                                ? const Icon(Icons.check, color: Colors.white, size: 16)
+                                ? const Icon(Icons.check,
+                                    color: Colors.white, size: 16)
                                 : null,
                           ),
                         ],

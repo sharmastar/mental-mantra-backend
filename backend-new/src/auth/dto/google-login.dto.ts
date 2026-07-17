@@ -1,10 +1,16 @@
-import { IsString, IsOptional } from 'class-validator';
-import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
+import { IsOptional, IsString } from 'class-validator';
+import { ApiPropertyOptional } from '@nestjs/swagger';
 
 export class GoogleLoginDto {
-  @ApiProperty()
+  @ApiPropertyOptional()
+  @IsOptional()
   @IsString()
-  idToken: string;
+  idToken?: string;
+
+  @ApiPropertyOptional()
+  @IsOptional()
+  @IsString()
+  accessToken?: string;
 
   @ApiPropertyOptional()
   @IsOptional()
@@ -20,19 +26,4 @@ export class GoogleLoginDto {
   @IsOptional()
   @IsString()
   photoUrl?: string;
-
-  @ApiPropertyOptional()
-  @IsOptional()
-  @IsString()
-  accessToken?: string;
-
-  @ApiPropertyOptional()
-  @IsOptional()
-  @IsString()
-  serverAuthCode?: string;
-
-  @ApiPropertyOptional()
-  @IsOptional()
-  @IsString()
-  device?: string;
 }

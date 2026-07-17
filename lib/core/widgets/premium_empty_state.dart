@@ -32,9 +32,13 @@ class PremiumEmptyState extends StatelessWidget {
               padding: const EdgeInsets.all(24),
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
-                color: isDark ? Colors.white.withValues(alpha: 0.04) : AppTheme.primaryColor.withValues(alpha: 0.05),
+                color: isDark
+                    ? Colors.white.withValues(alpha: 0.04)
+                    : AppTheme.primaryColor.withValues(alpha: 0.05),
                 border: Border.all(
-                  color: isDark ? Colors.white10 : AppTheme.primaryColor.withValues(alpha: 0.1),
+                  color: isDark
+                      ? Colors.white10
+                      : AppTheme.primaryColor.withValues(alpha: 0.1),
                 ),
               ),
               child: Icon(
@@ -42,8 +46,11 @@ class PremiumEmptyState extends StatelessWidget {
                 size: 40,
                 color: isDark ? AppTheme.secondaryColor : AppTheme.primaryColor,
               ),
-            ).animate(onPlay: (c) => c.repeat(reverse: true))
-             .scaleXY(begin: 0.95, end: 1.05, duration: 2.seconds, curve: Curves.easeInOut),
+            ).animate(onPlay: (c) => c.repeat(reverse: true)).scaleXY(
+                begin: 0.95,
+                end: 1.05,
+                duration: 2.seconds,
+                curve: Curves.easeInOut),
             const SizedBox(height: 24),
             Text(
               title,
@@ -71,7 +78,8 @@ class PremiumEmptyState extends StatelessWidget {
               GestureDetector(
                 onTap: onAction,
                 child: Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
                   decoration: BoxDecoration(
                     gradient: AppTheme.primaryGradient,
                     borderRadius: BorderRadius.circular(16),

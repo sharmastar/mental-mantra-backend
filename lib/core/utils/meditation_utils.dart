@@ -15,10 +15,16 @@ void triggerHaptic(HapticType type, {bool enabled = true}) {
 }
 
 String formatDuration(int seconds) {
-  final min = seconds ~/ 60;
-  final sec = seconds % 60;
-  return '${min.toString().padLeft(2, '0')}:${sec.toString().padLeft(2, '0')}';
+  final h = seconds ~/ 3600;
+  final m = (seconds % 3600) ~/ 60;
+  final s = seconds % 60;
+  if (h > 0) {
+    return '$h:${m.toString().padLeft(2, '0')}:${s.toString().padLeft(2, '0')}';
+  }
+  return '${m.toString().padLeft(2, '0')}:${s.toString().padLeft(2, '0')}';
 }
+
+String formatDurationFromDuration(Duration d) => formatDuration(d.inSeconds);
 
 List<String> moodEmojis = ['', '😢', '😟', '😐', '😊', '🥰'];
 List<String> moodLabels = ['', 'Sad', 'Anxious', 'Neutral', 'Happy', 'Joyful'];

@@ -3,48 +3,129 @@ import '../models/recommendation.dart';
 class ImpactEngine {
   static const _defaultImpacts = <String, List<ExpectedImpact>>{
     'breathing': [
-      ExpectedImpact(metric: 'stress', change: 12, direction: 'decrease', description: 'Reduce stress score'),
-      ExpectedImpact(metric: 'calm', change: 15, direction: 'increase', description: 'Increase calmness'),
+      ExpectedImpact(
+          metric: 'stress',
+          change: 12,
+          direction: 'decrease',
+          description: 'Reduce stress score'),
+      ExpectedImpact(
+          metric: 'calm',
+          change: 15,
+          direction: 'increase',
+          description: 'Increase calmness'),
     ],
     'meditation': [
-      ExpectedImpact(metric: 'mood', change: 8, direction: 'increase', description: 'Improve mood'),
-      ExpectedImpact(metric: 'anxiety', change: 10, direction: 'decrease', description: 'Reduce anxiety'),
+      ExpectedImpact(
+          metric: 'mood',
+          change: 8,
+          direction: 'increase',
+          description: 'Improve mood'),
+      ExpectedImpact(
+          metric: 'anxiety',
+          change: 10,
+          direction: 'decrease',
+          description: 'Reduce anxiety'),
     ],
     'journal': [
-      ExpectedImpact(metric: 'clarity', change: 15, direction: 'increase', description: 'Improve mental clarity'),
-      ExpectedImpact(metric: 'mood', change: 5, direction: 'increase', description: 'Lift mood through expression'),
+      ExpectedImpact(
+          metric: 'clarity',
+          change: 15,
+          direction: 'increase',
+          description: 'Improve mental clarity'),
+      ExpectedImpact(
+          metric: 'mood',
+          change: 5,
+          direction: 'increase',
+          description: 'Lift mood through expression'),
     ],
     'walk': [
-      ExpectedImpact(metric: 'energy', change: 10, direction: 'increase', description: 'Boost energy'),
-      ExpectedImpact(metric: 'stress', change: 8, direction: 'decrease', description: 'Reduce stress'),
+      ExpectedImpact(
+          metric: 'energy',
+          change: 10,
+          direction: 'increase',
+          description: 'Boost energy'),
+      ExpectedImpact(
+          metric: 'stress',
+          change: 8,
+          direction: 'decrease',
+          description: 'Reduce stress'),
     ],
     'sleep': [
-      ExpectedImpact(metric: 'sleep', change: 15, direction: 'increase', description: 'Improve sleep quality'),
-      ExpectedImpact(metric: 'mood', change: 10, direction: 'increase', description: 'Better mood from rest'),
+      ExpectedImpact(
+          metric: 'sleep',
+          change: 15,
+          direction: 'increase',
+          description: 'Improve sleep quality'),
+      ExpectedImpact(
+          metric: 'mood',
+          change: 10,
+          direction: 'increase',
+          description: 'Better mood from rest'),
     ],
     'music': [
-      ExpectedImpact(metric: 'relaxation', change: 12, direction: 'increase', description: 'Increase relaxation'),
-      ExpectedImpact(metric: 'anxiety', change: 8, direction: 'decrease', description: 'Calm anxious thoughts'),
+      ExpectedImpact(
+          metric: 'relaxation',
+          change: 12,
+          direction: 'increase',
+          description: 'Increase relaxation'),
+      ExpectedImpact(
+          metric: 'anxiety',
+          change: 8,
+          direction: 'decrease',
+          description: 'Calm anxious thoughts'),
     ],
     'hydrate': [
-      ExpectedImpact(metric: 'energy', change: 8, direction: 'increase', description: 'Improve energy'),
-      ExpectedImpact(metric: 'focus', change: 5, direction: 'increase', description: 'Sharpen focus'),
+      ExpectedImpact(
+          metric: 'energy',
+          change: 8,
+          direction: 'increase',
+          description: 'Improve energy'),
+      ExpectedImpact(
+          metric: 'focus',
+          change: 5,
+          direction: 'increase',
+          description: 'Sharpen focus'),
     ],
     'gratitude': [
-      ExpectedImpact(metric: 'mood', change: 10, direction: 'increase', description: 'Elevate mood'),
-      ExpectedImpact(metric: 'optimism', change: 12, direction: 'increase', description: 'Build optimism'),
+      ExpectedImpact(
+          metric: 'mood',
+          change: 10,
+          direction: 'increase',
+          description: 'Elevate mood'),
+      ExpectedImpact(
+          metric: 'optimism',
+          change: 12,
+          direction: 'increase',
+          description: 'Build optimism'),
     ],
     'goals': [
-      ExpectedImpact(metric: 'motivation', change: 10, direction: 'increase', description: 'Boost motivation'),
-      ExpectedImpact(metric: 'confidence', change: 8, direction: 'increase', description: 'Build confidence'),
+      ExpectedImpact(
+          metric: 'motivation',
+          change: 10,
+          direction: 'increase',
+          description: 'Boost motivation'),
+      ExpectedImpact(
+          metric: 'confidence',
+          change: 8,
+          direction: 'increase',
+          description: 'Build confidence'),
     ],
     'stretch': [
-      ExpectedImpact(metric: 'energy', change: 8, direction: 'increase', description: 'Release physical tension'),
-      ExpectedImpact(metric: 'stress', change: 5, direction: 'decrease', description: 'Ease physical stress'),
+      ExpectedImpact(
+          metric: 'energy',
+          change: 8,
+          direction: 'increase',
+          description: 'Release physical tension'),
+      ExpectedImpact(
+          metric: 'stress',
+          change: 5,
+          direction: 'decrease',
+          description: 'Ease physical stress'),
     ],
   };
 
-  List<ExpectedImpact> estimate(String action, {
+  List<ExpectedImpact> estimate(
+    String action, {
     String? domain,
     String? primaryConcern,
     int currentStress = 5,
@@ -68,7 +149,9 @@ class ImpactEngine {
         }
       }
 
-      if (impact.metric == 'mood' || impact.metric == 'calm' || impact.metric == 'energy') {
+      if (impact.metric == 'mood' ||
+          impact.metric == 'calm' ||
+          impact.metric == 'energy') {
         if (currentMood <= 2) {
           adjustedChange = (adjustedChange * 1.2).round().toDouble();
         } else if (currentMood >= 4) {
@@ -113,9 +196,10 @@ class ImpactEngine {
     }).toList();
   }
 
-  List<ExpectedImpact> aggregate(List<RecommendationOutcome> outcomes, String action) {
+  List<ExpectedImpact> aggregate(
+      List<RecommendationOutcome> outcomes, String action) {
     final relevant = outcomes.where((o) =>
-      o.completed && o.beforeMetrics.isNotEmpty && o.afterMetrics.isNotEmpty);
+        o.completed && o.beforeMetrics.isNotEmpty && o.afterMetrics.isNotEmpty);
     if (relevant.isEmpty) return _defaultImpacts[action] ?? [];
 
     final metricChanges = <String, List<double>>{};

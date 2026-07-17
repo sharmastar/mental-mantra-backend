@@ -14,10 +14,12 @@ class PremiumBounceInteraction extends ConsumerStatefulWidget {
   });
 
   @override
-  ConsumerState<PremiumBounceInteraction> createState() => _PremiumBounceInteractionState();
+  ConsumerState<PremiumBounceInteraction> createState() =>
+      _PremiumBounceInteractionState();
 }
 
-class _PremiumBounceInteractionState extends ConsumerState<PremiumBounceInteraction>
+class _PremiumBounceInteractionState
+    extends ConsumerState<PremiumBounceInteraction>
     with SingleTickerProviderStateMixin {
   late AnimationController _controller;
   late Animation<double> _scaleAnimation;

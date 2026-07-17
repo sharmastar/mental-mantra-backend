@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:mental_mantra/core/network/api_client.dart';
 import '../models/recommendation.dart';
 
@@ -5,7 +6,9 @@ class OutcomeRepository {
   Future<void> saveOutcome(RecommendationOutcome outcome) async {
     try {
       await ApiClient.post('/recommendations/outcomes', data: outcome.toJson());
-    } catch (_) {}
+    } catch (e) {
+      debugPrint('OutcomeRepository.saveOutcome: $e');
+    }
   }
 
   Future<void> recordAccepted({
@@ -72,34 +75,55 @@ class OutcomeRepository {
 
   Future<RecommendationOutcome?> getOutcome(String recommendationId) async {
     try {
-      final response = await ApiClient.get('/recommendations/outcomes/$recommendationId');
+      final response =
+          await ApiClient.get('/recommendations/outcomes/$recommendationId');
       final data = response.data as Map<String, dynamic>;
       if (data['success'] == true && data['data'] != null) {
-        return RecommendationOutcome.fromJson(data['data'] as Map<String, dynamic>);
+        return RecommendationOutcome.fromJson(
+            data['data'] as Map<String, dynamic>);
       }
-    } catch (_) {}
+    } catch (e) {
+      debugPrint('OutcomeRepository.getOutcome: $e');
+    }
     return null;
   }
 
-  Future<List<RecommendationOutcome>> getOutcomesByUser(String userId, {int limit = 50}) async {
+  Future<List<RecommendationOutcome>> getOutcomesByUser(String userId,
+      {int limit = 50}) async {
     try {
-      final response = await ApiClient.get('/recommendations/outcomes/user/$userId', queryParameters: {'limit': limit});
+      final response = await ApiClient.get(
+          '/recommendations/outcomes/user/$userId',
+          queryParameters: {'limit': limit});
       final data = response.data as Map<String, dynamic>;
       if (data['success'] == true && data['data'] != null) {
-        return (data['data'] as List<dynamic>).map((e) => RecommendationOutcome.fromJson(e as Map<String, dynamic>)).toList();
+        return (data['data'] as List<dynamic>)
+            .map((e) =>
+                RecommendationOutcome.fromJson(e as Map<String, dynamic>))
+            .toList();
       }
-    } catch (_) {}
+    } catch (e) {
+      debugPrint('OutcomeRepository.getOutcomesByUser: $e');
+    }
     return [];
   }
 
-  Future<List<RecommendationOutcome>> getOutcomesByAction(String userId, String action, {int limit = 50}) async {
+  Future<List<RecommendationOutcome>> getOutcomesByAction(
+      String userId, String action,
+      {int limit = 50}) async {
     try {
-      final response = await ApiClient.get('/recommendations/outcomes/user/$userId/action/$action', queryParameters: {'limit': limit});
+      final response = await ApiClient.get(
+          '/recommendations/outcomes/user/$userId/action/$action',
+          queryParameters: {'limit': limit});
       final data = response.data as Map<String, dynamic>;
       if (data['success'] == true && data['data'] != null) {
-        return (data['data'] as List<dynamic>).map((e) => RecommendationOutcome.fromJson(e as Map<String, dynamic>)).toList();
+        return (data['data'] as List<dynamic>)
+            .map((e) =>
+                RecommendationOutcome.fromJson(e as Map<String, dynamic>))
+            .toList();
       }
-    } catch (_) {}
+    } catch (e) {
+      debugPrint('OutcomeRepository.getOutcomesByAction: $e');
+    }
     return [];
   }
 }

@@ -6,15 +6,18 @@ void main() {
 
   group('Mental Mantra Core Tests', () {
     test('AppTheme color constants', () {
-      expect(AppTheme.primaryColor.toARGB32(), 0xFF42C8B7);
-      expect(AppTheme.secondaryColor.toARGB32(), 0xFF00BFA5);
-      expect(AppTheme.accentColor.toARGB32(), 0xFFE0F7F6);
-      expect(AppTheme.errorColor.toARGB32(), 0xFFE06B7A);
-      expect(AppTheme.successColor.toARGB32(), 0xFF5CA380);
-      expect(AppTheme.warningColor.toARGB32(), 0xFFD99B4B);
-      expect(AppTheme.darkBg.toARGB32(), 0xFF0C2425);
-      expect(AppTheme.darkSurface.toARGB32(), 0xFF102E30);
-      expect(AppTheme.lightBg.toARGB32(), 0xFFF2F8F7);
+      // Primary: Warm Therapeutic Teal
+      expect(AppTheme.primaryColor.toARGB32(), 0xFF1E9B8E);
+      // Secondary: Soft Teal Light
+      expect(AppTheme.secondaryColor.toARGB32(), 0xFF5CCABF);
+      // Accent: Soft Teal Tint
+      expect(AppTheme.accentColor.toARGB32(), 0xFFE6F7F5);
+      expect(AppTheme.errorColor.toARGB32(), 0xFFD65D5D);
+      expect(AppTheme.successColor.toARGB32(), 0xFF73A99C);
+      expect(AppTheme.warningColor.toARGB32(), 0xFFE2A050);
+      expect(AppTheme.darkBg.toARGB32(), 0xFF0A1112);
+      expect(AppTheme.darkSurface.toARGB32(), 0xFF101719);
+      expect(AppTheme.lightBg.toARGB32(), 0xFFF3F7F6);
     });
 
     test('AppTheme gradients', () {

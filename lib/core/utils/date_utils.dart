@@ -42,7 +42,8 @@ class DateFormatUtils {
   static List<DateTime> getCurrentWeek() {
     final now = DateTime.now();
     final weekday = now.weekday;
-    return List.generate(7, (i) => now.subtract(Duration(days: weekday - 1 - i)));
+    return List.generate(
+        7, (i) => now.subtract(Duration(days: weekday - 1 - i)));
   }
 
   static List<DateTime> getLastDays(int days) {
@@ -63,7 +64,9 @@ class DateFormatUtils {
     if (seconds < 60) return '${seconds}s';
     final minutes = seconds ~/ 60;
     final remainingSeconds = seconds % 60;
-    if (minutes < 60) return '${minutes}m${remainingSeconds > 0 ? ' ${remainingSeconds}s' : ''}';
+    if (minutes < 60) {
+      return '${minutes}m${remainingSeconds > 0 ? ' ${remainingSeconds}s' : ''}';
+    }
     final hours = minutes ~/ 60;
     final remainingMinutes = minutes % 60;
     return '${hours}h ${remainingMinutes}m';

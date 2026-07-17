@@ -3,6 +3,7 @@ import { ApiTags, ApiOperation, ApiBearerAuth } from '@nestjs/swagger';
 import { SleepService } from './sleep.service';
 import { JwtAuthGuard } from '../common/guards/jwt-auth.guard';
 import { CurrentUser } from '../common/decorators/current-user.decorator';
+import { CreateSleepDto } from './dto/create-sleep.dto';
 
 @ApiTags('Sleep')
 @ApiBearerAuth()
@@ -19,8 +20,8 @@ export class SleepController {
 
   @Post()
   @ApiOperation({ summary: 'Log sleep' })
-  async create(@CurrentUser('id') userId: string, @Body() data: any) {
-    return { success: true, data: await this.sleepService.create(userId, data) };
+  async create(@CurrentUser('id') userId: string, @Body() dto: CreateSleepDto) {
+    return { success: true, data: await this.sleepService.create(userId, dto) };
   }
 
   @Delete(':id')

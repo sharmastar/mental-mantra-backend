@@ -8,7 +8,8 @@ class SleepRepository {
       final data = response.data as Map<String, dynamic>;
       if (data['success'] == true && data['data'] != null) {
         return (data['data'] as List<dynamic>)
-            .map((e) => SleepRecord.fromJson({...e as Map<String, dynamic>, 'id': e['id'] ?? ''}))
+            .map((e) => SleepRecord.fromJson(
+                {...e as Map<String, dynamic>, 'id': e['id'] ?? ''}))
             .toList();
       }
       return [];
@@ -48,7 +49,8 @@ class SleepRepository {
     final records = await getRecords(limit: 90);
     if (records.isEmpty) return const SleepStats();
 
-    final totalDuration = records.fold(0, (int sum, r) => sum + r.durationMinutes);
+    final totalDuration =
+        records.fold(0, (int sum, r) => sum + r.durationMinutes);
     final totalQuality = records.fold(0, (int sum, r) => sum + r.qualityRating);
     final averageDuration = totalDuration ~/ records.length;
     final averageQuality = totalQuality ~/ records.length;

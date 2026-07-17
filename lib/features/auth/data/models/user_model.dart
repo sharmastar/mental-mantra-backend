@@ -49,7 +49,8 @@ class UserModel {
     return UserModel(
       uid: json['uid'] as String? ?? json['id'] as String? ?? '',
       email: json['email'] as String? ?? '',
-      displayName: json['displayName'] as String? ?? json['name'] as String? ?? '',
+      displayName:
+          json['displayName'] as String? ?? json['name'] as String? ?? '',
       photoUrl: json['photoUrl'] as String?,
       role: json['role'] as String? ?? 'user',
       emailVerified: json['emailVerified'] as bool? ?? false,

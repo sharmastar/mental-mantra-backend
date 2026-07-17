@@ -11,19 +11,29 @@ void main() {
     });
 
     test('detects unauthorized', () {
-      expect(const AppException(message: 'x', statusCode: 401).isUnauthorized, isTrue);
-      expect(const AppException(message: 'x', statusCode: 403).isUnauthorized, isFalse);
+      expect(const AppException(message: 'x', statusCode: 401).isUnauthorized,
+          isTrue);
+      expect(const AppException(message: 'x', statusCode: 403).isUnauthorized,
+          isFalse);
     });
 
     test('detects server errors', () {
-      expect(const AppException(message: 'x', statusCode: 500).isServerError, isTrue);
-      expect(const AppException(message: 'x', statusCode: 404).isServerError, isFalse);
+      expect(const AppException(message: 'x', statusCode: 500).isServerError,
+          isTrue);
+      expect(const AppException(message: 'x', statusCode: 404).isServerError,
+          isFalse);
     });
 
     test('detects network errors', () {
-      expect(const AppException(message: 'x', code: 'NO_CONNECTION').isNetworkError, isTrue);
-      expect(const AppException(message: 'x', code: 'TIMEOUT').isNetworkError, isTrue);
-      expect(const AppException(message: 'x', code: 'SERVER_ERROR').isNetworkError, isFalse);
+      expect(
+          const AppException(message: 'x', code: 'NO_CONNECTION')
+              .isNetworkError,
+          isTrue);
+      expect(const AppException(message: 'x', code: 'TIMEOUT').isNetworkError,
+          isTrue);
+      expect(
+          const AppException(message: 'x', code: 'SERVER_ERROR').isNetworkError,
+          isFalse);
     });
   });
 

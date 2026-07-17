@@ -111,101 +111,274 @@ class AssessmentQuestion {
       // Reasons joined icons
       if (id == 'reasons_joined') {
         switch (opt) {
-          case 'Stress or pressure': icon = Icons.flash_on; color = const Color(0xFFFF7043); break;
-          case 'Anxiety or overthinking': icon = Icons.waves; color = const Color(0xFFFFB547); break;
-          case 'Feeling emotionally low': icon = Icons.mood_bad; color = const Color(0xFF7986CB); break;
-          case 'Loneliness': icon = Icons.person_outline; color = const Color(0xFF00BCD4); break;
-          case 'Relationship difficulties': icon = Icons.favorite_border; color = const Color(0xFFE91E63); break;
-          case 'Family conflicts': icon = Icons.family_restroom; color = const Color(0xFFFF8A65); break;
-          case 'Work stress': icon = Icons.work_outline; color = const Color(0xFF42A5F5); break;
-          case 'Academic stress': icon = Icons.school; color = const Color(0xFF66BB6A); break;
-          case 'Sleep problems': icon = Icons.bedtime; color = const Color(0xFF5C6BC0); break;
-          case 'Lack of motivation': icon = Icons.battery_alert; color = const Color(0xFF9C27B0); break;
-          case 'Low confidence/self-esteem': icon = Icons.star_border; color = const Color(0xFFFF9800); break;
-          case 'Addiction or habit control': icon = Icons.loop; color = const Color(0xFFE53935); break;
-          case 'Anger or emotional control': icon = Icons.whatshot; color = const Color(0xFFD32F2F); break;
-          case 'Emotional burnout': icon = Icons.local_fire_department; color = const Color(0xFFFF5722); break;
-          case 'Just exploring mental wellness': icon = Icons.explore; color = const Color(0xFF4CAF50); break;
+          case 'Stress or pressure':
+            icon = Icons.flash_on;
+            color = const Color(0xFFFF7043);
+            break;
+          case 'Anxiety or overthinking':
+            icon = Icons.waves;
+            color = const Color(0xFFFFB547);
+            break;
+          case 'Feeling emotionally low':
+            icon = Icons.mood_bad;
+            color = const Color(0xFF7986CB);
+            break;
+          case 'Loneliness':
+            icon = Icons.person_outline;
+            color = const Color(0xFF00BCD4);
+            break;
+          case 'Relationship difficulties':
+            icon = Icons.favorite_border;
+            color = const Color(0xFFE91E63);
+            break;
+          case 'Family conflicts':
+            icon = Icons.family_restroom;
+            color = const Color(0xFFFF8A65);
+            break;
+          case 'Work stress':
+            icon = Icons.work_outline;
+            color = const Color(0xFF42A5F5);
+            break;
+          case 'Academic stress':
+            icon = Icons.school;
+            color = const Color(0xFF66BB6A);
+            break;
+          case 'Sleep problems':
+            icon = Icons.bedtime;
+            color = const Color(0xFF5C6BC0);
+            break;
+          case 'Lack of motivation':
+            icon = Icons.battery_alert;
+            color = const Color(0xFF9C27B0);
+            break;
+          case 'Low confidence/self-esteem':
+            icon = Icons.star_border;
+            color = const Color(0xFFFF9800);
+            break;
+          case 'Addiction or habit control':
+            icon = Icons.loop;
+            color = const Color(0xFFE53935);
+            break;
+          case 'Anger or emotional control':
+            icon = Icons.whatshot;
+            color = const Color(0xFFD32F2F);
+            break;
+          case 'Emotional burnout':
+            icon = Icons.local_fire_department;
+            color = const Color(0xFFFF5722);
+            break;
+          case 'Just exploring mental wellness':
+            icon = Icons.explore;
+            color = const Color(0xFF4CAF50);
+            break;
         }
       }
 
       // Affected areas icons
       if (id == 'affected_areas') {
         switch (opt) {
-          case 'Relationships': icon = Icons.favorite; break;
-          case 'Family life': icon = Icons.family_restroom; break;
-          case 'Studies': icon = Icons.school; break;
-          case 'Work performance': icon = Icons.work; break;
-          case 'Sleep': icon = Icons.bedtime; break;
-          case 'Physical health': icon = Icons.fitness_center; break;
-          case 'Confidence': icon = Icons.star; break;
-          case 'Social interactions': icon = Icons.groups; break;
-          case 'Daily routine': icon = Icons.schedule; break;
-          case 'Motivation/productivity': icon = Icons.trending_up; break;
+          case 'Relationships':
+            icon = Icons.favorite;
+            break;
+          case 'Family life':
+            icon = Icons.family_restroom;
+            break;
+          case 'Studies':
+            icon = Icons.school;
+            break;
+          case 'Work performance':
+            icon = Icons.work;
+            break;
+          case 'Sleep':
+            icon = Icons.bedtime;
+            break;
+          case 'Physical health':
+            icon = Icons.fitness_center;
+            break;
+          case 'Confidence':
+            icon = Icons.star;
+            break;
+          case 'Social interactions':
+            icon = Icons.groups;
+            break;
+          case 'Daily routine':
+            icon = Icons.schedule;
+            break;
+          case 'Motivation/productivity':
+            icon = Icons.trending_up;
+            break;
         }
       }
 
       // Sleep quality icons
       if (id == 'sleep_quality') {
         switch (opt) {
-          case 'Very good': icon = Icons.check_circle_outline; sub = 'Wake up refreshed'; break;
-          case 'Good': icon = Icons.thumb_up_alt_outlined; sub = 'Mostly rested'; break;
-          case 'Average': icon = Icons.remove_circle_outline; sub = 'Could be better'; break;
-          case 'Poor': icon = Icons.warning_amber_rounded; sub = 'Often tired'; break;
-          case 'Very poor': icon = Icons.error_outline; sub = 'Constantly exhausted'; break;
+          case 'Very good':
+            icon = Icons.check_circle_outline;
+            sub = 'Wake up refreshed';
+            break;
+          case 'Good':
+            icon = Icons.thumb_up_alt_outlined;
+            sub = 'Mostly rested';
+            break;
+          case 'Average':
+            icon = Icons.remove_circle_outline;
+            sub = 'Could be better';
+            break;
+          case 'Poor':
+            icon = Icons.warning_amber_rounded;
+            sub = 'Often tired';
+            break;
+          case 'Very poor':
+            icon = Icons.error_outline;
+            sub = 'Constantly exhausted';
+            break;
         }
       }
 
       // Habit struggles icons
       if (id == 'habit_struggles') {
         switch (opt) {
-          case 'Social media scrolling': icon = Icons.phone_android; color = const Color(0xFF2196F3); break;
-          case 'Gaming': icon = Icons.sports_esports; color = const Color(0xFF9C27B0); break;
-          case 'Pornography': icon = Icons.visibility_off; color = const Color(0xFFE53935); break;
-          case 'Betting/Gambling': icon = Icons.casino; color = const Color(0xFFFF9800); break;
-          case 'Alcohol': icon = Icons.local_bar; color = const Color(0xFF795548); break;
-          case 'Smoking': icon = Icons.smoking_rooms; color = const Color(0xFF607D8B); break;
-          case 'Emotional eating': icon = Icons.restaurant; color = const Color(0xFFFF7043); break;
-          case 'Binge watching': icon = Icons.tv; color = const Color(0xFF00BCD4); break;
-          case 'Shopping/spending': icon = Icons.shopping_cart; color = const Color(0xFFE91E63); break;
-          case 'None': icon = Icons.check_circle; color = const Color(0xFF4CAF50); break;
+          case 'Social media scrolling':
+            icon = Icons.phone_android;
+            color = const Color(0xFF2196F3);
+            break;
+          case 'Gaming':
+            icon = Icons.sports_esports;
+            color = const Color(0xFF9C27B0);
+            break;
+          case 'Pornography':
+            icon = Icons.visibility_off;
+            color = const Color(0xFFE53935);
+            break;
+          case 'Betting/Gambling':
+            icon = Icons.casino;
+            color = const Color(0xFFFF9800);
+            break;
+          case 'Alcohol':
+            icon = Icons.local_bar;
+            color = const Color(0xFF795548);
+            break;
+          case 'Smoking':
+            icon = Icons.smoking_rooms;
+            color = const Color(0xFF607D8B);
+            break;
+          case 'Emotional eating':
+            icon = Icons.restaurant;
+            color = const Color(0xFFFF7043);
+            break;
+          case 'Binge watching':
+            icon = Icons.tv;
+            color = const Color(0xFF00BCD4);
+            break;
+          case 'Shopping/spending':
+            icon = Icons.shopping_cart;
+            color = const Color(0xFFE91E63);
+            break;
+          case 'None':
+            icon = Icons.check_circle;
+            color = const Color(0xFF4CAF50);
+            break;
         }
       }
 
       // Coping style icons
       if (id == 'coping_style') {
         switch (opt) {
-          case 'Stay alone': icon = Icons.person; break;
-          case 'Talk to someone': icon = Icons.chat_bubble_outline; break;
-          case 'Sleep': icon = Icons.bedtime; break;
-          case 'Cry': icon = Icons.water_drop; break;
-          case 'Exercise': icon = Icons.fitness_center; break;
-          case 'Watch content/videos': icon = Icons.play_circle_outline; break;
-          case 'Scroll social media': icon = Icons.phone_android; break;
-          case 'Pray/meditate': icon = Icons.self_improvement; break;
-          case 'Work/study more': icon = Icons.work; break;
-          case 'Get angry': icon = Icons.whatshot; break;
-          case 'Eat more': icon = Icons.restaurant; break;
-          case 'Play games': icon = Icons.sports_esports; break;
+          case 'Stay alone':
+            icon = Icons.person;
+            break;
+          case 'Talk to someone':
+            icon = Icons.chat_bubble_outline;
+            break;
+          case 'Sleep':
+            icon = Icons.bedtime;
+            break;
+          case 'Cry':
+            icon = Icons.water_drop;
+            break;
+          case 'Exercise':
+            icon = Icons.fitness_center;
+            break;
+          case 'Watch content/videos':
+            icon = Icons.play_circle_outline;
+            break;
+          case 'Scroll social media':
+            icon = Icons.phone_android;
+            break;
+          case 'Pray/meditate':
+            icon = Icons.self_improvement;
+            break;
+          case 'Work/study more':
+            icon = Icons.work;
+            break;
+          case 'Get angry':
+            icon = Icons.whatshot;
+            break;
+          case 'Eat more':
+            icon = Icons.restaurant;
+            break;
+          case 'Play games':
+            icon = Icons.sports_esports;
+            break;
         }
       }
 
       // Improvement goals icons
       if (id == 'improvement_goals') {
         switch (opt) {
-          case 'Reduce stress': icon = Icons.spa; color = const Color(0xFF4CAF50); break;
-          case 'Reduce anxiety': icon = Icons.waves; color = const Color(0xFF00BCD4); break;
-          case 'Improve sleep': icon = Icons.bedtime; color = const Color(0xFF5C6BC0); break;
-          case 'Build confidence': icon = Icons.star; color = const Color(0xFFFFB300); break;
-          case 'Improve relationships': icon = Icons.favorite; color = const Color(0xFFE91E63); break;
-          case 'Addiction recovery': icon = Icons.loop; color = const Color(0xFFE53935); break;
-          case 'Better focus/productivity': icon = Icons.track_changes; color = const Color(0xFF2196F3); break;
-          case 'Emotional balance': icon = Icons.balance; color = const Color(0xFF9C27B0); break;
-          case 'Self-discipline': icon = Icons.fitness_center; color = const Color(0xFFFF7043); break;
-          case 'Motivation': icon = Icons.rocket_launch; color = const Color(0xFFFF9800); break;
-          case 'Healthier habits': icon = Icons.check_circle_outline; color = const Color(0xFF66BB6A); break;
-          case 'Inner peace': icon = Icons.self_improvement; color = const Color(0xFF7E57C2); break;
-          case 'Overall wellbeing': icon = Icons.auto_awesome; color = const Color(0xFF26A69A); break;
+          case 'Reduce stress':
+            icon = Icons.spa;
+            color = const Color(0xFF4CAF50);
+            break;
+          case 'Reduce anxiety':
+            icon = Icons.waves;
+            color = const Color(0xFF00BCD4);
+            break;
+          case 'Improve sleep':
+            icon = Icons.bedtime;
+            color = const Color(0xFF5C6BC0);
+            break;
+          case 'Build confidence':
+            icon = Icons.star;
+            color = const Color(0xFFFFB300);
+            break;
+          case 'Improve relationships':
+            icon = Icons.favorite;
+            color = const Color(0xFFE91E63);
+            break;
+          case 'Addiction recovery':
+            icon = Icons.loop;
+            color = const Color(0xFFE53935);
+            break;
+          case 'Better focus/productivity':
+            icon = Icons.track_changes;
+            color = const Color(0xFF2196F3);
+            break;
+          case 'Emotional balance':
+            icon = Icons.balance;
+            color = const Color(0xFF9C27B0);
+            break;
+          case 'Self-discipline':
+            icon = Icons.fitness_center;
+            color = const Color(0xFFFF7043);
+            break;
+          case 'Motivation':
+            icon = Icons.rocket_launch;
+            color = const Color(0xFFFF9800);
+            break;
+          case 'Healthier habits':
+            icon = Icons.check_circle_outline;
+            color = const Color(0xFF66BB6A);
+            break;
+          case 'Inner peace':
+            icon = Icons.self_improvement;
+            color = const Color(0xFF7E57C2);
+            break;
+          case 'Overall wellbeing':
+            icon = Icons.auto_awesome;
+            color = const Color(0xFF26A69A);
+            break;
         }
       }
 
@@ -270,7 +443,8 @@ class AssessmentAnswers {
 
   Map<String, dynamic> toJson() => _answers;
 
-  factory AssessmentAnswers.fromJson(Map<String, dynamic> json) => AssessmentAnswers(json);
+  factory AssessmentAnswers.fromJson(Map<String, dynamic> json) =>
+      AssessmentAnswers(json);
 }
 
 class WellnessProfile {
@@ -310,7 +484,8 @@ class WellnessProfile {
     required this.encouragement,
   });
 
-  factory WellnessProfile.fromJson(Map<String, dynamic> json) => WellnessProfile(
+  factory WellnessProfile.fromJson(Map<String, dynamic> json) =>
+      WellnessProfile(
         overallScore: (json['overallScore'] ?? 50).toDouble(),
         stressScore: (json['stressScore'] ?? 50).toDouble(),
         anxietyScore: (json['anxietyScore'] ?? 50).toDouble(),
@@ -323,7 +498,8 @@ class WellnessProfile {
         strengths: List<String>.from(json['strengths'] ?? []),
         riskLevel: json['riskLevel'] ?? 'low',
         summary: json['summary'] ?? '',
-        recommendedFocusAreas: List<String>.from(json['recommendedFocusAreas'] ?? []),
+        recommendedFocusAreas:
+            List<String>.from(json['recommendedFocusAreas'] ?? []),
         safetyEscalation: json['safetyEscalation'] ?? false,
         escalationReason: json['escalationReason'],
         encouragement: json['encouragement'] ?? '',

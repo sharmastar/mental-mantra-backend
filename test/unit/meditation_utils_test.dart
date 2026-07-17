@@ -17,7 +17,7 @@ void main() {
       });
 
       test('formats large durations', () {
-        expect(formatDuration(3661), '61:01');
+        expect(formatDuration(3661), '1:01:01');
       });
     });
 

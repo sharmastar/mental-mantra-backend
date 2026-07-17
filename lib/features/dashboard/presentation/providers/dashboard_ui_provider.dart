@@ -60,7 +60,8 @@ class DashboardUiState {
     bool clearExpandedSoundBubble = false,
   }) {
     return DashboardUiState(
-      completedJourneySteps: completedJourneySteps ?? this.completedJourneySteps,
+      completedJourneySteps:
+          completedJourneySteps ?? this.completedJourneySteps,
       waterLogged: waterLogged ?? this.waterLogged,
       habitFlipped: habitFlipped ?? this.habitFlipped,
       journeySelectedMood: journeySelectedMood ?? this.journeySelectedMood,
@@ -76,7 +77,9 @@ class DashboardUiState {
       rainVolume: rainVolume ?? this.rainVolume,
       oceanVolume: oceanVolume ?? this.oceanVolume,
       forestVolume: forestVolume ?? this.forestVolume,
-      expandedSoundBubble: clearExpandedSoundBubble ? null : (expandedSoundBubble ?? this.expandedSoundBubble),
+      expandedSoundBubble: clearExpandedSoundBubble
+          ? null
+          : (expandedSoundBubble ?? this.expandedSoundBubble),
     );
   }
 }
@@ -89,7 +92,8 @@ class DashboardUiNotifier extends StateNotifier<DashboardUiState> {
   }
 
   void advanceJourneyStep() {
-    state = state.copyWith(completedJourneySteps: state.completedJourneySteps + 1);
+    state =
+        state.copyWith(completedJourneySteps: state.completedJourneySteps + 1);
   }
 
   void setWaterLogged(bool value) {
@@ -173,6 +177,7 @@ class DashboardUiNotifier extends StateNotifier<DashboardUiState> {
   }
 }
 
-final dashboardUiProvider = StateNotifierProvider<DashboardUiNotifier, DashboardUiState>((ref) {
+final dashboardUiProvider =
+    StateNotifierProvider<DashboardUiNotifier, DashboardUiState>((ref) {
   return DashboardUiNotifier();
 });

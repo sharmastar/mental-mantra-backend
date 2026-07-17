@@ -22,14 +22,15 @@ class SyncDashboardPage extends ConsumerWidget {
             pinned: true,
             expandedHeight: 160,
             leading: IconButton(
-              icon: Icon(Icons.arrow_back_ios_new_rounded, color: isDark ? Colors.white : Colors.black87, size: 18),
+              icon: Icon(Icons.arrow_back_ios_new_rounded,
+                  color: isDark ? Colors.white : Colors.black87, size: 18),
               onPressed: () => context.pop(),
             ),
             flexibleSpace: FlexibleSpaceBar(
               background: Container(
                 decoration: const BoxDecoration(
                   gradient: LinearGradient(
-                    colors: [Color(0xFF6C63FF), Color(0xFF00BFA5)],
+                    colors: [AppTheme.primaryColor, AppTheme.secondaryColor],
                     begin: Alignment.topLeft,
                     end: Alignment.bottomRight,
                   ),
@@ -41,7 +42,8 @@ class SyncDashboardPage extends ConsumerWidget {
                       mainAxisAlignment: MainAxisAlignment.end,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        const Icon(Icons.cloud_done_outlined, color: Colors.white, size: 36),
+                        const Icon(Icons.cloud_done_outlined,
+                            color: Colors.white, size: 36),
                         const SizedBox(height: 8),
                         const Text(
                           'Cloud Backup',
@@ -53,7 +55,9 @@ class SyncDashboardPage extends ConsumerWidget {
                         ),
                         Text(
                           'Keep your mental wellness plan synced safely',
-                          style: TextStyle(color: Colors.white.withValues(alpha: 0.7), fontSize: 13),
+                          style: TextStyle(
+                              color: Colors.white.withValues(alpha: 0.7),
+                              fontSize: 13),
                         ),
                       ],
                     ),
@@ -82,7 +86,8 @@ class SyncDashboardPage extends ConsumerWidget {
     );
   }
 
-  Widget _buildSyncStatusCard(BuildContext context, SyncState state, bool isDark) {
+  Widget _buildSyncStatusCard(
+      BuildContext context, SyncState state, bool isDark) {
     final hasPending = state.pendingCount > 0;
     final lastSyncText = state.lastSyncTime != null
         ? 'Last synced: ${state.lastSyncTime!.toLocal().toString().substring(0, 16)}'
@@ -117,14 +122,19 @@ class SyncDashboardPage extends ConsumerWidget {
                     height: 90,
                     decoration: BoxDecoration(
                       shape: BoxShape.circle,
-                      border: Border.all(color: const Color(0xFF00BFA5).withValues(alpha: 0.3), width: 3),
+                      border: Border.all(
+                          color: AppTheme.secondaryColor.withValues(alpha: 0.3),
+                          width: 3),
                     ),
-                  ).animate(onPlay: (c) => c.repeat()).scale(
+                  )
+                      .animate(onPlay: (c) => c.repeat())
+                      .scale(
                         begin: const Offset(0.8, 0.8),
                         end: const Offset(1.4, 1.4),
                         curve: Curves.easeOut,
                         duration: 1200.ms,
-                      ).fadeOut(duration: 1200.ms)
+                      )
+                      .fadeOut(duration: 1200.ms)
                 else
                   const SizedBox(width: 90, height: 90),
 
@@ -135,24 +145,28 @@ class SyncDashboardPage extends ConsumerWidget {
                   decoration: BoxDecoration(
                     shape: BoxShape.circle,
                     color: state.isSyncing
-                        ? const Color(0xFF00BFA5).withValues(alpha: 0.1)
+                        ? AppTheme.secondaryColor.withValues(alpha: 0.1)
                         : (hasPending
-                            ? const Color(0xFFFF9800).withValues(alpha: 0.1)
-                            : const Color(0xFF6C63FF).withValues(alpha: 0.1)),
+                            ? AppTheme.warningColor.withValues(alpha: 0.1)
+                            : AppTheme.primaryColor.withValues(alpha: 0.1)),
                   ),
                   child: Icon(
                     state.isSyncing
                         ? Icons.sync
                         : (hasPending ? Icons.sync_problem : Icons.cloud_done),
                     color: state.isSyncing
-                        ? const Color(0xFF00BFA5)
-                        : (hasPending ? const Color(0xFFFF9800) : const Color(0xFF6C63FF)),
+                        ? AppTheme.secondaryColor
+                        : (hasPending
+                            ? AppTheme.warningColor
+                            : AppTheme.primaryColor),
                     size: 36,
                   ),
-                ).animate(
-                  target: state.isSyncing ? 1 : 0,
-                  onPlay: (c) => state.isSyncing ? c.repeat() : c.stop(),
-                ).rotate(duration: 2000.ms, curve: Curves.linear),
+                )
+                    .animate(
+                      target: state.isSyncing ? 1 : 0,
+                      onPlay: (c) => state.isSyncing ? c.repeat() : c.stop(),
+                    )
+                    .rotate(duration: 2000.ms, curve: Curves.linear),
               ],
             ),
           ),
@@ -181,7 +195,8 @@ class SyncDashboardPage extends ConsumerWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Icon(Icons.access_time_rounded, size: 14, color: isDark ? Colors.white38 : Colors.black38),
+              Icon(Icons.access_time_rounded,
+                  size: 14, color: isDark ? Colors.white38 : Colors.black38),
               const SizedBox(width: 6),
               Text(
                 lastSyncText,
@@ -198,7 +213,8 @@ class SyncDashboardPage extends ConsumerWidget {
     );
   }
 
-  Widget _buildActionsCard(BuildContext context, SyncState state, SyncQueueNotifier notifier, bool isDark) {
+  Widget _buildActionsCard(BuildContext context, SyncState state,
+      SyncQueueNotifier notifier, bool isDark) {
     return Container(
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
@@ -214,19 +230,22 @@ class SyncDashboardPage extends ConsumerWidget {
             children: [
               Expanded(
                 child: FilledButton.icon(
-                  onPressed: state.isSyncing ? null : () => notifier.processQueue(),
+                  onPressed:
+                      state.isSyncing ? null : () => notifier.processQueue(),
                   icon: state.isSyncing
                       ? const SizedBox(
                           width: 16,
                           height: 16,
-                          child: CircularProgressIndicator(color: Colors.white, strokeWidth: 2),
+                          child: CircularProgressIndicator(
+                              color: Colors.white, strokeWidth: 2),
                         )
                       : const Icon(Icons.backup_outlined),
                   label: Text(state.isSyncing ? 'Syncing...' : 'Backup Now'),
                   style: FilledButton.styleFrom(
-                    backgroundColor: const Color(0xFF6C63FF),
+                    backgroundColor: AppTheme.primaryColor,
                     padding: const EdgeInsets.symmetric(vertical: 14),
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(16)),
                   ),
                 ),
               ),
@@ -252,16 +271,17 @@ class SyncDashboardPage extends ConsumerWidget {
     return Container(
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
-        color: const Color(0xFF00BFA5).withValues(alpha: 0.05),
+        color: AppTheme.secondaryColor.withValues(alpha: 0.05),
         borderRadius: BorderRadius.circular(24),
         border: Border.all(
-          color: const Color(0xFF00BFA5).withValues(alpha: 0.15),
+          color: AppTheme.secondaryColor.withValues(alpha: 0.15),
         ),
       ),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Icon(Icons.info_outline_rounded, color: Color(0xFF00BFA5), size: 22),
+          const Icon(Icons.info_outline_rounded,
+              color: AppTheme.secondaryColor, size: 22),
           const SizedBox(width: 14),
           Expanded(
             child: Column(
@@ -272,7 +292,7 @@ class SyncDashboardPage extends ConsumerWidget {
                   style: TextStyle(
                     fontSize: 14,
                     fontWeight: FontWeight.bold,
-                    color: Color(0xFF00BFA5),
+                    color: AppTheme.secondaryColor,
                   ),
                 ),
                 const SizedBox(height: 6),
@@ -292,7 +312,8 @@ class SyncDashboardPage extends ConsumerWidget {
     );
   }
 
-  Widget _buildBackupLogsCard(BuildContext context, SyncState state, SyncQueueNotifier notifier, bool isDark) {
+  Widget _buildBackupLogsCard(BuildContext context, SyncState state,
+      SyncQueueNotifier notifier, bool isDark) {
     return Container(
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
@@ -319,7 +340,9 @@ class SyncDashboardPage extends ConsumerWidget {
               if (state.syncLog.isNotEmpty)
                 TextButton(
                   onPressed: () => notifier.clearLogs(),
-                  child: const Text('Clear', style: TextStyle(color: AppTheme.errorColor, fontSize: 12)),
+                  child: const Text('Clear',
+                      style:
+                          TextStyle(color: AppTheme.errorColor, fontSize: 12)),
                 ),
             ],
           ),

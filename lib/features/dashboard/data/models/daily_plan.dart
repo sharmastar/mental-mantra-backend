@@ -11,8 +11,10 @@ class DailyPlan {
     required this.beforeBed,
   });
 
-  List<PlanActivity> get allActivities => [...morning, ...afternoon, ...evening, ...beforeBed];
-  int get totalDuration => allActivities.fold(0, (sum, a) => sum + a.durationMinutes);
+  List<PlanActivity> get allActivities =>
+      [...morning, ...afternoon, ...evening, ...beforeBed];
+  int get totalDuration =>
+      allActivities.fold(0, (sum, a) => sum + a.durationMinutes);
 
   factory DailyPlan.fromJson(Map<String, dynamic> json) {
     return DailyPlan(
@@ -25,7 +27,9 @@ class DailyPlan {
 
   static List<PlanActivity> _parseActivities(dynamic list) {
     if (list is! List) return [];
-    return list.map((e) => PlanActivity.fromJson(e as Map<String, dynamic>)).toList();
+    return list
+        .map((e) => PlanActivity.fromJson(e as Map<String, dynamic>))
+        .toList();
   }
 }
 
@@ -49,11 +53,11 @@ class PlanActivity {
   }
 
   factory PlanActivity.fromJson(Map<String, dynamic> json) => PlanActivity(
-    type: json['type'] ?? '',
-    title: json['title'] ?? '',
-    description: json['description'] ?? '',
-    duration: json['duration'] ?? '5 min',
-  );
+        type: json['type'] ?? '',
+        title: json['title'] ?? '',
+        description: json['description'] ?? '',
+        duration: json['duration'] ?? '5 min',
+      );
 }
 
 class WellnessSummary {
@@ -71,13 +75,14 @@ class WellnessSummary {
     required this.encouragement,
   });
 
-  factory WellnessSummary.fromJson(Map<String, dynamic> json) => WellnessSummary(
-    overallScore: (json['overallScore'] ?? 0).toDouble(),
-    trend: json['trend'] ?? 'stable',
-    highlights: List<String>.from(json['highlights'] ?? []),
-    areasToFocus: List<String>.from(json['areasToFocus'] ?? []),
-    encouragement: json['encouragement'] ?? '',
-  );
+  factory WellnessSummary.fromJson(Map<String, dynamic> json) =>
+      WellnessSummary(
+        overallScore: (json['overallScore'] ?? 0).toDouble(),
+        trend: json['trend'] ?? 'stable',
+        highlights: List<String>.from(json['highlights'] ?? []),
+        areasToFocus: List<String>.from(json['areasToFocus'] ?? []),
+        encouragement: json['encouragement'] ?? '',
+      );
 }
 
 class MoodEntry {
@@ -100,22 +105,22 @@ class MoodEntry {
   });
 
   factory MoodEntry.fromJson(Map<String, dynamic> json) => MoodEntry(
-    date: json['date'] ?? '',
-    mood: json['mood'] ?? 3,
-    energy: json['energy'],
-    stress: json['stress'],
-    anxiety: json['anxiety'],
-    notes: json['notes'],
-    timestamp: (json['timestamp'] as dynamic)?.toDate() ?? DateTime.now(),
-  );
+        date: json['date'] ?? '',
+        mood: json['mood'] ?? 3,
+        energy: json['energy'],
+        stress: json['stress'],
+        anxiety: json['anxiety'],
+        notes: json['notes'],
+        timestamp: (json['timestamp'] as dynamic)?.toDate() ?? DateTime.now(),
+      );
 
   Map<String, dynamic> toJson() => {
-    'date': date,
-    'mood': mood,
-    'energy': energy,
-    'stress': stress,
-    'anxiety': anxiety,
-    'notes': notes,
-    'timestamp': timestamp,
-  };
+        'date': date,
+        'mood': mood,
+        'energy': energy,
+        'stress': stress,
+        'anxiety': anxiety,
+        'notes': notes,
+        'timestamp': timestamp,
+      };
 }

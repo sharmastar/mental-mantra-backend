@@ -13,7 +13,8 @@ class DetoxTimerPage extends ConsumerStatefulWidget {
   ConsumerState<DetoxTimerPage> createState() => _DetoxTimerPageState();
 }
 
-class _DetoxTimerPageState extends ConsumerState<DetoxTimerPage> with TickerProviderStateMixin {
+class _DetoxTimerPageState extends ConsumerState<DetoxTimerPage>
+    with TickerProviderStateMixin, WidgetsBindingObserver {
   DetoxSessionType _selectedType = DetoxSessionType.digitalDetox;
   int _selectedMinutes = 25;
   Timer? _timer;
@@ -22,6 +23,8 @@ class _DetoxTimerPageState extends ConsumerState<DetoxTimerPage> with TickerProv
   bool _isCompleted = false;
   String? _sessionId;
   late AnimationController _pulseController;
+  DateTime? _startTime;
+  int _totalDurationSeconds = 0;
 
   final List<Map<String, dynamic>> _presets = [
     {'label': '5 min', 'minutes': 5},
@@ -32,15 +35,30 @@ class _DetoxTimerPageState extends ConsumerState<DetoxTimerPage> with TickerProv
   ];
 
   final List<Map<String, dynamic>> _sessionTypes = [
-    {'type': DetoxSessionType.digitalDetox, 'label': 'Digital Detox', 'icon': Icons.phonelink_off, 'color': const Color(0xFFFF6B9D)},
-    {'type': DetoxSessionType.focus, 'label': 'Deep Focus', 'icon': Icons.track_changes, 'color': AppTheme.primaryColor},
-    {'type': DetoxSessionType.gamingBreak, 'label': 'Gaming Break', 'icon': Icons.sports_esports, 'color': const Color(0xFFFFB547)},
-    {'type': DetoxSessionType.socialMediaFree, 'label': 'No Social Media', 'icon': Icons.person_off, 'color': AppTheme.successColor},
+    {
+      'type': DetoxSessionType.focus,
+      'label': 'Deep Focus',
+      'icon': Icons.track_changes,
+      'color': AppTheme.primaryColor
+    },
+    {
+      'type': DetoxSessionType.gamingBreak,
+      'label': 'Gaming Break',
+      'icon': Icons.sports_esports,
+      'color': const Color(0xFFFFB547)
+    },
+    {
+      'type': DetoxSessionType.socialMediaFree,
+      'label': 'No Social Media',
+      'icon': Icons.person_off,
+      'color': AppTheme.successColor
+    },
   ];
 
   @override
   void initState() {
     super.initState();
+    WidgetsBinding.instance.addObserver(this);
     _pulseController = AnimationController(
       vsync: this,
       duration: const Duration(seconds: 1),
@@ -49,14 +67,35 @@ class _DetoxTimerPageState extends ConsumerState<DetoxTimerPage> with TickerProv
 
   @override
   void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
     _timer?.cancel();
     _pulseController.dispose();
     super.dispose();
   }
 
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.resumed && _isRunning) {
+      _recalculateTime();
+    }
+  }
+
+  void _recalculateTime() {
+    if (!_isRunning || _startTime == null) return;
+    final elapsed = DateTime.now().difference(_startTime!).inSeconds;
+    setState(() {
+      _remainingSeconds = _totalDurationSeconds - elapsed;
+    });
+    if (_remainingSeconds <= 0) {
+      _completeTimer();
+    }
+  }
+
   void _startTimer() {
     if (_isRunning) return;
-    _remainingSeconds = _selectedMinutes * 60;
+    _startTime = DateTime.now();
+    _totalDurationSeconds = _selectedMinutes * 60;
+    _remainingSeconds = _totalDurationSeconds;
     _isRunning = true;
     _isCompleted = false;
     _pulseController.repeat(reverse: true);
@@ -66,7 +105,11 @@ class _DetoxTimerPageState extends ConsumerState<DetoxTimerPage> with TickerProv
       durationMin: _selectedMinutes,
       startedAt: DateTime.now(),
     );
-    ref.read(recoveryProvider.notifier).startDetoxSession(session).then((docId) {
+    ref
+        .read(recoveryProvider.notifier)
+        .startDetoxSession(session)
+        .then((docId) {
+      if (!mounted) return;
       if (docId != null) {
         _sessionId = docId;
       }
@@ -74,13 +117,11 @@ class _DetoxTimerPageState extends ConsumerState<DetoxTimerPage> with TickerProv
     });
 
     _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
-      if (!mounted) { timer.cancel(); return; }
-      setState(() {
-        _remainingSeconds--;
-      });
-      if (_remainingSeconds <= 0) {
-        _completeTimer();
+      if (!mounted) {
+        timer.cancel();
+        return;
       }
+      _recalculateTime();
     });
   }
 
@@ -96,16 +137,18 @@ class _DetoxTimerPageState extends ConsumerState<DetoxTimerPage> with TickerProv
     _isRunning = false;
     _isCompleted = true;
     _pulseController.stop();
-    if (_sessionId != null) {
+    if (_sessionId != null && _startTime != null) {
       final completedSession = DetoxSession(
         sessionType: _selectedType,
         durationMin: _selectedMinutes,
         completedMinutes: _selectedMinutes,
         completed: true,
-        startedAt: DateTime.now().subtract(Duration(minutes: _selectedMinutes)),
+        startedAt: _startTime!,
         completedAt: DateTime.now(),
       );
-      ref.read(recoveryProvider.notifier).completeDetoxSession(_sessionId!, completedSession);
+      ref
+          .read(recoveryProvider.notifier)
+          .completeDetoxSession(_sessionId!, completedSession);
     }
     setState(() {});
   }
@@ -116,19 +159,20 @@ class _DetoxTimerPageState extends ConsumerState<DetoxTimerPage> with TickerProv
     _isCompleted = false;
     _remainingSeconds = 0;
     _sessionId = null;
+    _startTime = null;
     _pulseController.reset();
     setState(() {});
   }
 
   String get _formattedTime {
-    final min = (_remainingSeconds ~/ 60).toString().padLeft(2, '0');
-    final sec = (_remainingSeconds % 60).toString().padLeft(2, '0');
+    final displaySeconds = _remainingSeconds < 0 ? 0 : _remainingSeconds;
+    final min = (displaySeconds ~/ 60).toString().padLeft(2, '0');
+    final sec = (displaySeconds % 60).toString().padLeft(2, '0');
     return '$min:$sec';
   }
 
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
       appBar: AppBar(title: const Text('Detox Timer')),
       body: SingleChildScrollView(
@@ -136,30 +180,43 @@ class _DetoxTimerPageState extends ConsumerState<DetoxTimerPage> with TickerProv
         child: Column(
           children: [
             if (!_isRunning && !_isCompleted) ...[
-              Text('Choose your detox type', style: Theme.of(context).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.bold)),
+              Text('Choose your detox type',
+                  style: Theme.of(context)
+                      .textTheme
+                      .titleMedium
+                      ?.copyWith(fontWeight: FontWeight.bold)),
               const SizedBox(height: 12),
               ..._sessionTypes.map((s) => Padding(
-                padding: const EdgeInsets.only(bottom: 8),
-                child: _SessionTypeCard(
-                  label: s['label'] as String,
-                  icon: s['icon'] as IconData,
-                  color: s['color'] as Color,
-                  isSelected: _selectedType == s['type'],
-                  onTap: () => setState(() => _selectedType = s['type'] as DetoxSessionType),
-                ),
-              )),
+                    padding: const EdgeInsets.only(bottom: 8),
+                    child: _SessionTypeCard(
+                      label: s['label'] as String,
+                      icon: s['icon'] as IconData,
+                      color: s['color'] as Color,
+                      isSelected: _selectedType == s['type'],
+                      onTap: () => setState(
+                          () => _selectedType = s['type'] as DetoxSessionType),
+                    ),
+                  )),
               const SizedBox(height: 24),
-              Text('Duration', style: Theme.of(context).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.bold)),
+              Text('Duration',
+                  style: Theme.of(context)
+                      .textTheme
+                      .titleMedium
+                      ?.copyWith(fontWeight: FontWeight.bold)),
               const SizedBox(height: 12),
               Wrap(
                 spacing: 8,
                 runSpacing: 8,
-                children: _presets.map((p) => ChoiceChip(
-                  label: Text(p['label'] as String),
-                  selected: _selectedMinutes == p['minutes'],
-                  onSelected: (_) => setState(() => _selectedMinutes = p['minutes'] as int),
-                  selectedColor: AppTheme.primaryColor.withValues(alpha: 0.2),
-                )).toList(),
+                children: _presets
+                    .map((p) => ChoiceChip(
+                          label: Text(p['label'] as String),
+                          selected: _selectedMinutes == p['minutes'],
+                          onSelected: (_) => setState(
+                              () => _selectedMinutes = p['minutes'] as int),
+                          selectedColor:
+                              AppTheme.primaryColor.withValues(alpha: 0.2),
+                        ))
+                    .toList(),
               ),
               const SizedBox(height: 32),
               SizedBox(
@@ -171,7 +228,8 @@ class _DetoxTimerPageState extends ConsumerState<DetoxTimerPage> with TickerProv
                   label: const Text('Start Detox'),
                   style: ElevatedButton.styleFrom(
                     backgroundColor: AppTheme.primaryColor,
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(16)),
                   ),
                 ),
               ),
@@ -204,9 +262,15 @@ class _DetoxTimerPageState extends ConsumerState<DetoxTimerPage> with TickerProv
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Text(_formattedTime, style: const TextStyle(fontSize: 48, fontWeight: FontWeight.w800, color: Colors.white)),
+                        Text(_formattedTime,
+                            style: const TextStyle(
+                                fontSize: 48,
+                                fontWeight: FontWeight.w800,
+                                color: Colors.white)),
                         const SizedBox(height: 4),
-                        Text(_selectedType.name, style: const TextStyle(fontSize: 14, color: Colors.white70)),
+                        Text(_selectedType.name,
+                            style: const TextStyle(
+                                fontSize: 14, color: Colors.white70)),
                       ],
                     ),
                   ),
@@ -223,7 +287,8 @@ class _DetoxTimerPageState extends ConsumerState<DetoxTimerPage> with TickerProv
                     style: OutlinedButton.styleFrom(
                       foregroundColor: AppTheme.warningColor,
                       side: const BorderSide(color: AppTheme.warningColor),
-                      padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 14),
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 24, vertical: 14),
                     ),
                   ),
                   const SizedBox(width: 16),
@@ -234,7 +299,8 @@ class _DetoxTimerPageState extends ConsumerState<DetoxTimerPage> with TickerProv
                     style: OutlinedButton.styleFrom(
                       foregroundColor: AppTheme.errorColor,
                       side: const BorderSide(color: AppTheme.errorColor),
-                      padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 14),
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 24, vertical: 14),
                     ),
                   ),
                 ],
@@ -242,11 +308,14 @@ class _DetoxTimerPageState extends ConsumerState<DetoxTimerPage> with TickerProv
             ],
             if (_isCompleted) ...[
               const SizedBox(height: 40),
-              const Icon(Icons.check_circle, size: 80, color: AppTheme.successColor),
+              const Icon(Icons.check_circle,
+                  size: 80, color: AppTheme.successColor),
               const SizedBox(height: 16),
-              const Text('Session Complete!', style: TextStyle(fontSize: 24, fontWeight: FontWeight.w700)),
+              const Text('Session Complete!',
+                  style: TextStyle(fontSize: 24, fontWeight: FontWeight.w700)),
               const SizedBox(height: 8),
-              Text('You completed $_selectedMinutes minutes of ${_selectedType.name.replaceAll('_', ' ')}',
+              Text(
+                  'You completed $_selectedMinutes minutes of ${_selectedType.name.replaceAll('_', ' ')}',
                   style: const TextStyle(color: Colors.grey)),
               const SizedBox(height: 32),
               SizedBox(
@@ -256,7 +325,8 @@ class _DetoxTimerPageState extends ConsumerState<DetoxTimerPage> with TickerProv
                   onPressed: _resetTimer,
                   style: ElevatedButton.styleFrom(
                     backgroundColor: AppTheme.successColor,
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(16)),
                   ),
                   child: const Text('Done', style: TextStyle(fontSize: 16)),
                 ),
@@ -283,12 +353,21 @@ class _SessionTypeCard extends StatelessWidget {
   final Color color;
   final bool isSelected;
   final VoidCallback onTap;
-  const _SessionTypeCard({required this.label, required this.icon, required this.color, required this.isSelected, required this.onTap});
+  const _SessionTypeCard(
+      {required this.label,
+      required this.icon,
+      required this.color,
+      required this.isSelected,
+      required this.onTap});
 
   @override
   Widget build(BuildContext context) {
     return Material(
-      color: isSelected ? color.withValues(alpha: 0.15) : (Theme.of(context).brightness == Brightness.dark ? AppTheme.darkCard : AppTheme.lightCard),
+      color: isSelected
+          ? color.withValues(alpha: 0.15)
+          : (Theme.of(context).brightness == Brightness.dark
+              ? AppTheme.darkCard
+              : AppTheme.lightCard),
       borderRadius: BorderRadius.circular(16),
       child: InkWell(
         borderRadius: BorderRadius.circular(16),
@@ -303,7 +382,11 @@ class _SessionTypeCard extends StatelessWidget {
             children: [
               Icon(icon, color: color, size: 24),
               const SizedBox(width: 12),
-              Text(label, style: TextStyle(fontSize: 15, fontWeight: FontWeight.w600, color: isSelected ? color : null)),
+              Text(label,
+                  style: TextStyle(
+                      fontSize: 15,
+                      fontWeight: FontWeight.w600,
+                      color: isSelected ? color : null)),
               const Spacer(),
               if (isSelected) Icon(Icons.check_circle, color: color, size: 20),
             ],

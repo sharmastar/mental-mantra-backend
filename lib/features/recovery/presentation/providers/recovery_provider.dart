@@ -31,14 +31,15 @@ class RecoveryState {
     bool? isRecoveryActive,
     bool? isRecoveryLoading,
     bool clearError = false,
-  }) => RecoveryState(
-    stats: stats ?? this.stats,
-    isLoading: isLoading ?? this.isLoading,
-    error: clearError ? null : (error ?? this.error),
-    activeDetox: activeDetox ?? this.activeDetox,
-    isRecoveryActive: isRecoveryActive ?? this.isRecoveryActive,
-    isRecoveryLoading: isRecoveryLoading ?? this.isRecoveryLoading,
-  );
+  }) =>
+      RecoveryState(
+        stats: stats ?? this.stats,
+        isLoading: isLoading ?? this.isLoading,
+        error: clearError ? null : (error ?? this.error),
+        activeDetox: activeDetox ?? this.activeDetox,
+        isRecoveryActive: isRecoveryActive ?? this.isRecoveryActive,
+        isRecoveryLoading: isRecoveryLoading ?? this.isRecoveryLoading,
+      );
 }
 
 class RecoveryNotifier extends StateNotifier<RecoveryState> {
@@ -52,7 +53,8 @@ class RecoveryNotifier extends StateNotifier<RecoveryState> {
       final stats = await _repository.getStats();
       state = state.copyWith(stats: stats, isLoading: false);
     } catch (e) {
-      state = state.copyWith(isLoading: false, error: 'Failed to load recovery data');
+      state = state.copyWith(
+          isLoading: false, error: 'Failed to load recovery data');
     }
   }
 
@@ -130,7 +132,8 @@ class RecoveryNotifier extends StateNotifier<RecoveryState> {
   void clearError() => state = state.copyWith(clearError: true);
 }
 
-final recoveryProvider = StateNotifierProvider<RecoveryNotifier, RecoveryState>((ref) {
+final recoveryProvider =
+    StateNotifierProvider<RecoveryNotifier, RecoveryState>((ref) {
   final repo = ref.watch(recoveryRepositoryProvider);
   return RecoveryNotifier(repo);
 });

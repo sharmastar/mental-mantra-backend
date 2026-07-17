@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:mental_mantra/core/network/api_client.dart';
 import '../models/yoga_class.dart';
 import '../yoga_catalog.dart';
@@ -23,23 +24,31 @@ class YogaRepository {
           }).toList();
         }
       }
-    } catch (_) {}
+    } catch (e) {
+      debugPrint('YogaRepository.getClasses: $e');
+    }
     return YogaCatalog.classes;
   }
 
-  Future<void> logSession(String sessionName, String category, int durationMin) async {
+  Future<void> logSession(
+      String sessionName, String category, int durationMin) async {
     try {
       await ApiClient.post('/yoga', data: {
         'sessionName': sessionName,
         'category': category,
         'durationMin': durationMin,
       });
-    } catch (_) {}
+    } catch (e) {
+      debugPrint('YogaRepository.logSession: $e');
+    }
   }
 
   Future<void> toggleFavorite(String classId, bool isFavorite) async {
     try {
-      await ApiClient.put('/yoga/$classId/favorite', data: {'isFavorite': isFavorite});
-    } catch (_) {}
+      await ApiClient.put('/yoga/$classId/favorite',
+          data: {'isFavorite': isFavorite});
+    } catch (e) {
+      debugPrint('YogaRepository.toggleFavorite: $e');
+    }
   }
 }

@@ -176,17 +176,21 @@ class _ProfileInfoCardState extends State<ProfileInfoCard> {
             hintText: 'Enter your name or nickname',
             hintStyle: const TextStyle(color: Colors.white30),
             counterText: '',
-            prefixIcon: const Icon(Icons.person_outline, color: AppTheme.primaryColor),
+            prefixIcon:
+                const Icon(Icons.person_outline, color: AppTheme.primaryColor),
             filled: true,
             fillColor: Colors.white.withValues(alpha: 0.05),
-            contentPadding: const EdgeInsets.symmetric(vertical: 18, horizontal: 20),
+            contentPadding:
+                const EdgeInsets.symmetric(vertical: 18, horizontal: 20),
             enabledBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(16),
-              borderSide: BorderSide(color: Colors.white.withValues(alpha: 0.1)),
+              borderSide:
+                  BorderSide(color: Colors.white.withValues(alpha: 0.1)),
             ),
             focusedBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(16),
-              borderSide: const BorderSide(color: AppTheme.primaryColor, width: 2),
+              borderSide:
+                  const BorderSide(color: AppTheme.primaryColor, width: 2),
             ),
           ),
           onChanged: (val) {
@@ -310,7 +314,8 @@ class _ProfileInfoCardState extends State<ProfileInfoCard> {
                   },
                   child: AnimatedContainer(
                     duration: const Duration(milliseconds: 200),
-                    padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 20, vertical: 16),
                     decoration: BoxDecoration(
                       color: isSelected
                           ? AppTheme.primaryColor.withValues(alpha: 0.2)
@@ -325,7 +330,8 @@ class _ProfileInfoCardState extends State<ProfileInfoCard> {
                     ),
                     child: Row(
                       children: [
-                        const Icon(Icons.public, color: Colors.white54, size: 20),
+                        const Icon(Icons.public,
+                            color: Colors.white54, size: 20),
                         const SizedBox(width: 14),
                         Expanded(
                           child: Text(
@@ -333,12 +339,15 @@ class _ProfileInfoCardState extends State<ProfileInfoCard> {
                             style: TextStyle(
                               fontSize: 15,
                               color: isSelected ? Colors.white : Colors.white70,
-                              fontWeight: isSelected ? FontWeight.w600 : FontWeight.w400,
+                              fontWeight: isSelected
+                                  ? FontWeight.w600
+                                  : FontWeight.w400,
                             ),
                           ),
                         ),
                         if (isSelected)
-                          const Icon(Icons.check_circle, color: AppTheme.primaryColor, size: 20),
+                          const Icon(Icons.check_circle,
+                              color: AppTheme.primaryColor, size: 20),
                       ],
                     ),
                   ),
@@ -398,7 +407,8 @@ class _ProfileInfoCardState extends State<ProfileInfoCard> {
                   },
                   child: AnimatedContainer(
                     duration: const Duration(milliseconds: 200),
-                    padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 18),
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 20, vertical: 18),
                     decoration: BoxDecoration(
                       color: isSelected
                           ? AppTheme.primaryColor.withValues(alpha: 0.2)
@@ -419,7 +429,9 @@ class _ProfileInfoCardState extends State<ProfileInfoCard> {
                             style: TextStyle(
                               fontSize: 15,
                               color: isSelected ? Colors.white : Colors.white70,
-                              fontWeight: isSelected ? FontWeight.w600 : FontWeight.w400,
+                              fontWeight: isSelected
+                                  ? FontWeight.w600
+                                  : FontWeight.w400,
                             ),
                           ),
                         ),
@@ -430,13 +442,18 @@ class _ProfileInfoCardState extends State<ProfileInfoCard> {
                           decoration: BoxDecoration(
                             shape: BoxShape.circle,
                             border: Border.all(
-                              color: isSelected ? AppTheme.primaryColor : Colors.white38,
+                              color: isSelected
+                                  ? AppTheme.primaryColor
+                                  : Colors.white38,
                               width: 2,
                             ),
-                            color: isSelected ? AppTheme.primaryColor : Colors.transparent,
+                            color: isSelected
+                                ? AppTheme.primaryColor
+                                : Colors.transparent,
                           ),
                           child: isSelected
-                              ? const Icon(Icons.check, color: Colors.white, size: 12)
+                              ? const Icon(Icons.check,
+                                  color: Colors.white, size: 12)
                               : null,
                         ),
                       ],

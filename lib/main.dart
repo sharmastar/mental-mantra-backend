@@ -8,8 +8,10 @@ import 'core/router/app_router.dart';
 import 'core/theme/app_theme.dart';
 import 'core/theme/theme_provider.dart';
 import 'core/services/notification_service.dart';
+import 'core/services/tts_service.dart';
 import 'core/storage/secure_storage.dart';
 import 'core/storage/hive_storage.dart';
+import 'core/services/observability_service.dart';
 import 'core/security/session_timeout_wrapper.dart';
 
 Future<void> main() async {
@@ -27,23 +29,36 @@ Future<void> main() async {
     DeviceOrientation.portraitDown,
   ]);
 
-  try {
-    await HiveStorage.init();
-  } catch (e) {
-    debugPrint('[Main] Hive init error: $e');
-  }
-
-  try {
-    await SecureStorage.init();
-  } catch (e) {
-    debugPrint('[Main] SecureStorage init error: $e');
-  }
-
-  try {
-    await AppConfig.init();
-  } catch (e) {
-    debugPrint('[Main] AppConfig init error: $e');
-  }
+  await Future.wait([
+    Future(() async {
+      try {
+        await ObservabilityService.init().timeout(const Duration(seconds: 3));
+      } catch (e) {
+        debugPrint('[Main] ObservabilityService init error/timeout: $e');
+      }
+    }),
+    Future(() async {
+      try {
+        await HiveStorage.init().timeout(const Duration(seconds: 3));
+      } catch (e) {
+        debugPrint('[Main] Hive init error/timeout: $e');
+      }
+    }),
+    Future(() async {
+      try {
+        await SecureStorage.init().timeout(const Duration(seconds: 3));
+      } catch (e) {
+        debugPrint('[Main] SecureStorage init error/timeout: $e');
+      }
+    }),
+    Future(() async {
+      try {
+        await AppConfig.init().timeout(const Duration(seconds: 3));
+      } catch (e) {
+        debugPrint('[Main] AppConfig init error/timeout: $e');
+      }
+    }),
+  ]);
 
   try {
     ApiClient.init();
@@ -59,8 +74,15 @@ Future<void> main() async {
 Future<void> _initBackgroundServices() async {
   try {
     await NotificationService.init();
+    await NotificationService.scheduleDefaultReminders();
   } catch (e) {
     debugPrint('[Main] NotificationService init error: $e');
+  }
+
+  try {
+    await TtsService.init();
+  } catch (e) {
+    debugPrint('[Main] TtsService init error: $e');
   }
 }
 
@@ -80,14 +102,7 @@ class MentalMantraApp extends ConsumerWidget {
       themeMode: themeMode,
       routerConfig: router,
       builder: (context, child) {
-        return MediaQuery(
-          data: MediaQuery.of(context).copyWith(
-            textScaler: TextScaler.linear(
-              MediaQuery.of(context).textScaler.scale(1.0).clamp(0.8, 1.3),
-            ),
-          ),
-          child: SessionTimeoutWrapper(child: child!),
-        );
+        return SessionTimeoutWrapper(child: child ?? const SizedBox.shrink());
       },
     );
   }

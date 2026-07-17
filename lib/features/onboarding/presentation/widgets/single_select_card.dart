@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import '../../data/models/assessment_question.dart';
+import '../../../../core/theme/app_theme.dart';
 
 class SingleSelectCard extends StatelessWidget {
   final AssessmentQuestion question;
@@ -27,7 +28,8 @@ class SingleSelectCard extends StatelessWidget {
         final isSelected = selectedValue == option.value;
 
         return Padding(
-          padding: EdgeInsets.only(bottom: index == question.options.length - 1 ? 0 : 10),
+          padding: EdgeInsets.only(
+              bottom: index == question.options.length - 1 ? 0 : 10),
           child: TweenAnimationBuilder<double>(
             tween: Tween(begin: 0, end: 1),
             duration: Duration(milliseconds: 300 + (index * 50)),
@@ -49,12 +51,19 @@ class SingleSelectCard extends StatelessWidget {
               child: AnimatedContainer(
                 duration: const Duration(milliseconds: 250),
                 curve: Curves.easeOutCubic,
-                padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
                 decoration: BoxDecoration(
                   color: isSelected
                       ? (isLight
-                          ? Theme.of(context).colorScheme.primary.withValues(alpha: 0.12)
-                          : Theme.of(context).colorScheme.primary.withValues(alpha: 0.2))
+                          ? Theme.of(context)
+                              .colorScheme
+                              .primary
+                              .withValues(alpha: 0.12)
+                          : Theme.of(context)
+                              .colorScheme
+                              .primary
+                              .withValues(alpha: 0.2))
                       : (isLight
                           ? Colors.white
                           : Colors.white.withValues(alpha: 0.06)),
@@ -70,7 +79,10 @@ class SingleSelectCard extends StatelessWidget {
                   boxShadow: isSelected && !isLight
                       ? [
                           BoxShadow(
-                            color: Theme.of(context).colorScheme.primary.withValues(alpha: 0.2),
+                            color: Theme.of(context)
+                                .colorScheme
+                                .primary
+                                .withValues(alpha: 0.2),
                             blurRadius: 12,
                             offset: const Offset(0, 4),
                           ),
@@ -80,7 +92,11 @@ class SingleSelectCard extends StatelessWidget {
                 child: Row(
                   children: [
                     if (option.icon != null) ...[
-                      Icon(option.icon, color: isSelected ? Theme.of(context).colorScheme.primary : Colors.white54, size: 22),
+                      Icon(option.icon,
+                          color: isSelected
+                              ? Theme.of(context).colorScheme.primary
+                              : Colors.white54,
+                          size: 22),
                       const SizedBox(width: 14),
                     ],
                     Expanded(
@@ -91,12 +107,16 @@ class SingleSelectCard extends StatelessWidget {
                             option.label,
                             style: TextStyle(
                               fontSize: 15,
-                              fontWeight: isSelected ? FontWeight.w600 : FontWeight.w400,
+                              fontWeight: isSelected
+                                  ? FontWeight.w600
+                                  : FontWeight.w400,
                               color: isLight
                                   ? (isSelected
                                       ? Theme.of(context).colorScheme.primary
-                                      : const Color(0xFF1A1A2E))
-                                  : (isSelected ? Colors.white : Colors.white70),
+                                      : AppTheme.darkBg)
+                                  : (isSelected
+                                      ? Colors.white
+                                      : Colors.white70),
                             ),
                           ),
                           if (option.subtitle != null) ...[
@@ -105,7 +125,8 @@ class SingleSelectCard extends StatelessWidget {
                               option.subtitle!,
                               style: TextStyle(
                                 fontSize: 12,
-                                color: (isLight ? Colors.black38 : Colors.white38),
+                                color:
+                                    (isLight ? Colors.black38 : Colors.white38),
                                 height: 1.3,
                               ),
                             ),
@@ -125,12 +146,15 @@ class SingleSelectCard extends StatelessWidget {
                         border: Border.all(
                           color: isSelected
                               ? Theme.of(context).colorScheme.primary
-                              : (isLight ? Colors.grey.withValues(alpha: 0.4) : Colors.white38),
+                              : (isLight
+                                  ? Colors.grey.withValues(alpha: 0.4)
+                                  : Colors.white38),
                           width: 2,
                         ),
                       ),
                       child: isSelected
-                          ? const Icon(Icons.check, color: Colors.white, size: 16)
+                          ? const Icon(Icons.check,
+                              color: Colors.white, size: 16)
                           : null,
                     ),
                   ],

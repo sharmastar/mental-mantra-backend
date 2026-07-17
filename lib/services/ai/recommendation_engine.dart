@@ -39,13 +39,20 @@ class ContentCurator {
       'I release what I cannot change and embrace what I can.',
     ];
     if (concerns.contains('Anxiety')) {
-      all.insertAll(0, ['I am safe in this moment.', 'This feeling will pass.']);
+      all.insertAll(
+          0, ['I am safe in this moment.', 'This feeling will pass.']);
     }
     if (concerns.contains('Sleep Quality')) {
-      all.insertAll(0, ['I release the day and welcome rest.', 'Sleep restores my mind and body.']);
+      all.insertAll(0, [
+        'I release the day and welcome rest.',
+        'Sleep restores my mind and body.'
+      ]);
     }
     if (concerns.contains('Motivation')) {
-      all.insertAll(0, ['Small steps lead to big changes.', 'I have the power to create change.']);
+      all.insertAll(0, [
+        'Small steps lead to big changes.',
+        'I have the power to create change.'
+      ]);
     }
     return all;
   }

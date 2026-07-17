@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import '../theme/app_theme.dart';
 import '../../features/auth/presentation/pages/splash_page.dart';
 import '../../features/fitness/presentation/pages/fitness_page.dart';
 import '../../features/auth/presentation/pages/login_page.dart';
@@ -32,7 +33,7 @@ import '../../features/yoga/presentation/pages/yoga_list_page.dart';
 import '../../features/yoga/presentation/pages/yoga_session_page.dart';
 import '../../features/achievements/presentation/pages/achievements_page.dart';
 import '../../features/sleep/presentation/pages/sleep_page.dart';
-import '../../features/ai/presentation/pages/ai_chat_page.dart';
+import '../../features/nova/presentation/pages/nova_chat_screen.dart';
 import '../../features/video/presentation/pages/meditation_videos_page.dart';
 import '../../features/video/presentation/pages/help_video_page.dart';
 import '../../features/wellness/presentation/pages/wellness_dashboard_page.dart';
@@ -55,6 +56,11 @@ import '../../features/games/presentation/pages/brain_games_page.dart';
 import '../../features/therapy/presentation/pages/therapy_tools_hub.dart';
 import '../../features/therapy/presentation/pages/venting_space_page.dart';
 import '../../features/content/presentation/pages/content_feed_page.dart';
+import '../../features/mood/presentation/pages/mood_report_page.dart';
+import '../../features/mood/presentation/pages/mood_timeline_page.dart';
+import '../../features/recovery/presentation/pages/unified_recovery_page.dart';
+import '../../features/recovery/presentation/pages/craving_sos_page.dart';
+import '../../features/emergency/presentation/pages/safety_plan_page.dart';
 
 class AppRoutes {
   static const splash = '/';
@@ -109,9 +115,17 @@ class AppRoutes {
   static const analytics = '/home/analytics';
   static const dailyTasks = '/home/daily-tasks';
   static const checkin = '/home/checkin';
+  // Phase 1 — Mood Intelligence
+  static const moodTimeline = '/home/mood/timeline';
+  static const moodReport = '/home/mood/report';
+  // Phase 2 — Recovery & Safety
+  static const unifiedRecovery = '/home/unified-recovery';
+  static const cravingSos = '/craving-sos';
+  static const safetyPlan = '/home/safety-plan';
 }
 
-Page<void> _buildPageWithTransition(BuildContext context, GoRouterState state, Widget child) {
+Page<void> _buildPageWithTransition(
+    BuildContext context, GoRouterState state, Widget child) {
   return CustomTransitionPage<void>(
     key: state.pageKey,
     child: child,
@@ -178,53 +192,72 @@ final routerProvider = Provider<GoRouter>((ref) {
     routes: [
       GoRoute(
         path: AppRoutes.splash,
-        pageBuilder: (context, state) => _buildPageWithTransition(context, state, const SplashPage()),
+        pageBuilder: (context, state) =>
+            _buildPageWithTransition(context, state, const SplashPage()),
       ),
       GoRoute(
         path: AppRoutes.landing,
-        pageBuilder: (context, state) => _buildPageWithTransition(context, state, const LandingPage()),
+        pageBuilder: (context, state) =>
+            _buildPageWithTransition(context, state, const LandingPage()),
       ),
       GoRoute(
         path: AppRoutes.wellnessDashboard,
-        pageBuilder: (context, state) => _buildPageWithTransition(context, state, const WellnessDashboardPage()),
+        pageBuilder: (context, state) => _buildPageWithTransition(
+            context, state, const WellnessDashboardPage()),
       ),
       GoRoute(
         path: AppRoutes.login,
         pageBuilder: (context, state) {
           final redirect = state.uri.queryParameters['redirect'];
-          return _buildPageWithTransition(context, state, LoginPage(returnRoute: redirect));
+          return _buildPageWithTransition(
+              context, state, LoginPage(returnRoute: redirect));
         },
       ),
       GoRoute(
         path: AppRoutes.signup,
-        pageBuilder: (context, state) => _buildPageWithTransition(context, state, const SignupPage()),
+        pageBuilder: (context, state) =>
+            _buildPageWithTransition(context, state, const SignupPage()),
       ),
       GoRoute(
         path: AppRoutes.forgotPassword,
-        pageBuilder: (context, state) => _buildPageWithTransition(context, state, const ForgotPasswordPage()),
+        pageBuilder: (context, state) => _buildPageWithTransition(
+            context, state, const ForgotPasswordPage()),
       ),
       GoRoute(
         path: AppRoutes.otp,
         pageBuilder: (context, state) {
           final email = state.extra as String? ?? '';
-          return _buildPageWithTransition(context, state, OtpPage(email: email));
+          return _buildPageWithTransition(
+              context, state, OtpPage(email: email));
         },
       ),
       GoRoute(
         path: AppRoutes.onboarding,
-        pageBuilder: (context, state) => _buildPageWithTransition(context, state, const OnboardingPage()),
+        pageBuilder: (context, state) =>
+            _buildPageWithTransition(context, state, const OnboardingPage()),
       ),
       GoRoute(
         path: AppRoutes.emergency,
-        pageBuilder: (context, state) => _buildPageWithTransition(context, state, const EmergencyPage()),
+        pageBuilder: (context, state) =>
+            _buildPageWithTransition(context, state, const EmergencyPage()),
       ),
       GoRoute(
         path: AppRoutes.admin,
-        pageBuilder: (context, state) => _buildPageWithTransition(context, state, const AdminDashboardPage()),
+        pageBuilder: (context, state) => _buildPageWithTransition(
+            context, state, const AdminDashboardPage()),
         routes: [
-          GoRoute(path: 'content', pageBuilder: (context, state) => _buildPageWithTransition(context, state, const ContentManagementPage())),
-          GoRoute(path: 'users', pageBuilder: (context, state) => _buildPageWithTransition(context, state, const UserManagementPage())),
-          GoRoute(path: 'analytics', pageBuilder: (context, state) => _buildPageWithTransition(context, state, const AnalyticsPage())),
+          GoRoute(
+              path: 'content',
+              pageBuilder: (context, state) => _buildPageWithTransition(
+                  context, state, const ContentManagementPage())),
+          GoRoute(
+              path: 'users',
+              pageBuilder: (context, state) => _buildPageWithTransition(
+                  context, state, const UserManagementPage())),
+          GoRoute(
+              path: 'analytics',
+              pageBuilder: (context, state) => _buildPageWithTransition(
+                  context, state, const AnalyticsPage())),
         ],
       ),
       ShellRoute(
@@ -232,174 +265,239 @@ final routerProvider = Provider<GoRouter>((ref) {
         routes: [
           GoRoute(
             path: AppRoutes.dashboard,
-            pageBuilder: (context, state) => _buildPageWithTransition(context, state, const DashboardPage()),
+            pageBuilder: (context, state) =>
+                _buildPageWithTransition(context, state, const DashboardPage()),
           ),
           GoRoute(
             path: AppRoutes.journal,
-            pageBuilder: (context, state) => _buildPageWithTransition(context, state, const JournalListPage()),
-          ),
-          GoRoute(
-            path: 'journal/new',
-            pageBuilder: (context, state) => _buildPageWithTransition(context, state, const JournalEntryPage()),
-          ),
-          GoRoute(
-            path: 'journal/:id',
-            pageBuilder: (context, state) {
-              final id = state.pathParameters['id'] ?? '';
-              return _buildPageWithTransition(context, state, JournalDetailPage(entryId: id));
-            },
+            pageBuilder: (context, state) => _buildPageWithTransition(
+                context, state, const JournalListPage()),
+            routes: [
+              GoRoute(
+                path: 'new',
+                pageBuilder: (context, state) => _buildPageWithTransition(
+                    context, state, const JournalEntryPage()),
+              ),
+              GoRoute(
+                path: ':id',
+                pageBuilder: (context, state) {
+                  final id = state.pathParameters['id'] ?? '';
+                  return _buildPageWithTransition(
+                      context, state, JournalDetailPage(entryId: id));
+                },
+              ),
+            ],
           ),
           GoRoute(
             path: AppRoutes.mood,
-            pageBuilder: (context, state) => _buildPageWithTransition(context, state, const MoodPage()),
+            pageBuilder: (context, state) =>
+                _buildPageWithTransition(context, state, const MoodPage()),
           ),
           GoRoute(
             path: AppRoutes.goals,
-            pageBuilder: (context, state) => _buildPageWithTransition(context, state, const GoalsPage()),
+            pageBuilder: (context, state) =>
+                _buildPageWithTransition(context, state, const GoalsPage()),
           ),
           GoRoute(
             path: AppRoutes.habits,
-            pageBuilder: (context, state) => _buildPageWithTransition(context, state, const HabitsPage()),
+            pageBuilder: (context, state) =>
+                _buildPageWithTransition(context, state, const HabitsPage()),
           ),
           GoRoute(
             path: AppRoutes.profile,
-            pageBuilder: (context, state) => _buildPageWithTransition(context, state, const ProfilePage()),
+            pageBuilder: (context, state) =>
+                _buildPageWithTransition(context, state, const ProfilePage()),
           ),
           GoRoute(
             path: AppRoutes.settings,
-            pageBuilder: (context, state) => _buildPageWithTransition(context, state, const SettingsPage()),
+            pageBuilder: (context, state) =>
+                _buildPageWithTransition(context, state, const SettingsPage()),
             routes: [
               GoRoute(
                 path: 'sync',
-                pageBuilder: (context, state) => _buildPageWithTransition(context, state, const SyncDashboardPage()),
+                pageBuilder: (context, state) => _buildPageWithTransition(
+                    context, state, const SyncDashboardPage()),
               ),
             ],
           ),
           GoRoute(
             path: AppRoutes.meditation,
-            pageBuilder: (context, state) => _buildPageWithTransition(context, state, const MeditationPage()),
+            pageBuilder: (context, state) => _buildPageWithTransition(
+                context, state, const MeditationPage()),
             routes: [
               GoRoute(
                 path: 'player',
                 pageBuilder: (context, state) {
                   final args = state.extra as Map<String, dynamic>?;
-                  return _buildPageWithTransition(context, state, MeditationPlayerPage(args: args ?? {}));
+                  return _buildPageWithTransition(
+                      context, state, MeditationPlayerPage(args: args ?? {}));
                 },
               ),
               GoRoute(
                 path: 'timer',
-                pageBuilder: (context, state) => _buildPageWithTransition(context, state, const MeditationTimerPage()),
+                pageBuilder: (context, state) => _buildPageWithTransition(
+                    context, state, const MeditationTimerPage()),
               ),
               GoRoute(
                 path: 'breathing',
-                pageBuilder: (context, state) => _buildPageWithTransition(context, state, const BreathingExercisesPage()),
+                pageBuilder: (context, state) => _buildPageWithTransition(
+                    context, state, const BreathingExercisesPage()),
               ),
             ],
           ),
           GoRoute(
             path: AppRoutes.music,
-            pageBuilder: (context, state) => _buildPageWithTransition(context, state, const MusicPage()),
+            pageBuilder: (context, state) =>
+                _buildPageWithTransition(context, state, const MusicPage()),
             routes: [
               GoRoute(
                 path: 'player',
-                pageBuilder: (context, state) => _buildPageWithTransition(context, state, const MusicPlayerPage(args: {})),
+                pageBuilder: (context, state) => _buildPageWithTransition(
+                    context, state, const MusicPlayerPage(args: {})),
               ),
               GoRoute(
                 path: 'full-player',
-                pageBuilder: (context, state) => _buildPageWithTransition(context, state, const FullScreenPlayer()),
+                pageBuilder: (context, state) => _buildPageWithTransition(
+                    context, state, const FullScreenPlayer()),
               ),
             ],
           ),
           GoRoute(
             path: AppRoutes.yoga,
-            pageBuilder: (context, state) => _buildPageWithTransition(context, state, const YogaListPage()),
+            pageBuilder: (context, state) =>
+                _buildPageWithTransition(context, state, const YogaListPage()),
             routes: [
               GoRoute(
                 path: ':id',
                 pageBuilder: (context, state) {
                   final id = state.pathParameters['id'] ?? '';
-                  return _buildPageWithTransition(context, state, YogaSessionPage(sessionId: id));
+                  return _buildPageWithTransition(
+                      context, state, YogaSessionPage(sessionId: id));
                 },
               ),
             ],
           ),
           GoRoute(
             path: AppRoutes.achievements,
-            pageBuilder: (context, state) => _buildPageWithTransition(context, state, const AchievementsPage()),
+            pageBuilder: (context, state) => _buildPageWithTransition(
+                context, state, const AchievementsPage()),
           ),
           GoRoute(
             path: AppRoutes.sleep,
-            pageBuilder: (context, state) => _buildPageWithTransition(context, state, const SleepPage()),
+            pageBuilder: (context, state) =>
+                _buildPageWithTransition(context, state, const SleepPage()),
           ),
           GoRoute(
             path: AppRoutes.fitness,
-            pageBuilder: (context, state) => _buildPageWithTransition(context, state, const FitnessPage()),
+            pageBuilder: (context, state) =>
+                _buildPageWithTransition(context, state, const FitnessPage()),
           ),
           GoRoute(
             path: AppRoutes.aiChat,
-            pageBuilder: (context, state) => _buildPageWithTransition(context, state, const AiChatPage()),
+            pageBuilder: (context, state) =>
+                _buildPageWithTransition(context, state, const NovaChatScreen()),
           ),
           GoRoute(
             path: AppRoutes.videos,
-            pageBuilder: (context, state) => _buildPageWithTransition(context, state, const MeditationVideosPage()),
+            pageBuilder: (context, state) => _buildPageWithTransition(
+                context, state, const MeditationVideosPage()),
           ),
           GoRoute(
             path: AppRoutes.recovery,
-            pageBuilder: (context, state) => _buildPageWithTransition(context, state, const RecoveryPage()),
+            pageBuilder: (context, state) =>
+                _buildPageWithTransition(context, state, const RecoveryPage()),
           ),
           GoRoute(
             path: AppRoutes.urgeLog,
-            pageBuilder: (context, state) => _buildPageWithTransition(context, state, const UrgeLoggerPage()),
+            pageBuilder: (context, state) => _buildPageWithTransition(
+                context, state, const UrgeLoggerPage()),
           ),
           GoRoute(
             path: AppRoutes.detoxTimer,
-            pageBuilder: (context, state) => _buildPageWithTransition(context, state, const DetoxTimerPage()),
+            pageBuilder: (context, state) => _buildPageWithTransition(
+                context, state, const DetoxTimerPage()),
           ),
           GoRoute(
             path: AppRoutes.recoveryGoals,
-            pageBuilder: (context, state) => _buildPageWithTransition(context, state, const RecoveryGoalsPage()),
+            pageBuilder: (context, state) => _buildPageWithTransition(
+                context, state, const RecoveryGoalsPage()),
           ),
           GoRoute(
             path: AppRoutes.helpVideos,
-            pageBuilder: (context, state) => _buildPageWithTransition(context, state, const HelpVideoPage()),
+            pageBuilder: (context, state) =>
+                _buildPageWithTransition(context, state, const HelpVideoPage()),
           ),
           GoRoute(
             path: AppRoutes.discover,
-            pageBuilder: (context, state) => _buildPageWithTransition(context, state, const ContentFeedPage()),
+            pageBuilder: (context, state) => _buildPageWithTransition(
+                context, state, const ContentFeedPage()),
           ),
           GoRoute(
             path: AppRoutes.spiritual,
-            pageBuilder: (context, state) => _buildPageWithTransition(context, state, const SpiritualPage()),
+            pageBuilder: (context, state) =>
+                _buildPageWithTransition(context, state, const SpiritualPage()),
           ),
           GoRoute(
             path: AppRoutes.nutrition,
-            pageBuilder: (context, state) => _buildPageWithTransition(context, state, const NutritionPage()),
+            pageBuilder: (context, state) =>
+                _buildPageWithTransition(context, state, const NutritionPage()),
           ),
           GoRoute(
             path: AppRoutes.games,
-            pageBuilder: (context, state) => _buildPageWithTransition(context, state, const BrainGamesPage()),
+            pageBuilder: (context, state) => _buildPageWithTransition(
+                context, state, const BrainGamesPage()),
           ),
           GoRoute(
             path: AppRoutes.therapyHub,
-            pageBuilder: (context, state) => _buildPageWithTransition(context, state, const TherapyToolsHub()),
+            pageBuilder: (context, state) => _buildPageWithTransition(
+                context, state, const TherapyToolsHub()),
           ),
           GoRoute(
             path: AppRoutes.ventingSpace,
-            pageBuilder: (context, state) => _buildPageWithTransition(context, state, const VentingSpacePage()),
+            pageBuilder: (context, state) => _buildPageWithTransition(
+                context, state, const VentingSpacePage()),
           ),
           GoRoute(
             path: AppRoutes.analytics,
-            pageBuilder: (context, state) => _buildPageWithTransition(context, state, const AnalyticsDashboardPage()),
+            pageBuilder: (context, state) => _buildPageWithTransition(
+                context, state, const AnalyticsDashboardPage()),
           ),
           GoRoute(
             path: AppRoutes.dailyTasks,
-            pageBuilder: (context, state) => _buildPageWithTransition(context, state, const DailyTasksPage()),
+            pageBuilder: (context, state) => _buildPageWithTransition(
+                context, state, const DailyTasksPage()),
           ),
           GoRoute(
             path: AppRoutes.checkin,
-            pageBuilder: (context, state) => _buildPageWithTransition(context, state, const OnboardingPage(isRecheckin: true)),
+            pageBuilder: (context, state) => _buildPageWithTransition(
+                context, state, const OnboardingPage(isRecheckin: true)),
+          ),
+          GoRoute(
+            path: AppRoutes.moodTimeline,
+            pageBuilder: (context, state) => _buildPageWithTransition(
+                context, state, const MoodTimelinePage()),
+          ),
+          GoRoute(
+            path: AppRoutes.moodReport,
+            pageBuilder: (context, state) => _buildPageWithTransition(
+                context, state, const MoodReportPage()),
+          ),
+          GoRoute(
+            path: AppRoutes.unifiedRecovery,
+            pageBuilder: (context, state) => _buildPageWithTransition(
+                context, state, const UnifiedRecoveryPage()),
+          ),
+          GoRoute(
+            path: AppRoutes.safetyPlan,
+            pageBuilder: (context, state) => _buildPageWithTransition(
+                context, state, const SafetyPlanPage()),
           ),
         ],
+      ),
+      GoRoute(
+        path: AppRoutes.cravingSos,
+        pageBuilder: (context, state) => _buildPageWithTransition(
+            context, state, const CravingSosPage()),
       ),
     ],
     errorBuilder: (context, state) => Scaffold(
@@ -409,15 +507,28 @@ final routerProvider = Provider<GoRouter>((ref) {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              const Icon(Icons.error_outline, size: 64, color: Colors.red),
-              const SizedBox(height: 16),
-              Text('Page not found', style: Theme.of(context).textTheme.headlineSmall),
+              Icon(
+                Icons.eco_rounded,
+                size: 56,
+                color: AppTheme.primaryColor.withValues(alpha: 0.6),
+              ),
+              const SizedBox(height: 20),
+              Text('Something went wrong',
+                  style: Theme.of(context).textTheme.headlineSmall),
               const SizedBox(height: 8),
-              Text('${state.uri}', style: Theme.of(context).textTheme.bodyMedium, textAlign: TextAlign.center),
-              const SizedBox(height: 24),
+              Text(
+                'This page isn\'t available right now. Let\'s head back.',
+                style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                  color: Theme.of(context).brightness == Brightness.dark
+                      ? Colors.white54
+                      : Colors.black45,
+                ),
+                textAlign: TextAlign.center,
+              ),
+              const SizedBox(height: 28),
               FilledButton.icon(
                 onPressed: () => context.go(AppRoutes.dashboard),
-                icon: const Icon(Icons.home),
+                icon: const Icon(Icons.home_rounded),
                 label: const Text('Go Home'),
               ),
             ],

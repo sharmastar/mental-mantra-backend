@@ -55,7 +55,8 @@ class MusicPage extends ConsumerWidget {
                       mainAxisAlignment: MainAxisAlignment.end,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        const Icon(Icons.music_note_rounded, color: Colors.white70, size: 36),
+                        const Icon(Icons.music_note_rounded,
+                            color: Colors.white70, size: 36),
                         const SizedBox(height: 8),
                         const Text(
                           'Music Therapy',
@@ -86,7 +87,10 @@ class MusicPage extends ConsumerWidget {
             padding: const EdgeInsets.fromLTRB(20, 16, 20, 32),
             sliver: SliverList(
               delegate: SliverChildListDelegate(
-                categories.map((cat) => _buildCategorySection(cat, context, ref, isDark, theme)).toList(),
+                categories
+                    .map((cat) =>
+                        _buildCategorySection(cat, context, ref, isDark, theme))
+                    .toList(),
               ),
             ),
           ),
@@ -121,7 +125,9 @@ class MusicPage extends ConsumerWidget {
               ),
               const Spacer(),
               TextButton(
-                onPressed: () => ref.read(audioPlayerProvider.notifier).playCategory(cat.name),
+                onPressed: () => ref
+                    .read(audioPlayerProvider.notifier)
+                    .playCategory(cat.name),
                 child: Text(
                   'Play All',
                   style: TextStyle(
@@ -171,15 +177,19 @@ class _MusicTrackCard extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final currentTrack = ref.watch(currentTrackProvider);
-    final isActive = currentTrack?.id == track.id && ref.watch(isPlayingProvider);
+    final isActive =
+        currentTrack?.id == track.id && ref.watch(isPlayingProvider);
 
     return Container(
       width: 160,
       margin: const EdgeInsets.only(right: 14),
       child: PremiumBounceInteraction(
         onTap: () {
-          final category = MusicCatalog.categories.firstWhere((c) => c.name == track.category);
-          ref.read(audioPlayerProvider.notifier).playTrack(track, queue: category.tracks);
+          final category = MusicCatalog.categories
+              .firstWhere((c) => c.name == track.category);
+          ref
+              .read(audioPlayerProvider.notifier)
+              .playTrack(track, queue: category.tracks);
         },
         child: Container(
           decoration: BoxDecoration(
@@ -232,7 +242,8 @@ class _MusicTrackCard extends ConsumerWidget {
                 const SizedBox(height: 6),
                 Row(
                   children: [
-                    const Icon(Icons.schedule_rounded, size: 12, color: Colors.grey),
+                    const Icon(Icons.schedule_rounded,
+                        size: 12, color: Colors.grey),
                     const SizedBox(width: 4),
                     Text(
                       track.formattedDuration,
@@ -244,7 +255,9 @@ class _MusicTrackCard extends ConsumerWidget {
                     ),
                     const Spacer(),
                     Icon(
-                      isActive ? Icons.pause_circle_filled_rounded : Icons.play_circle_fill_rounded,
+                      isActive
+                          ? Icons.pause_circle_filled_rounded
+                          : Icons.play_circle_fill_rounded,
                       color: track.color,
                       size: 24,
                     ),
@@ -255,6 +268,9 @@ class _MusicTrackCard extends ConsumerWidget {
           ),
         ),
       ),
-    ).animate().fadeIn(duration: 350.ms, delay: (index * 50).ms).slideX(begin: 0.1, end: 0);
+    )
+        .animate()
+        .fadeIn(duration: 350.ms, delay: (index * 50).ms)
+        .slideX(begin: 0.1, end: 0);
   }
 }

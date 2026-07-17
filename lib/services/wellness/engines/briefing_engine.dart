@@ -15,7 +15,8 @@ class BriefingEngine {
     final name = (userName?.isNotEmpty == true) ? userName! : 'there';
     final greeting = _morningGreeting(ctx, name);
 
-    final yesterdaySummary = _yesterdaySummary(sleepHours, yesterdayMood, previousMood, breathingStreak);
+    final yesterdaySummary = _yesterdaySummary(
+        sleepHours, yesterdayMood, previousMood, breathingStreak);
     final todayFocus = _todayFocus(ctx, score);
 
     final reflection = _eveningReflection(score);
@@ -41,7 +42,8 @@ class BriefingEngine {
   }) {
     final name = (userName?.isNotEmpty == true) ? userName! : 'there';
 
-    final completionSummary = _eveningCompletionSummary(activitiesCompleted, morningAnxiety, eveningAnxiety, score);
+    final completionSummary = _eveningCompletionSummary(
+        activitiesCompleted, morningAnxiety, eveningAnxiety, score);
     _windDownRecommendation(ctx);
     final reflection = _eveningReflection(score);
 
@@ -56,7 +58,11 @@ class BriefingEngine {
 
   String _morningGreeting(PersonalizationContext ctx, String name) {
     final hour = DateTime.now().hour;
-    final timeGreeting = hour < 12 ? 'Good morning' : hour < 17 ? 'Good afternoon' : 'Good evening';
+    final timeGreeting = hour < 12
+        ? 'Good morning'
+        : hour < 17
+            ? 'Good afternoon'
+            : 'Good evening';
 
     if (!ctx.hasClassification) return '$timeGreeting, $name.';
 
@@ -82,7 +88,8 @@ class BriefingEngine {
     }
   }
 
-  String _yesterdaySummary(int sleepHours, int yesterdayMood, int? previousMood, int breathingStreak) {
+  String _yesterdaySummary(int sleepHours, int yesterdayMood, int? previousMood,
+      int breathingStreak) {
     final parts = <String>[];
     parts.add('Yesterday you slept $sleepHours hours.');
 
@@ -128,12 +135,16 @@ class BriefingEngine {
     }
   }
 
-  String _eveningCompletionSummary(int completed, int? morningAnxiety, int? eveningAnxiety, WellnessScore score) {
+  String _eveningCompletionSummary(int completed, int? morningAnxiety,
+      int? eveningAnxiety, WellnessScore score) {
     final parts = <String>[];
     parts.add('You completed $completed wellness activities today.');
 
-    if (morningAnxiety != null && eveningAnxiety != null && eveningAnxiety < morningAnxiety) {
-      parts.add('Your anxiety rating decreased from $morningAnxiety to $eveningAnxiety.');
+    if (morningAnxiety != null &&
+        eveningAnxiety != null &&
+        eveningAnxiety < morningAnxiety) {
+      parts.add(
+          'Your anxiety rating decreased from $morningAnxiety to $eveningAnxiety.');
     }
 
     if (score.improvements.isNotEmpty) {
@@ -169,15 +180,24 @@ class BriefingEngine {
 
   String _getAffirmation(String? domain) {
     switch (domain) {
-      case 'stress_burnout': return 'I release what I cannot control.';
-      case 'anxiety_overthinking': return 'I am safe in this moment.';
-      case 'emotional_isolation': return 'I am worthy of connection.';
-      case 'addiction_recovery': return 'I am stronger than any urge.';
-      case 'anger_dysregulation': return 'I choose peace over reaction.';
-      case 'low_motivation': return 'Small steps lead to big changes.';
-      case 'spiritual_seeking': return 'I am exactly where I need to be.';
-      case 'sleep_dysregulation': return 'Rest is healing. I welcome deep sleep.';
-      default: return 'I am enough, exactly as I am.';
+      case 'stress_burnout':
+        return 'I release what I cannot control.';
+      case 'anxiety_overthinking':
+        return 'I am safe in this moment.';
+      case 'emotional_isolation':
+        return 'I am worthy of connection.';
+      case 'addiction_recovery':
+        return 'I am stronger than any urge.';
+      case 'anger_dysregulation':
+        return 'I choose peace over reaction.';
+      case 'low_motivation':
+        return 'Small steps lead to big changes.';
+      case 'spiritual_seeking':
+        return 'I am exactly where I need to be.';
+      case 'sleep_dysregulation':
+        return 'Rest is healing. I welcome deep sleep.';
+      default:
+        return 'I am enough, exactly as I am.';
     }
   }
 }

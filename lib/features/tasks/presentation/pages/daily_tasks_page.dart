@@ -54,18 +54,32 @@ class _DailyTasksPageState extends ConsumerState<DailyTasksPage>
               duration: const Duration(milliseconds: 600),
               tween: Tween(begin: 0, end: 1),
               curve: Curves.easeOutBack,
-              builder: (_, scale, __) => Transform.scale(scale: scale, child: const Text('🎉', style: TextStyle(fontSize: 56))),
+              builder: (_, scale, __) => Transform.scale(
+                  scale: scale,
+                  child: const Text('🎉', style: TextStyle(fontSize: 56))),
             ),
             const SizedBox(height: 16),
-            Text('Level Up!', style: GoogleFonts.playfairDisplay(fontSize: 28, fontWeight: FontWeight.w700, color: Colors.white)),
+            Text('Level Up!',
+                style: GoogleFonts.playfairDisplay(
+                    fontSize: 28,
+                    fontWeight: FontWeight.w700,
+                    color: Colors.white)),
             const SizedBox(height: 8),
             Text('You reached Level $level',
-              style: GoogleFonts.outfit(fontSize: 16, color: AppTheme.primaryColor, fontWeight: FontWeight.w600)),
+                style: GoogleFonts.outfit(
+                    fontSize: 16,
+                    color: AppTheme.primaryColor,
+                    fontWeight: FontWeight.w600)),
             const SizedBox(height: 24),
             FilledButton(
               onPressed: () => Navigator.pop(ctx),
-              style: FilledButton.styleFrom(backgroundColor: AppTheme.primaryColor, shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16))),
-              child: Text('Keep Going!', style: GoogleFonts.outfit(fontSize: 15, fontWeight: FontWeight.w600)),
+              style: FilledButton.styleFrom(
+                  backgroundColor: AppTheme.primaryColor,
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(16))),
+              child: Text('Keep Going!',
+                  style: GoogleFonts.outfit(
+                      fontSize: 15, fontWeight: FontWeight.w600)),
             ),
             const SizedBox(height: 8),
           ],
@@ -80,11 +94,18 @@ class _DailyTasksPageState extends ConsumerState<DailyTasksPage>
     final isDark = Theme.of(context).brightness == Brightness.dark;
 
     return Scaffold(
-      appBar: AppBar(title: Text('Daily Tasks', style: GoogleFonts.playfairDisplay(fontSize: 20))),
+      appBar: AppBar(
+          title: Text('Daily Tasks',
+              style: GoogleFonts.playfairDisplay(fontSize: 20))),
       body: !_dataLoaded
-          ? ListView(padding: const EdgeInsets.all(20), children: List.generate(4, (_) => const Padding(
-              padding: EdgeInsets.only(bottom: 16), child: SkeletonCardLoader(),
-            )))
+          ? ListView(
+              padding: const EdgeInsets.all(20),
+              children: List.generate(
+                  4,
+                  (_) => const Padding(
+                        padding: EdgeInsets.only(bottom: 16),
+                        child: SkeletonCardLoader(),
+                      )))
           : ListView(
               padding: const EdgeInsets.fromLTRB(20, 8, 20, 100),
               children: [
@@ -94,14 +115,18 @@ class _DailyTasksPageState extends ConsumerState<DailyTasksPage>
                 const SizedBox(height: 20),
                 _buildStatGrid(state, isDark),
                 const SizedBox(height: 24),
-                _buildSectionTitle('Today\'s Tasks', Icons.checklist_rounded, isDark),
+                _buildSectionTitle(
+                    'Today\'s Tasks', Icons.checklist_rounded, isDark),
                 const SizedBox(height: 12),
-                ...List.generate(state.tasks.length, (i) => Padding(
-                  padding: const EdgeInsets.only(bottom: 10),
-                  child: _buildTaskCard(state, i, isDark),
-                )),
+                ...List.generate(
+                    state.tasks.length,
+                    (i) => Padding(
+                          padding: const EdgeInsets.only(bottom: 10),
+                          child: _buildTaskCard(state, i, isDark),
+                        )),
                 const SizedBox(height: 24),
-                _buildSectionTitle('Badges', Icons.emoji_events_rounded, isDark),
+                _buildSectionTitle(
+                    'Badges', Icons.emoji_events_rounded, isDark),
                 const SizedBox(height: 12),
                 _buildBadgeGrid(state, isDark),
                 const SizedBox(height: 32),
@@ -111,7 +136,8 @@ class _DailyTasksPageState extends ConsumerState<DailyTasksPage>
   }
 
   Widget _buildLevelHeader(TasksState state, bool isDark) {
-    final xpPct = state.xpForNextLevel > 0 ? state.xpInLevel / state.xpForNextLevel : 0.0;
+    final xpPct =
+        state.xpForNextLevel > 0 ? state.xpInLevel / state.xpForNextLevel : 0.0;
     return Container(
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
@@ -129,13 +155,18 @@ class _DailyTasksPageState extends ConsumerState<DailyTasksPage>
           Row(
             children: [
               Container(
-                width: 56, height: 56,
+                width: 56,
+                height: 56,
                 decoration: BoxDecoration(
                   color: Colors.white.withValues(alpha: 0.15),
                   shape: BoxShape.circle,
                 ),
                 child: Center(
-                  child: Text('${state.currentLevel}', style: GoogleFonts.outfit(fontSize: 24, fontWeight: FontWeight.w800, color: Colors.white)),
+                  child: Text('${state.currentLevel}',
+                      style: GoogleFonts.outfit(
+                          fontSize: 24,
+                          fontWeight: FontWeight.w800,
+                          color: Colors.white)),
                 ),
               ),
               const SizedBox(width: 16),
@@ -143,10 +174,16 @@ class _DailyTasksPageState extends ConsumerState<DailyTasksPage>
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text('Level ${state.currentLevel}', style: GoogleFonts.playfairDisplay(fontSize: 22, fontWeight: FontWeight.w700, color: Colors.white)),
+                    Text('Level ${state.currentLevel}',
+                        style: GoogleFonts.playfairDisplay(
+                            fontSize: 22,
+                            fontWeight: FontWeight.w700,
+                            color: Colors.white)),
                     const SizedBox(height: 4),
-                    Text('${state.xpInLevel} / ${state.xpForNextLevel} XP to next level',
-                      style: GoogleFonts.outfit(fontSize: 12, color: Colors.white70)),
+                    Text(
+                        '${state.xpInLevel} / ${state.xpForNextLevel} XP to next level',
+                        style: GoogleFonts.outfit(
+                            fontSize: 12, color: Colors.white70)),
                   ],
                 ),
               ),
@@ -160,7 +197,8 @@ class _DailyTasksPageState extends ConsumerState<DailyTasksPage>
               builder: (_, __) => LinearProgressIndicator(
                 value: xpPct * _xpAnimController.value,
                 backgroundColor: Colors.white.withValues(alpha: 0.2),
-                valueColor: const AlwaysStoppedAnimation<Color>(Colors.amberAccent),
+                valueColor:
+                    const AlwaysStoppedAnimation<Color>(Colors.amberAccent),
                 minHeight: 8,
               ),
             ),
@@ -177,17 +215,24 @@ class _DailyTasksPageState extends ConsumerState<DailyTasksPage>
       decoration: BoxDecoration(
         color: isDark ? AppTheme.darkCard : Colors.white,
         borderRadius: BorderRadius.circular(20),
-        border: Border.all(color: isDark ? AppTheme.darkBorder : AppTheme.lightBorder),
+        border: Border.all(
+            color: isDark ? AppTheme.darkBorder : AppTheme.lightBorder),
       ),
       child: Column(
         children: [
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text('Today\'s Progress', style: GoogleFonts.outfit(fontSize: 14, fontWeight: FontWeight.w600,
-                color: isDark ? Colors.white : AppTheme.primaryDark)),
+              Text('Today\'s Progress',
+                  style: GoogleFonts.outfit(
+                      fontSize: 14,
+                      fontWeight: FontWeight.w600,
+                      color: isDark ? Colors.white : AppTheme.primaryDark)),
               Text('${state.tasksDone} / ${state.tasksTotal} done',
-                style: GoogleFonts.outfit(fontSize: 13, fontWeight: FontWeight.w700, color: AppTheme.primaryColor)),
+                  style: GoogleFonts.outfit(
+                      fontSize: 13,
+                      fontWeight: FontWeight.w700,
+                      color: AppTheme.primaryColor)),
             ],
           ),
           const SizedBox(height: 12),
@@ -195,8 +240,10 @@ class _DailyTasksPageState extends ConsumerState<DailyTasksPage>
             borderRadius: BorderRadius.circular(8),
             child: LinearProgressIndicator(
               value: pct,
-              backgroundColor: (isDark ? Colors.white : Colors.black).withValues(alpha: 0.08),
-              valueColor: const AlwaysStoppedAnimation<Color>(AppTheme.primaryColor),
+              backgroundColor: (isDark ? Colors.white : Colors.black)
+                  .withValues(alpha: 0.08),
+              valueColor:
+                  const AlwaysStoppedAnimation<Color>(AppTheme.primaryColor),
               minHeight: 10,
             ),
           ),
@@ -205,9 +252,14 @@ class _DailyTasksPageState extends ConsumerState<DailyTasksPage>
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                const Icon(Icons.celebration_rounded, color: AppTheme.warningColor, size: 18),
+                const Icon(Icons.celebration_rounded,
+                    color: AppTheme.warningColor, size: 18),
                 const SizedBox(width: 6),
-                Text('All tasks complete! Great work today 🎉', style: GoogleFonts.outfit(fontSize: 12, color: AppTheme.warningColor, fontWeight: FontWeight.w600)),
+                Text('All tasks complete! Great work today 🎉',
+                    style: GoogleFonts.outfit(
+                        fontSize: 12,
+                        color: AppTheme.warningColor,
+                        fontWeight: FontWeight.w600)),
               ],
             ),
           ],
@@ -218,10 +270,30 @@ class _DailyTasksPageState extends ConsumerState<DailyTasksPage>
 
   Widget _buildStatGrid(TasksState state, bool isDark) {
     final stats = [
-      {'icon': Icons.bolt_rounded, 'label': 'Total XP', 'value': '${state.totalXp}', 'color': AppTheme.warningColor},
-      {'icon': Icons.local_fire_department_rounded, 'label': 'Streak', 'value': '${state.streak} days', 'color': Colors.orangeAccent},
-      {'icon': Icons.task_alt_rounded, 'label': 'Tasks', 'value': '${state.tasksDone} / ${state.tasksTotal}', 'color': AppTheme.successColor},
-      {'icon': Icons.emoji_events_rounded, 'label': 'Level', 'value': '${state.currentLevel}', 'color': AppTheme.primaryColor},
+      {
+        'icon': Icons.bolt_rounded,
+        'label': 'Total XP',
+        'value': '${state.totalXp}',
+        'color': AppTheme.warningColor
+      },
+      {
+        'icon': Icons.local_fire_department_rounded,
+        'label': 'Streak',
+        'value': '${state.streak} days',
+        'color': Colors.orangeAccent
+      },
+      {
+        'icon': Icons.task_alt_rounded,
+        'label': 'Tasks',
+        'value': '${state.tasksDone} / ${state.tasksTotal}',
+        'color': AppTheme.successColor
+      },
+      {
+        'icon': Icons.emoji_events_rounded,
+        'label': 'Level',
+        'value': '${state.currentLevel}',
+        'color': AppTheme.primaryColor
+      },
     ];
     return GridView.builder(
       shrinkWrap: true,
@@ -239,27 +311,42 @@ class _DailyTasksPageState extends ConsumerState<DailyTasksPage>
           duration: Duration(milliseconds: 500 + (i * 100)),
           tween: Tween(begin: 0, end: 1),
           curve: Curves.easeOutBack,
-          builder: (_, scale, __) => Transform.scale(scale: scale, child: Container(
-            padding: const EdgeInsets.all(10),
-            decoration: BoxDecoration(
-              color: isDark ? AppTheme.darkCard : Colors.white,
-              borderRadius: BorderRadius.circular(16),
-              border: Border.all(color: isDark ? AppTheme.darkBorder : AppTheme.lightBorder),
-            ),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Icon(stat['icon'] as IconData, color: stat['color'] as Color, size: 22),
-                const SizedBox(height: 6),
-                Text(stat['value'] as String, style: GoogleFonts.outfit(fontSize: 13, fontWeight: FontWeight.w700,
-                  color: isDark ? Colors.white : AppTheme.primaryDark),
-                  textAlign: TextAlign.center, maxLines: 1, overflow: TextOverflow.ellipsis),
-                const SizedBox(height: 2),
-                Text(stat['label'] as String, style: GoogleFonts.outfit(fontSize: 9, color: Colors.grey),
-                  textAlign: TextAlign.center, maxLines: 1, overflow: TextOverflow.ellipsis),
-              ],
-            ),
-          )),
+          builder: (_, scale, __) => Transform.scale(
+              scale: scale,
+              child: Container(
+                padding: const EdgeInsets.all(10),
+                decoration: BoxDecoration(
+                  color: isDark ? AppTheme.darkCard : Colors.white,
+                  borderRadius: BorderRadius.circular(16),
+                  border: Border.all(
+                      color:
+                          isDark ? AppTheme.darkBorder : AppTheme.lightBorder),
+                ),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Icon(stat['icon'] as IconData,
+                        color: stat['color'] as Color, size: 22),
+                    const SizedBox(height: 6),
+                    Text(stat['value'] as String,
+                        style: GoogleFonts.outfit(
+                            fontSize: 13,
+                            fontWeight: FontWeight.w700,
+                            color:
+                                isDark ? Colors.white : AppTheme.primaryDark),
+                        textAlign: TextAlign.center,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis),
+                    const SizedBox(height: 2),
+                    Text(stat['label'] as String,
+                        style:
+                            GoogleFonts.outfit(fontSize: 9, color: Colors.grey),
+                        textAlign: TextAlign.center,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis),
+                  ],
+                ),
+              )),
         );
       },
     );
@@ -270,8 +357,11 @@ class _DailyTasksPageState extends ConsumerState<DailyTasksPage>
       children: [
         Icon(icon, size: 18, color: AppTheme.primaryColor),
         const SizedBox(width: 8),
-        Text(title, style: GoogleFonts.playfairDisplay(fontSize: 18, fontWeight: FontWeight.w600,
-          color: isDark ? Colors.white : AppTheme.primaryDark)),
+        Text(title,
+            style: GoogleFonts.playfairDisplay(
+                fontSize: 18,
+                fontWeight: FontWeight.w600,
+                color: isDark ? Colors.white : AppTheme.primaryDark)),
       ],
     );
   }
@@ -315,25 +405,40 @@ class _DailyTasksPageState extends ConsumerState<DailyTasksPage>
             child: Row(
               children: [
                 Container(
-                  width: 40, height: 40,
+                  width: 40,
+                  height: 40,
                   decoration: BoxDecoration(
                     color: task.done
                         ? AppTheme.successColor.withValues(alpha: 0.15)
                         : AppTheme.primaryColor.withValues(alpha: 0.08),
                     borderRadius: BorderRadius.circular(12),
                   ),
-                  child: Center(child: Text(task.emoji, style: const TextStyle(fontSize: 20))),
+                  child: Center(
+                      child: Text(task.emoji,
+                          style: const TextStyle(fontSize: 20))),
                 ),
                 const SizedBox(width: 12),
                 Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(task.label,
-                        style: GoogleFonts.outfit(fontSize: 14, fontWeight: FontWeight.w600,
-                          color: task.done ? Colors.grey : (isDark ? Colors.white : AppTheme.primaryDark)),
+                      Text(
+                        task.label,
+                        style: GoogleFonts.outfit(
+                            fontSize: 14,
+                            fontWeight: FontWeight.w600,
+                            color: task.done
+                                ? Colors.grey
+                                : (isDark
+                                    ? Colors.white
+                                    : AppTheme.primaryDark)),
                       ),
-                      Text('+${task.xp} XP', style: GoogleFonts.outfit(fontSize: 11, color: task.done ? Colors.grey : AppTheme.primaryColor)),
+                      Text('+${task.xp} XP',
+                          style: GoogleFonts.outfit(
+                              fontSize: 11,
+                              color: task.done
+                                  ? Colors.grey
+                                  : AppTheme.primaryColor)),
                     ],
                   ),
                 ),
@@ -341,14 +446,19 @@ class _DailyTasksPageState extends ConsumerState<DailyTasksPage>
                   onTap: task.done ? null : () => _onCompleteTask(state, index),
                   child: AnimatedContainer(
                     duration: const Duration(milliseconds: 300),
-                    width: 36, height: 36,
+                    width: 36,
+                    height: 36,
                     decoration: BoxDecoration(
-                      color: task.done ? AppTheme.successColor : AppTheme.primaryColor,
+                      color: task.done
+                          ? AppTheme.successColor
+                          : AppTheme.primaryColor,
                       shape: BoxShape.circle,
                     ),
                     child: task.done
-                        ? const Icon(Icons.check_rounded, color: Colors.white, size: 20)
-                        : const Icon(Icons.add_rounded, color: Colors.white, size: 20),
+                        ? const Icon(Icons.check_rounded,
+                            color: Colors.white, size: 20)
+                        : const Icon(Icons.add_rounded,
+                            color: Colors.white, size: 20),
                   ),
                 ),
               ],
@@ -388,15 +498,24 @@ class _DailyTasksPageState extends ConsumerState<DailyTasksPage>
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Text(badge.emoji, style: TextStyle(fontSize: badge.earned ? 28 : 24)),
+              Text(badge.emoji,
+                  style: TextStyle(fontSize: badge.earned ? 28 : 24)),
               const SizedBox(height: 6),
               Text(badge.label,
-                style: GoogleFonts.outfit(fontSize: 11, fontWeight: FontWeight.w600,
-                  color: badge.earned ? (isDark ? Colors.white : AppTheme.primaryDark) : Colors.grey),
-                textAlign: TextAlign.center, maxLines: 2, overflow: TextOverflow.ellipsis),
+                  style: GoogleFonts.outfit(
+                      fontSize: 11,
+                      fontWeight: FontWeight.w600,
+                      color: badge.earned
+                          ? (isDark ? Colors.white : AppTheme.primaryDark)
+                          : Colors.grey),
+                  textAlign: TextAlign.center,
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis),
               Text(badge.description,
-                style: GoogleFonts.outfit(fontSize: 9, color: Colors.grey.shade500),
-                textAlign: TextAlign.center, maxLines: 1),
+                  style: GoogleFonts.outfit(
+                      fontSize: 9, color: Colors.grey.shade500),
+                  textAlign: TextAlign.center,
+                  maxLines: 1),
             ],
           ),
         );

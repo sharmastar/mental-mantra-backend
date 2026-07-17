@@ -23,21 +23,32 @@ class MeditationPage extends StatelessWidget {
             expandedHeight: 200,
             backgroundColor: isDark ? AppTheme.darkSurface : AppTheme.lightBg,
             elevation: 0,
-            leading: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: CircleAvatar(
-                backgroundColor: isDark ? Colors.black26 : Colors.white70,
+            leading: Center(
+              child: Container(
+                margin: const EdgeInsets.only(left: 12),
+                decoration: BoxDecoration(
+                  color: isDark
+                      ? Colors.white.withValues(alpha: 0.15)
+                      : Colors.black.withValues(alpha: 0.1),
+                  shape: BoxShape.circle,
+                ),
                 child: IconButton(
                   icon: const Icon(Icons.arrow_back_ios_new, size: 16),
-                  color: isDark ? Colors.white : Colors.black87,
+                  color: Colors.white,
                   onPressed: () => context.pop(),
+                  padding: EdgeInsets.zero,
+                  constraints: const BoxConstraints(
+                    minWidth: 36,
+                    minHeight: 36,
+                  ),
                 ),
               ),
             ),
             flexibleSpace: FlexibleSpaceBar(
               background: Container(
                 decoration: BoxDecoration(
-                  gradient: isDark ? AppTheme.nightGradient : AppTheme.primaryGradient,
+                  gradient:
+                      isDark ? AppTheme.nightGradient : AppTheme.calmGradient,
                 ),
                 child: const SafeArea(
                   child: Padding(
@@ -46,7 +57,8 @@ class MeditationPage extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.end,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Icon(Icons.self_improvement, color: Colors.white70, size: 36),
+                        Icon(Icons.self_improvement,
+                            color: Colors.white, size: 36), // fallback or white
                         SizedBox(height: 8),
                         Text(
                           'Meditate',
@@ -107,36 +119,34 @@ class MeditationPage extends StatelessWidget {
               child: PremiumBounceInteraction(
                 onTap: () => context.push('${AppRoutes.meditation}/timer'),
                 child: Container(
-                  height: 120,
+                  height: 130,
                   decoration: BoxDecoration(
                     color: isDark ? AppTheme.darkCard : AppTheme.lightSurface,
-                    borderRadius: BorderRadius.circular(28),
+                    borderRadius: BorderRadius.circular(24),
                     border: Border.all(
-                      color: isDark ? AppTheme.darkBorder : AppTheme.lightBorder,
+                      color:
+                          isDark ? AppTheme.darkBorder : AppTheme.lightBorder,
                     ),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.black.withValues(alpha: isDark ? 0.2 : 0.04),
-                        blurRadius: 10,
-                        offset: const Offset(0, 4),
-                      ),
-                    ],
+                    boxShadow:
+                        isDark ? AppTheme.darkShadow : AppTheme.lightShadow,
                   ),
                   child: const Padding(
-                    padding: EdgeInsets.all(16),
+                    padding: EdgeInsets.all(20),
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Icon(Icons.hourglass_bottom_rounded, size: 36, color: AppTheme.primaryColor),
+                        Icon(Icons.hourglass_bottom_rounded,
+                            size: 32, color: AppTheme.primaryColor),
                         SizedBox(height: 12),
                         Text(
                           'Silent Timer',
                           style: TextStyle(
                             fontFamily: 'Outfit',
-                            fontWeight: FontWeight.w600,
+                            fontWeight: FontWeight.w700,
                             fontSize: 15,
                           ),
                         ),
+                        SizedBox(height: 2),
                         Text(
                           'Self-guided practice',
                           style: TextStyle(
@@ -156,36 +166,33 @@ class MeditationPage extends StatelessWidget {
               child: PremiumBounceInteraction(
                 onTap: () => context.push('${AppRoutes.meditation}/breathing'),
                 child: Container(
-                  height: 120,
+                  height: 130,
                   decoration: BoxDecoration(
                     color: isDark ? AppTheme.darkCard : AppTheme.lightSurface,
-                    borderRadius: BorderRadius.circular(28),
+                    borderRadius: BorderRadius.circular(24),
                     border: Border.all(
-                      color: isDark ? AppTheme.darkBorder : AppTheme.lightBorder,
+                      color:
+                          isDark ? AppTheme.darkBorder : AppTheme.lightBorder,
                     ),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.black.withValues(alpha: isDark ? 0.2 : 0.04),
-                        blurRadius: 10,
-                        offset: const Offset(0, 4),
-                      ),
-                    ],
+                    boxShadow:
+                        isDark ? AppTheme.darkShadow : AppTheme.lightShadow,
                   ),
                   child: const Padding(
-                    padding: EdgeInsets.all(16),
+                    padding: EdgeInsets.all(20),
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Icon(Icons.air, size: 36, color: AppTheme.accentColor),
+                        Icon(Icons.air, size: 32, color: AppTheme.primaryLight),
                         SizedBox(height: 12),
                         Text(
                           'Breathing',
                           style: TextStyle(
                             fontFamily: 'Outfit',
-                            fontWeight: FontWeight.w600,
+                            fontWeight: FontWeight.w700,
                             fontSize: 15,
                           ),
                         ),
+                        SizedBox(height: 2),
                         Text(
                           'Guided rhythms',
                           style: TextStyle(
@@ -206,14 +213,39 @@ class MeditationPage extends StatelessWidget {
     );
   }
 
-  Widget _buildCategorySection(BuildContext context, bool isDark, ThemeData theme) {
+  Widget _buildCategorySection(
+      BuildContext context, bool isDark, ThemeData theme) {
     final categories = [
-      {'icon': Icons.wind_power, 'label': 'Stress', 'color': const Color(0xFF6C63FF)},
-      {'icon': Icons.bedtime, 'label': 'Sleep', 'color': const Color(0xFF9C27B0)},
-      {'icon': Icons.psychology, 'label': 'Focus', 'color': const Color(0xFF00BCD4)},
-      {'icon': Icons.favorite_border, 'label': 'Anxiety', 'color': const Color(0xFFFF6B9D)},
-      {'icon': Icons.whatshot, 'label': 'Anger', 'color': const Color(0xFFFF5722)},
-      {'icon': Icons.volunteer_activism, 'label': 'Self Love', 'color': const Color(0xFFE91E63)},
+      {
+        'icon': Icons.wind_power,
+        'label': 'Stress',
+        'color': const Color(0xFF6C63FF)
+      },
+      {
+        'icon': Icons.bedtime,
+        'label': 'Sleep',
+        'color': const Color(0xFF9C27B0)
+      },
+      {
+        'icon': Icons.psychology,
+        'label': 'Focus',
+        'color': const Color(0xFF00BCD4)
+      },
+      {
+        'icon': Icons.favorite_border,
+        'label': 'Anxiety',
+        'color': const Color(0xFFFF6B9D)
+      },
+      {
+        'icon': Icons.whatshot,
+        'label': 'Anger',
+        'color': const Color(0xFFFF5722)
+      },
+      {
+        'icon': Icons.volunteer_activism,
+        'label': 'Self Love',
+        'color': const Color(0xFFE91E63)
+      },
     ];
 
     return Column(
@@ -231,7 +263,7 @@ class MeditationPage extends StatelessWidget {
           physics: const NeverScrollableScrollPhysics(),
           gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
             crossAxisCount: 2,
-            childAspectRatio: 1.3,
+            childAspectRatio: 1.35,
             mainAxisSpacing: 16,
             crossAxisSpacing: 16,
           ),
@@ -241,22 +273,18 @@ class MeditationPage extends StatelessWidget {
             final color = cat['color'] as Color;
             return PremiumBounceInteraction(
               onTap: () {
-                context.push('${AppRoutes.meditation}/player', extra: {'category': cat['label']});
+                context.push('${AppRoutes.meditation}/player',
+                    extra: {'category': cat['label']});
               },
               child: Container(
                 decoration: BoxDecoration(
                   color: isDark ? AppTheme.darkCard : AppTheme.lightSurface,
-                  borderRadius: BorderRadius.circular(28),
+                  borderRadius: BorderRadius.circular(24),
                   border: Border.all(
                     color: isDark ? AppTheme.darkBorder : AppTheme.lightBorder,
                   ),
-                  boxShadow: [
-                    BoxShadow(
-                      color: color.withValues(alpha: isDark ? 0.08 : 0.03),
-                      blurRadius: 10,
-                      offset: const Offset(0, 4),
-                    ),
-                  ],
+                  boxShadow:
+                      isDark ? AppTheme.darkShadow : AppTheme.lightShadow,
                 ),
                 child: Padding(
                   padding: const EdgeInsets.all(16.0),
@@ -270,14 +298,15 @@ class MeditationPage extends StatelessWidget {
                           color: color.withValues(alpha: 0.12),
                           shape: BoxShape.circle,
                         ),
-                        child: Icon(cat['icon'] as IconData, color: color, size: 24),
+                        child: Icon(cat['icon'] as IconData,
+                            color: color, size: 22),
                       ),
                       Text(
                         cat['label'] as String,
                         style: const TextStyle(
                           fontFamily: 'Outfit',
                           fontSize: 16,
-                          fontWeight: FontWeight.w600,
+                          fontWeight: FontWeight.w700,
                         ),
                       ),
                     ],
@@ -291,7 +320,8 @@ class MeditationPage extends StatelessWidget {
     );
   }
 
-  Widget _buildFeaturedSection(BuildContext context, bool isDark, ThemeData theme) {
+  Widget _buildFeaturedSection(
+      BuildContext context, bool isDark, ThemeData theme) {
     final sessions = [
       {
         'title': 'Morning Calm',
@@ -329,22 +359,19 @@ class MeditationPage extends StatelessWidget {
         ...sessions.map((s) => Container(
               margin: const EdgeInsets.only(bottom: 16),
               child: PremiumBounceInteraction(
-                onTap: () => context.push('${AppRoutes.meditation}/player', extra: s),
+                onTap: () =>
+                    context.push('${AppRoutes.meditation}/player', extra: s),
                 child: Container(
                   height: 110,
                   decoration: BoxDecoration(
                     gradient: s['gradient'] as LinearGradient,
-                    borderRadius: BorderRadius.circular(28),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.black.withValues(alpha: isDark ? 0.3 : 0.1),
-                        blurRadius: 12,
-                        offset: const Offset(0, 4),
-                      ),
-                    ],
+                    borderRadius: BorderRadius.circular(24),
+                    boxShadow:
+                        isDark ? AppTheme.darkShadow : AppTheme.lightShadow,
                   ),
                   child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 20),
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 24, vertical: 20),
                     child: Row(
                       children: [
                         Container(
@@ -354,7 +381,8 @@ class MeditationPage extends StatelessWidget {
                             color: Colors.white24,
                             shape: BoxShape.circle,
                           ),
-                          child: const Icon(Icons.play_arrow_rounded, color: Colors.white, size: 32),
+                          child: const Icon(Icons.play_arrow_rounded,
+                              color: Colors.white, size: 32),
                         ),
                         const SizedBox(width: 20),
                         Expanded(
@@ -398,4 +426,3 @@ class MeditationPage extends StatelessWidget {
     );
   }
 }
-

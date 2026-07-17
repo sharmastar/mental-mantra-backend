@@ -78,7 +78,8 @@ void main() {
     });
 
     test('updateBreathingPhase updates phase, seconds, and rounds', () {
-      notifier.updateBreathingPhase(phaseText: 'Inhale', secondsLeft: 3, rounds: 1);
+      notifier.updateBreathingPhase(
+          phaseText: 'Inhale', secondsLeft: 3, rounds: 1);
       final state = container.read(dashboardUiProvider);
       expect(state.breathingPhaseText, 'Inhale');
       expect(state.breathingSecondsLeft, 3);

@@ -3,6 +3,9 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mental_mantra/core/config/app_config.dart';
 import 'package:mental_mantra/core/utils/connectivity.dart';
+import 'package:mental_mantra/core/network/api_client.dart';
+import 'package:mental_mantra/core/errors/app_exceptions.dart';
+
 
 class SyncQueueItem {
   final String id;
@@ -35,7 +38,9 @@ class SyncQueueItem {
         collection: json['collection'] as String,
         docId: json['docId'] as String,
         action: json['action'] as String,
-        data: json['data'] != null ? Map<String, dynamic>.from(json['data'] as Map) : null,
+        data: json['data'] != null
+            ? Map<String, dynamic>.from(json['data'] as Map)
+            : null,
         timestamp: json['timestamp'] as String,
       );
 }
@@ -91,7 +96,9 @@ class SyncQueueNotifier extends StateNotifier<SyncState> {
       state = SyncState(
         pendingCount: queueStrings.length,
         isSyncing: false,
-        lastSyncTime: lastSyncMs != null ? DateTime.fromMillisecondsSinceEpoch(lastSyncMs) : null,
+        lastSyncTime: lastSyncMs != null
+            ? DateTime.fromMillisecondsSinceEpoch(lastSyncMs)
+            : null,
         statusMessage: queueStrings.isEmpty
             ? 'Cloud Backup is up to date.'
             : 'You have ${queueStrings.length} changes pending backup.',
@@ -105,7 +112,10 @@ class SyncQueueNotifier extends StateNotifier<SyncState> {
   List<SyncQueueItem> _getQueueItems() {
     final prefs = AppConfig.prefs;
     final queueStrings = prefs.getStringList(_queueKey) ?? [];
-    return queueStrings.map((s) => SyncQueueItem.fromJson(jsonDecode(s) as Map<String, dynamic>)).toList();
+    return queueStrings
+        .map((s) =>
+            SyncQueueItem.fromJson(jsonDecode(s) as Map<String, dynamic>))
+        .toList();
   }
 
   Future<void> _saveQueueItems(List<SyncQueueItem> items) async {
@@ -132,7 +142,8 @@ class SyncQueueNotifier extends StateNotifier<SyncState> {
       );
 
       // Check if we already have a pending update for this doc to merge or overwrite
-      items.removeWhere((item) => item.collection == collection && item.docId == docId);
+      items.removeWhere(
+          (item) => item.collection == collection && item.docId == docId);
       items.add(newItem);
 
       await _saveQueueItems(items);
@@ -140,7 +151,8 @@ class SyncQueueNotifier extends StateNotifier<SyncState> {
         pendingCount: items.length,
         statusMessage: 'You have ${items.length} changes pending backup.',
       );
-      debugPrint('[SyncService] Queued sync action: $action on $collection/$docId');
+      debugPrint(
+          '[SyncService] Queued sync action: $action on $collection/$docId');
     } catch (e) {
       debugPrint('[SyncService] Error adding to sync queue: $e');
     }
@@ -178,27 +190,95 @@ class SyncQueueNotifier extends StateNotifier<SyncState> {
         return;
       }
 
-      // Simulate uploading each item to Cloud Firestore
+      final List<SyncQueueItem> succeededItems = [];
       for (final item in items) {
-        debugPrint('[SyncService] Uploading ${item.action} of ${item.collection}/${item.docId} to Firestore...');
-        await Future.delayed(const Duration(milliseconds: 150));
+        debugPrint(
+            '[SyncService] Syncing ${item.action} of ${item.collection}/${item.docId}...');
+        
+        try {
+          if (item.collection == 'journals') {
+            if (item.action == 'SET') {
+              await ApiClient.post('/journal', data: item.data);
+            } else if (item.action == 'UPDATE') {
+              await ApiClient.put('/journal/${item.docId}', data: item.data);
+            } else if (item.action == 'DELETE') {
+              await ApiClient.delete('/journal/${item.docId}');
+            }
+          } else if (item.collection == 'moods') {
+            if (item.action == 'SET') {
+              await ApiClient.post('/mood', data: item.data);
+            }
+          } else if (item.collection == 'habits') {
+            if (item.action == 'SET') {
+              await ApiClient.post('/habits', data: item.data);
+            } else if (item.action == 'LOG') {
+              await ApiClient.post('/habits/${item.docId}/log');
+            } else if (item.action == 'DELETE') {
+              await ApiClient.delete('/habits/${item.docId}');
+            }
+          } else if (item.collection == 'goals') {
+            if (item.action == 'SET') {
+              await ApiClient.post('/goals', data: item.data);
+            } else if (item.action == 'UPDATE') {
+              await ApiClient.put('/goals/${item.docId}', data: item.data);
+            } else if (item.action == 'DELETE') {
+              await ApiClient.delete('/goals/${item.docId}');
+            }
+          } else if (item.collection == 'sleep') {
+            if (item.action == 'SET') {
+              await ApiClient.post('/sleep', data: item.data);
+            } else if (item.action == 'DELETE') {
+              await ApiClient.delete('/sleep/${item.docId}');
+            }
+          } else if (item.collection == 'fitness') {
+            if (item.action == 'SET') {
+              await ApiClient.post('/fitness', data: item.data);
+            }
+          } else if (item.collection == 'yoga') {
+            if (item.action == 'SET') {
+              await ApiClient.post('/yoga', data: item.data);
+            }
+          }
+          
+          succeededItems.add(item);
+        } on AppException catch (ae) {
+          // Conflict resolution: if it's a client validation error (4xx),
+          // it cannot be resolved by retrying. Log it, discard item, and continue.
+          if (ae.statusCode != null && ae.statusCode! >= 400 && ae.statusCode! < 500) {
+            debugPrint('[SyncService] Discarding conflicting client request: $ae');
+            succeededItems.add(item); // Treat as completed to clear from queue
+            _logEvent('Conflict discarded: ${item.action} ${item.collection}/${item.docId} - ${ae.message}');
+          } else {
+            // Server error or connection issue - stop queue processing to retry later
+            rethrow;
+          }
+        } catch (e) {
+          // Other unexpected errors - stop queue processing
+          rethrow;
+        }
       }
 
+      // Remove successfully completed items from the queue
+      final remainingItems = items.where((i) => !succeededItems.contains(i)).toList();
+      await _saveQueueItems(remainingItems);
+      
       final prefs = AppConfig.prefs;
-      final completedCount = items.length;
-
-      // Clear the queue
-      await prefs.setStringList(_queueKey, []);
+      final completedCount = succeededItems.length;
       final now = DateTime.now();
       await prefs.setInt(_lastSyncKey, now.millisecondsSinceEpoch);
 
-      _logEvent('Successfully backed up $completedCount pending record(s) to Firestore.');
+      if (completedCount > 0) {
+        _logEvent(
+            'Successfully backed up $completedCount pending record(s) to server.');
+      }
 
       state = state.copyWith(
-        pendingCount: 0,
+        pendingCount: remainingItems.length,
         isSyncing: false,
         lastSyncTime: now,
-        statusMessage: 'Backup completed successfully.',
+        statusMessage: remainingItems.isEmpty
+            ? 'Backup completed successfully.'
+            : 'Backup partially completed. ${remainingItems.length} changes remaining.',
       );
     } catch (e) {
       state = state.copyWith(
@@ -235,6 +315,7 @@ class SyncQueueNotifier extends StateNotifier<SyncState> {
   }
 }
 
-final syncQueueProvider = StateNotifierProvider<SyncQueueNotifier, SyncState>((ref) {
+final syncQueueProvider =
+    StateNotifierProvider<SyncQueueNotifier, SyncState>((ref) {
   return SyncQueueNotifier();
 });

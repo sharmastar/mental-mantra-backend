@@ -54,7 +54,8 @@ class AudioPlayerState {
   }
 }
 
-class AudioPlayerNotifier extends StateNotifier<AudioPlayerState> with WidgetsBindingObserver {
+class AudioPlayerNotifier extends StateNotifier<AudioPlayerState>
+    with WidgetsBindingObserver {
   final AudioPlayer _player = AudioPlayer();
   StreamSubscription? _posSub;
   StreamSubscription? _durSub;
@@ -92,11 +93,6 @@ class AudioPlayerNotifier extends StateNotifier<AudioPlayerState> with WidgetsBi
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
     switch (state) {
-      case AppLifecycleState.paused:
-        if (_player.playing) {
-          _player.pause();
-        }
-        break;
       case AppLifecycleState.detached:
         _player.stop();
         break;
@@ -116,35 +112,59 @@ class AudioPlayerNotifier extends StateNotifier<AudioPlayerState> with WidgetsBi
   }
 
   static const Map<String, String> _streamingUrls = {
-    'assets/audio/solfeggio/432hz.mp3': 'https://archive.org/download/jamendo-633430/01-2318774-Bulbasound-Binaural%20Meditation%20432%20Hz.mp3',
-    'assets/audio/solfeggio/528hz.mp3': 'https://archive.org/download/Decagon-Solfeggio_Arrangement/Decagon-Solfeggio_528Hz_Transformation_And_Miracles.mp3',
-    'assets/audio/solfeggio/639hz.mp3': 'https://archive.org/download/Decagon-Solfeggio_Arrangement/Decagon-Solfeggio_639Hz_Connecting_Relationships.mp3',
-    'assets/audio/solfeggio/852hz.mp3': 'https://archive.org/download/Decagon-Solfeggio_Arrangement/Decagon-Solfeggio_852Hz_Returning_To_Spiritual_Order.mp3',
-    'assets/audio/rain.mp3': 'https://costellopsychology.com/relax/Brainwave%20Nature/Gentle%20Rain.mp3',
-    'assets/audio/ocean.mp3': 'https://costellopsychology.com/relax/Brainwave%20Nature/Sleepy%20Ocean.mp3',
-    'assets/audio/forest.mp3': 'https://costellopsychology.com/relax/Brainwave%20Nature/Rainforest%20Sounds.mp3',
-    'assets/audio/stream.mp3': 'https://costellopsychology.com/relax/Brainwave%20Nature/Forest%20Stream.mp3',
-    'assets/audio/delta.mp3': 'https://archive.org/download/OndesCrbralesTuningMusique/BrainSync-01.relieveJetLagdeltaSleep.mp3',
-    'assets/audio/theta.mp3': 'https://archive.org/download/OndesCrbralesTuningMusique/BrainSync-01.deepLearningmusicThetaFrequencies.mp3',
-    'assets/audio/alpha.mp3': 'https://archive.org/download/OndesCrbralesTuningMusique/BrainSync-02.totalRelaxationambienceAlphaWaves.mp3',
-    'assets/audio/gamma.mp3': 'https://archive.org/download/OndesCrbralesTuningMusique/BrainSync-01.highFocusmusicHighBetaWaves.mp3',
-    'assets/audio/focus.mp3': 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3',
-    'assets/audio/lofi.mp3': 'https://archive.org/download/cozy-alone-lofi-chill-out-beats/Cozy%20Alone%20Lofi%20Chill%20Out%20Beats%20Music%20Mix.mp3',
-    'assets/audio/piano.mp3': 'https://archive.org/download/Complete_Chopin_Nocturnes/Chopin_Nocturne_No.04_in_EfM_Op.9_2_SDRodrian.mp3',
-    'assets/audio/ambient.mp3': 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-3.mp3',
-    'assets/audio/tranquil.mp3': 'https://archive.org/download/Complete_Chopin_Nocturnes/Chopin_Nocturne_No.02_in_c_sharp_minor_SDRodrian.mp3',
-    'assets/audio/flute.mp3': 'https://archive.org/download/jamendo-575472/01-2190794-MemoryMusic-Hypnotic%20Asian%20Flute%20-%20Ancient%20Warrior%20Meditation.mp3',
-    'assets/audio/harp.mp3': 'https://archive.org/download/jamendo-615914/01-2281014-Frank%20Schroter-Celtic%20Harp.mp3',
-    'assets/audio/cello.mp3': 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-6.mp3',
-    'assets/audio/sunrise.mp3': 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-7.mp3',
-    'assets/audio/morning.mp3': 'https://archive.org/download/Sleep_Music-5629/junior85_-_01_-_Birdsong.mp3',
-    'assets/audio/energy.mp3': 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-8.mp3',
-    'assets/audio/affirmations.mp3': 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-10.mp3',
+    'assets/audio/solfeggio/432hz.mp3':
+        'https://archive.org/download/jamendo-633430/01-2318774-Bulbasound-Binaural%20Meditation%20432%20Hz.mp3',
+    'assets/audio/solfeggio/528hz.mp3':
+        'https://archive.org/download/Decagon-Solfeggio_Arrangement/Decagon-Solfeggio_528Hz_Transformation_And_Miracles.mp3',
+    'assets/audio/solfeggio/639hz.mp3':
+        'https://archive.org/download/Decagon-Solfeggio_Arrangement/Decagon-Solfeggio_639Hz_Connecting_Relationships.mp3',
+    'assets/audio/solfeggio/852hz.mp3':
+        'https://archive.org/download/Decagon-Solfeggio_Arrangement/Decagon-Solfeggio_852Hz_Returning_To_Spiritual_Order.mp3',
+    'assets/audio/rain.mp3':
+        'https://costellopsychology.com/relax/Brainwave%20Nature/Gentle%20Rain.mp3',
+    'assets/audio/ocean.mp3':
+        'https://costellopsychology.com/relax/Brainwave%20Nature/Sleepy%20Ocean.mp3',
+    'assets/audio/forest.mp3':
+        'https://costellopsychology.com/relax/Brainwave%20Nature/Rainforest%20Sounds.mp3',
+    'assets/audio/stream.mp3':
+        'https://costellopsychology.com/relax/Brainwave%20Nature/Forest%20Stream.mp3',
+    'assets/audio/delta.mp3':
+        'https://archive.org/download/OndesCrbralesTuningMusique/BrainSync-01.relieveJetLagdeltaSleep.mp3',
+    'assets/audio/theta.mp3':
+        'https://archive.org/download/OndesCrbralesTuningMusique/BrainSync-01.deepLearningmusicThetaFrequencies.mp3',
+    'assets/audio/alpha.mp3':
+        'https://archive.org/download/OndesCrbralesTuningMusique/BrainSync-02.totalRelaxationambienceAlphaWaves.mp3',
+    'assets/audio/gamma.mp3':
+        'https://archive.org/download/OndesCrbralesTuningMusique/BrainSync-01.highFocusmusicHighBetaWaves.mp3',
+    'assets/audio/focus.mp3':
+        'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3',
+    'assets/audio/lofi.mp3':
+        'https://archive.org/download/cozy-alone-lofi-chill-out-beats/Cozy%20Alone%20Lofi%20Chill%20Out%20Beats%20Music%20Mix.mp3',
+    'assets/audio/piano.mp3':
+        'https://archive.org/download/Complete_Chopin_Nocturnes/Chopin_Nocturne_No.04_in_EfM_Op.9_2_SDRodrian.mp3',
+    'assets/audio/ambient.mp3':
+        'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-3.mp3',
+    'assets/audio/tranquil.mp3':
+        'https://archive.org/download/Complete_Chopin_Nocturnes/Chopin_Nocturne_No.02_in_c_sharp_minor_SDRodrian.mp3',
+    'assets/audio/flute.mp3':
+        'https://archive.org/download/jamendo-575472/01-2190794-MemoryMusic-Hypnotic%20Asian%20Flute%20-%20Ancient%20Warrior%20Meditation.mp3',
+    'assets/audio/harp.mp3':
+        'https://archive.org/download/jamendo-615914/01-2281014-Frank%20Schroter-Celtic%20Harp.mp3',
+    'assets/audio/cello.mp3':
+        'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-6.mp3',
+    'assets/audio/sunrise.mp3':
+        'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-7.mp3',
+    'assets/audio/morning.mp3':
+        'https://archive.org/download/Sleep_Music-5629/junior85_-_01_-_Birdsong.mp3',
+    'assets/audio/energy.mp3':
+        'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-8.mp3',
+    'assets/audio/affirmations.mp3':
+        'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-10.mp3',
   };
 
   Future<void> playTrack(MusicTrack track, {List<MusicTrack>? queue}) async {
     String path = track.assetPath;
-    
+
     // Normalize and fallback checking for existing assets
     const existingAssets = {
       'assets/audio/background.mp3',
@@ -152,11 +172,11 @@ class AudioPlayerNotifier extends StateNotifier<AudioPlayerState> with WidgetsBi
       'assets/audio/solfeggio/963hz_for_meditation_3min.mp3',
       'assets/audio/solfeggio/963hz_short_3min.mp3',
     };
-    
+
     if (path == 'assets/audio/solfeggio/963hz.mp3') {
       path = 'assets/audio/solfeggio/963hz_meditation.mp3';
     }
-    
+
     String resolvedPath = path;
     bool isNetwork = false;
 
@@ -173,7 +193,7 @@ class AudioPlayerNotifier extends StateNotifier<AudioPlayerState> with WidgetsBi
 
     final playQueue = queue ?? [track];
     final index = playQueue.indexWhere((t) => t.id == track.id);
-    
+
     state = state.copyWith(
       currentTrack: track,
       isPlaying: true,
@@ -238,9 +258,8 @@ class AudioPlayerNotifier extends StateNotifier<AudioPlayerState> with WidgetsBi
 
   void previous() {
     if (state.queue.isEmpty) return;
-    final prevIndex = state.queueIndex <= 0
-        ? state.queue.length - 1
-        : state.queueIndex - 1;
+    final prevIndex =
+        state.queueIndex <= 0 ? state.queue.length - 1 : state.queueIndex - 1;
     playTrack(state.queue[prevIndex], queue: state.queue);
   }
 

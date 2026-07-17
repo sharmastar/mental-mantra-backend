@@ -3,7 +3,8 @@ import 'package:mental_mantra/core/domain/entities/assessment_response.dart';
 class WellnessScorer {
   const WellnessScorer();
 
-  Map<String, double> calculateFromResponses(List<AssessmentResponse> responses) {
+  Map<String, double> calculateFromResponses(
+      List<AssessmentResponse> responses) {
     final answers = <String, dynamic>{};
     for (final r in responses) {
       answers[r.questionId] = r.answer;
@@ -15,7 +16,15 @@ class WellnessScorer {
     final energyScore = _computeEnergyScore(answers);
     final motivationScore = _computeMotivationScore(answers);
     final resilienceScore = _computeResilienceScore(answers);
-    final overallScore = ((stressScore + anxietyScore + sleepScore + moodScore + energyScore + motivationScore + resilienceScore) / 7).roundToDouble();
+    final overallScore = ((stressScore +
+                anxietyScore +
+                sleepScore +
+                moodScore +
+                energyScore +
+                motivationScore +
+                resilienceScore) /
+            7)
+        .roundToDouble();
 
     return {
       'overallScore': overallScore,
@@ -62,11 +71,16 @@ class WellnessScorer {
     double score = 50;
     if (a['sleep_quality'] is String) {
       switch (a['sleep_quality'] as String) {
-        case "I sleep well most nights": score = 80;
-        case "I sometimes struggle": score = 55;
-        case "I often have trouble sleeping": score = 35;
-        case "I rarely sleep well": score = 20;
-        case "I have a diagnosed sleep condition": score = 25;
+        case "I sleep well most nights":
+          score = 80;
+        case "I sometimes struggle":
+          score = 55;
+        case "I often have trouble sleeping":
+          score = 35;
+        case "I rarely sleep well":
+          score = 20;
+        case "I have a diagnosed sleep condition":
+          score = 25;
       }
     }
     return score.clamp(0, 100).roundToDouble();
@@ -121,11 +135,16 @@ class WellnessScorer {
     double score = 50;
     if (a['social_support'] is String) {
       switch (a['social_support'] as String) {
-        case "I have a strong support system": score = 75;
-        case "I have some support but wish I had more": score = 50;
-        case "I feel mostly alone": score = 30;
-        case "I don't have anyone I can count on": score = 20;
-        case "Prefer not to say": score = 45;
+        case "I have a strong support system":
+          score = 75;
+        case "I have some support but wish I had more":
+          score = 50;
+        case "I feel mostly alone":
+          score = 30;
+        case "I don't have anyone I can count on":
+          score = 20;
+        case "Prefer not to say":
+          score = 45;
       }
     }
     if (a['coping_mechanisms'] is List) {
@@ -134,7 +153,10 @@ class WellnessScorer {
       if (coping.contains('Nothing seems to help')) score -= 20;
     }
     if (a['exercise_frequency'] is String) {
-      if (a['exercise_frequency'] == 'Daily' || a['exercise_frequency'] == '3-4 times a week') score += 10;
+      if (a['exercise_frequency'] == 'Daily' ||
+          a['exercise_frequency'] == '3-4 times a week') {
+        score += 10;
+      }
     }
     return score.clamp(0, 100).roundToDouble();
   }

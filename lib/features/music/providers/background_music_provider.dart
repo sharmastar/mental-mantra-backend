@@ -4,7 +4,8 @@ import 'package:just_audio/just_audio.dart';
 import 'package:audio_session/audio_session.dart';
 import 'audio_player_provider.dart';
 
-class BackgroundMusicNotifier extends StateNotifier<bool> with WidgetsBindingObserver {
+class BackgroundMusicNotifier extends StateNotifier<bool>
+    with WidgetsBindingObserver {
   final AudioPlayer _bgPlayer = AudioPlayer();
   final Ref _ref;
   bool _initialized = false;
@@ -29,7 +30,9 @@ class BackgroundMusicNotifier extends StateNotifier<bool> with WidgetsBindingObs
     try {
       final session = await AudioSession.instance;
       await session.configure(const AudioSessionConfiguration.music());
-    } catch (_) {}
+    } catch (e) {
+      debugPrint('BackgroundMusicNotifier._init configure session: $e');
+    }
 
     final mainPlaying = _ref.read(audioPlayerProvider).isPlaying;
     bool loaded = false;
@@ -63,8 +66,9 @@ class BackgroundMusicNotifier extends StateNotifier<bool> with WidgetsBindingObs
         state = true;
         try {
           await _bgPlayer.play();
-        } catch (_) {
+        } catch (e) {
           if (!_disposed) state = false;
+          debugPrint('BackgroundMusicNotifier._init play: $e');
         }
       }
     }
@@ -82,7 +86,9 @@ class BackgroundMusicNotifier extends StateNotifier<bool> with WidgetsBindingObs
         try {
           await _bgPlayer.play();
           state = true;
-        } catch (_) {}
+        } catch (e) {
+          debugPrint('BackgroundMusicNotifier.toggle play: $e');
+        }
       } else {
         // Main player is playing, just mark as enabled for when it stops
         state = true;

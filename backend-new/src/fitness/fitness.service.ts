@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../common/prisma.service';
+import { CreateFitnessDto } from './dto/create-fitness.dto';
 
 @Injectable()
 export class FitnessService {
@@ -9,7 +10,7 @@ export class FitnessService {
     return this.prisma.fitnessRecord.findMany({ where: { userId }, orderBy: { date: 'desc' }, take: 30 });
   }
 
-  async create(userId: string, data: { activity: string; durationMin: number; calories?: number; notes?: string; date: string }) {
-    return this.prisma.fitnessRecord.create({ data: { userId, activity: data.activity, durationMin: data.durationMin, calories: data.calories, notes: data.notes, date: new Date(data.date) } });
+  async create(userId: string, dto: CreateFitnessDto) {
+    return this.prisma.fitnessRecord.create({ data: { userId, activity: dto.activity, durationMin: dto.durationMin, calories: dto.calories, notes: dto.notes, date: new Date(dto.date) } });
   }
 }

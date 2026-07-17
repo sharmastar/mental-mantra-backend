@@ -52,7 +52,8 @@ void main() {
     });
 
     test('copyWith does not modify original', () {
-      final original = SleepRecord(date: DateTime.now(), durationMinutes: 420, qualityRating: 3);
+      final original = SleepRecord(
+          date: DateTime.now(), durationMinutes: 420, qualityRating: 3);
       final copy = original.copyWith(durationMinutes: 480, qualityRating: 4);
       expect(original.durationMinutes, 420);
       expect(original.qualityRating, 3);

@@ -1,4 +1,6 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:timezone/timezone.dart' as tz;
 import 'package:timezone/data/latest.dart' as tz_data;
 import 'package:flutter_timezone/flutter_timezone.dart' as ftz;
@@ -14,29 +16,41 @@ class NotificationService {
     final localTz = await ftz.FlutterTimezone.getLocalTimezone();
     tz.setLocalLocation(tz.getLocation(localTz.identifier));
 
-    const androidSettings = AndroidInitializationSettings('@mipmap/ic_launcher');
+    // Request notification permission on Android 13+
+    if (!kIsWeb) {
+      final status = await Permission.notification.status;
+      if (status.isDenied || status.isPermanentlyDenied) {
+        await Permission.notification.request();
+      }
+    }
+
+    const androidSettings =
+        AndroidInitializationSettings('@mipmap/ic_launcher');
     const iosSettings = DarwinInitializationSettings(
       requestAlertPermission: true,
       requestBadgePermission: true,
       requestSoundPermission: true,
     );
-    const initSettings = InitializationSettings(android: androidSettings, iOS: iosSettings);
+    const initSettings =
+        InitializationSettings(android: androidSettings, iOS: iosSettings);
 
     await _local.initialize(
       initSettings,
       onDidReceiveNotificationResponse: _onNotificationTap,
     );
 
-    await _local.resolvePlatformSpecificImplementation<
-        AndroidFlutterLocalNotificationsPlugin>()?.createNotificationChannel(
-      const AndroidNotificationChannel(
-        'mental_mantra_reminders',
-        'Mental Mantra Reminders',
-        description: 'Daily wellness reminders',
-        importance: Importance.high,
-        playSound: true,
-      ),
-    );
+    await _local
+        .resolvePlatformSpecificImplementation<
+            AndroidFlutterLocalNotificationsPlugin>()
+        ?.createNotificationChannel(
+          const AndroidNotificationChannel(
+            'mental_mantra_reminders',
+            'Mental Mantra Reminders',
+            description: 'Daily wellness reminders',
+            importance: Importance.high,
+            playSound: true,
+          ),
+        );
   }
 
   static void _onNotificationTap(NotificationResponse response) {
@@ -73,7 +87,8 @@ class NotificationService {
 
   static tz.TZDateTime _nextInstanceOf(int hour, int minute) {
     final now = tz.TZDateTime.now(tz.local);
-    var scheduled = tz.TZDateTime(tz.local, now.year, now.month, now.day, hour, minute);
+    var scheduled =
+        tz.TZDateTime(tz.local, now.year, now.month, now.day, hour, minute);
     if (scheduled.isBefore(now)) {
       scheduled = scheduled.add(const Duration(days: 1));
     }

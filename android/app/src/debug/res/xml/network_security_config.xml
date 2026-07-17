@@ -2,7 +2,8 @@
 <network-security-config>
     <!-- Allow cleartext for local dev server only -->
     <domain-config cleartextTrafficPermitted="true">
-        <domain includeSubdomains="true">172.26.78.41</domain>
+        <domain includeSubdomains="true">172.26.77.0</domain>
+        <domain includeSubdomains="true">172.26.79.50</domain>
         <domain includeSubdomains="true">10.0.2.2</domain>
         <domain includeSubdomains="true">localhost</domain>
     </domain-config>

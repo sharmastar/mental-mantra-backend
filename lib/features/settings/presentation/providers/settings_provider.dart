@@ -46,12 +46,18 @@ class SettingsNotifier extends StateNotifier<SettingsState> {
   }
 
   Future<void> _loadSettings() async {
-    final dailyReminders = HiveStorage.getSetting('dailyReminders', defaultValue: true) as bool;
-    final wellnessTips = HiveStorage.getSetting('wellnessTips', defaultValue: true) as bool;
-    final achievementAlerts = HiveStorage.getSetting('achievementAlerts', defaultValue: true) as bool;
+    final dailyReminders =
+        HiveStorage.getSetting('dailyReminders', defaultValue: true) as bool;
+    final wellnessTips =
+        HiveStorage.getSetting('wellnessTips', defaultValue: true) as bool;
+    final achievementAlerts =
+        HiveStorage.getSetting('achievementAlerts', defaultValue: true) as bool;
     final biometricLogin = await SecureStorage.isBiometricEnabled();
-    final aiInsights = HiveStorage.getSetting('aiInsights', defaultValue: true) as bool;
-    final screenshotProtection = HiveStorage.getSetting('screenshotProtection', defaultValue: false) as bool;
+    final aiInsights =
+        HiveStorage.getSetting('aiInsights', defaultValue: true) as bool;
+    final screenshotProtection =
+        HiveStorage.getSetting('screenshotProtection', defaultValue: false)
+            as bool;
 
     if (screenshotProtection) {
       SecurityService.instance.enableScreenshotProtection();
@@ -88,7 +94,8 @@ class SettingsNotifier extends StateNotifier<SettingsState> {
   Future<bool> toggleBiometricLogin() async {
     final newValue = !state.biometricLogin;
     if (newValue) {
-      final isAvailable = await BiometricService.instance.isBiometricAvailable();
+      final isAvailable =
+          await BiometricService.instance.isBiometricAvailable();
       if (!isAvailable) return false;
       final authenticated = await BiometricService.instance.authenticate(
         localizedReason: 'Authenticate to enable Biometric Security',
@@ -119,7 +126,7 @@ class SettingsNotifier extends StateNotifier<SettingsState> {
   }
 }
 
-final appSettingsProvider = StateNotifierProvider<SettingsNotifier, SettingsState>((ref) {
+final appSettingsProvider =
+    StateNotifierProvider<SettingsNotifier, SettingsState>((ref) {
   return SettingsNotifier();
 });
-

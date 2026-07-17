@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mental_mantra/core/theme/app_theme.dart';
 
 class Goal {
   final String id;
@@ -16,7 +17,7 @@ class Goal {
     required this.title,
     required this.category,
     this.progress = 0.0,
-    this.color = const Color(0xFF42C8B7),
+    this.color = AppTheme.primaryColor,
     this.icon = Icons.self_improvement,
     this.current = 0,
     this.target = 1,
@@ -48,24 +49,24 @@ class Goal {
   }
 
   Map<String, dynamic> toJson() => {
-    'id': id,
-    'title': title,
-    'category': category,
-    'progress': progress,
-    'current': current,
-    'target': target,
-    'createdAt': createdAt.toIso8601String(),
-  };
+        'id': id,
+        'title': title,
+        'category': category,
+        'progress': progress,
+        'current': current,
+        'target': target,
+        'createdAt': createdAt.toIso8601String(),
+      };
 
   factory Goal.fromJson(Map<String, dynamic> json) => Goal(
-    id: json['id'] as String,
-    title: json['title'] as String,
-    category: json['category'] as String? ?? 'General',
-    progress: (json['progress'] as num?)?.toDouble() ?? 0.0,
-    current: (json['current'] as num?)?.toInt() ?? 0,
-    target: (json['target'] as num?)?.toInt() ?? 1,
-    createdAt: json['createdAt'] != null
-        ? DateTime.parse(json['createdAt'] as String)
-        : DateTime.now(),
-  );
+        id: json['id'] as String,
+        title: json['title'] as String,
+        category: json['category'] as String? ?? 'General',
+        progress: (json['progress'] as num?)?.toDouble() ?? 0.0,
+        current: (json['current'] as num?)?.toInt() ?? 0,
+        target: (json['target'] as num?)?.toInt() ?? 1,
+        createdAt: json['createdAt'] != null
+            ? DateTime.parse(json['createdAt'] as String)
+            : DateTime.now(),
+      );
 }

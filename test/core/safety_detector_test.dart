@@ -17,7 +17,8 @@ void main() {
     });
 
     test('detects hopelessness', () {
-      final result = SafetyDetector.assess('I feel hopeless and nothing matters anymore');
+      final result =
+          SafetyDetector.assess('I feel hopeless and nothing matters anymore');
       expect(result.containsCrisisIndicator, isTrue);
       expect(result.crisisType, 'hopelessness');
     });

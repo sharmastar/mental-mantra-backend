@@ -3,6 +3,10 @@ import { ApiTags, ApiOperation, ApiBearerAuth } from '@nestjs/swagger';
 import { RecoveryService } from './recovery.service';
 import { JwtAuthGuard } from '../common/guards/jwt-auth.guard';
 import { CurrentUser } from '../common/decorators/current-user.decorator';
+import { CreateUrgeDto } from './dto/create-urge.dto';
+import { CreateRecoverySessionDto } from './dto/create-recovery-session.dto';
+import { UpdateRecoverySessionDto } from './dto/update-recovery-session.dto';
+import { CreateRecoveryGoalDto } from './dto/create-recovery-goal.dto';
 
 @ApiTags('Recovery')
 @ApiBearerAuth()
@@ -25,8 +29,8 @@ export class RecoveryController {
 
   @Post('urges')
   @ApiOperation({ summary: 'Log an urge' })
-  async createUrge(@CurrentUser('id') userId: string, @Body() data: any) {
-    return { success: true, data: await this.recoveryService.createUrge(userId, data) };
+  async createUrge(@CurrentUser('id') userId: string, @Body() dto: CreateUrgeDto) {
+    return { success: true, data: await this.recoveryService.createUrge(userId, dto) };
   }
 
   @Get('sessions')
@@ -37,14 +41,14 @@ export class RecoveryController {
 
   @Post('sessions')
   @ApiOperation({ summary: 'Start a detox session' })
-  async createSession(@CurrentUser('id') userId: string, @Body() data: any) {
-    return { success: true, data: await this.recoveryService.createSession(userId, data) };
+  async createSession(@CurrentUser('id') userId: string, @Body() dto: CreateRecoverySessionDto) {
+    return { success: true, data: await this.recoveryService.createSession(userId, dto) };
   }
 
   @Put('sessions/:id')
   @ApiOperation({ summary: 'Update a detox session' })
-  async updateSession(@CurrentUser('id') userId: string, @Param('id') id: string, @Body() data: any) {
-    return { success: true, data: await this.recoveryService.updateSession(userId, id, data) };
+  async updateSession(@CurrentUser('id') userId: string, @Param('id') id: string, @Body() dto: UpdateRecoverySessionDto) {
+    return { success: true, data: await this.recoveryService.updateSession(userId, id, dto) };
   }
 
   @Get('goals')
@@ -55,7 +59,7 @@ export class RecoveryController {
 
   @Post('goals')
   @ApiOperation({ summary: 'Create a recovery goal' })
-  async createGoal(@CurrentUser('id') userId: string, @Body() data: any) {
-    return { success: true, data: await this.recoveryService.createGoal(userId, data) };
+  async createGoal(@CurrentUser('id') userId: string, @Body() dto: CreateRecoveryGoalDto) {
+    return { success: true, data: await this.recoveryService.createGoal(userId, dto) };
   }
 }

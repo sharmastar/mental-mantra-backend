@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../theme/app_theme.dart';
 import 'debounce_button.dart';
+import 'premium_bounce_interaction.dart';
 
 class CustomButton extends StatelessWidget {
   final String label;
@@ -25,7 +26,7 @@ class CustomButton extends StatelessWidget {
     this.backgroundColor,
     this.textColor,
     this.width,
-    this.height = 52,
+    this.height = 54, // Modern standard 2026 height is 54px for primary
     this.borderRadius = 16,
     this.isLoading = false,
     this.outlined = false,
@@ -36,64 +37,120 @@ class CustomButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final bgColor = backgroundColor ?? AppTheme.primaryColor;
-    final txtColor = textColor ?? (outlined ? bgColor : Colors.white);
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    const primaryColor = AppTheme.primaryColor;
+
+    // Determine colors
+    final bool isEnabled = onPressed != null && !isLoading;
+    final Color bgColor =
+        backgroundColor ?? (outlined ? Colors.transparent : primaryColor);
+    final Color txtColor = textColor ??
+        (outlined ? (isEnabled ? primaryColor : Colors.grey) : Colors.white);
 
     if (textButton) {
       return TextButton(
-        onPressed: isLoading ? null : onPressed,
+        onPressed: isEnabled ? onPressed : null,
+        style: TextButton.styleFrom(
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+          shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(borderRadius)),
+        ),
         child: isLoading
-            ? const SizedBox(width: 20, height: 20, child: CircularProgressIndicator(strokeWidth: 2))
-            : Text(label, style: TextStyle(color: txtColor, fontSize: fontSize, fontWeight: fontWeight)),
+            ? const SizedBox(
+                width: 20,
+                height: 20,
+                child: CircularProgressIndicator(
+                    strokeWidth: 2,
+                    valueColor:
+                        AlwaysStoppedAnimation<Color>(AppTheme.primaryColor)),
+              )
+            : Text(
+                label,
+                style: TextStyle(
+                  color:
+                      isEnabled ? txtColor : Colors.grey.withValues(alpha: 0.5),
+                  fontSize: fontSize,
+                  fontWeight: fontWeight,
+                ),
+              ),
       );
     }
 
-    Widget button = GestureDetector(
-      onTap: isLoading ? null : onPressed,
-      child: AnimatedContainer(
-        duration: const Duration(milliseconds: 200),
-        width: width ?? double.infinity,
-        height: height,
-        decoration: BoxDecoration(
-          color: outlined ? Colors.transparent : (isLoading ? bgColor.withValues(alpha: 0.7) : bgColor),
-          borderRadius: BorderRadius.circular(borderRadius),
-          border: outlined ? Border.all(color: bgColor, width: 1.5) : null,
-          boxShadow: outlined
-              ? null
-              : [
-                  BoxShadow(
-                    color: bgColor.withValues(alpha: 0.3),
-                    blurRadius: 12,
-                    offset: const Offset(0, 4),
-                  ),
-                ],
-        ),
-        alignment: Alignment.center,
-        child: isLoading
-            ? const SizedBox(width: 22, height: 22, child: CircularProgressIndicator(strokeWidth: 2.5, color: Colors.white))
-            : Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  if (icon != null) ...[
-                    Icon(icon, color: txtColor, size: 20),
-                    const SizedBox(width: 8),
-                  ],
-                  Text(
-                    label,
-                    style: TextStyle(
-                      color: txtColor,
-                      fontSize: fontSize,
-                      fontWeight: fontWeight,
-                    ),
-                  ),
-                ],
-              ),
+    Widget buttonContent = AnimatedContainer(
+      duration: const Duration(milliseconds: 200),
+      width: width ?? double.infinity,
+      height: height,
+      decoration: BoxDecoration(
+        color: outlined
+            ? Colors.transparent
+            : (isEnabled
+                ? bgColor
+                : (isDark ? Colors.white12 : Colors.grey.shade300)),
+        borderRadius: BorderRadius.circular(borderRadius),
+        border: outlined
+            ? Border.all(
+                color: isEnabled
+                    ? bgColor
+                    : (isDark ? Colors.white24 : Colors.grey.shade400),
+                width: 1.5)
+            : null,
+        boxShadow: outlined || !isEnabled
+            ? null
+            : [
+                BoxShadow(
+                  color: bgColor.withValues(alpha: 0.25),
+                  blurRadius: 16,
+                  offset: const Offset(0, 6),
+                ),
+              ],
       ),
+      alignment: Alignment.center,
+      child: isLoading
+          ? SizedBox(
+              width: 22,
+              height: 22,
+              child: CircularProgressIndicator(
+                strokeWidth: 2.5,
+                valueColor: AlwaysStoppedAnimation<Color>(
+                    outlined ? primaryColor : Colors.white),
+              ),
+            )
+          : Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                if (icon != null) ...[
+                  Icon(icon,
+                      color: isEnabled ? txtColor : Colors.grey, size: 20),
+                  const SizedBox(width: 8),
+                ],
+                Text(
+                  label,
+                  style: TextStyle(
+                    color: isEnabled
+                        ? txtColor
+                        : (isDark ? Colors.white38 : Colors.grey.shade600),
+                    fontSize: fontSize,
+                    fontWeight: fontWeight,
+                    letterSpacing: 0.3,
+                  ),
+                ),
+              ],
+            ),
     );
 
-    if (!outlined) {
-      button = DebounceButton(onTap: isLoading ? null : onPressed, child: button);
+    // Apply bounce animation on tap (always)
+    Widget button = PremiumBounceInteraction(
+      onTap: isEnabled ? onPressed : null,
+      child: buttonContent,
+    );
+
+    // Wrap with debounce for solid buttons to prevent double-taps
+    if (!outlined && isEnabled) {
+      button = DebounceButton(
+        onTap: onPressed,
+        child: button, // Keep bounce inside debounce
+      );
     }
 
     return button;

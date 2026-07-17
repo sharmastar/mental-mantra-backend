@@ -4,11 +4,12 @@ import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import helmet from 'helmet';
 import compression from 'compression';
 import { AppModule } from './app.module';
+import { StructuredLogger } from './common/logger/structured-logger.service';
 
 async function bootstrap() {
   const logger = new Logger('Bootstrap');
   const app = await NestFactory.create(AppModule, {
-    logger: ['log', 'error', 'warn', 'debug', 'verbose'],
+    logger: new StructuredLogger(),
   });
 
   app.setGlobalPrefix('api');

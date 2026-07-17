@@ -18,17 +18,16 @@ class ModernMiniPlayer extends ConsumerWidget {
         context,
         PageRouteBuilder(
           pageBuilder: (_, __, ___) => const FullScreenPlayer(),
-          transitionsBuilder: (_, animation, __, child) =>
-              SlideTransition(
-                position: Tween<Offset>(
-                  begin: const Offset(0, 1),
-                  end: Offset.zero,
-                ).animate(CurvedAnimation(
-                  parent: animation,
-                  curve: Curves.easeOutCubic,
-                )),
-                child: child,
-              ),
+          transitionsBuilder: (_, animation, __, child) => SlideTransition(
+            position: Tween<Offset>(
+              begin: const Offset(0, 1),
+              end: Offset.zero,
+            ).animate(CurvedAnimation(
+              parent: animation,
+              curve: Curves.easeOutCubic,
+            )),
+            child: child,
+          ),
           transitionDuration: const Duration(milliseconds: 400),
         ),
       ),
@@ -148,7 +147,8 @@ class ModernMiniPlayer extends ConsumerWidget {
             ),
           ),
         ),
-      ).animate().slideY(begin: 1, end: 0, duration: 350.ms, curve: Curves.easeOutCubic),
+      ).animate().slideY(
+          begin: 1, end: 0, duration: 350.ms, curve: Curves.easeOutCubic),
     );
   }
 }

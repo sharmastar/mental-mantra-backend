@@ -5,22 +5,23 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../../core/theme/app_theme.dart';
 import '../../../../core/config/sound_haptic_provider.dart';
-import '../../../../core/widgets/premium_bounce_interaction.dart';
 import '../../../../core/utils/meditation_utils.dart';
+import '../../../../core/widgets/premium_bounce_interaction.dart';
 
 class MeditationPlayerPage extends ConsumerStatefulWidget {
   final Map<String, dynamic> args;
   const MeditationPlayerPage({super.key, required this.args});
 
   @override
-  ConsumerState<MeditationPlayerPage> createState() => _MeditationPlayerPageState();
+  ConsumerState<MeditationPlayerPage> createState() =>
+      _MeditationPlayerPageState();
 }
 
 class _MeditationPlayerPageState extends ConsumerState<MeditationPlayerPage>
     with TickerProviderStateMixin {
   late AnimationController _breathController;
   late AnimationController _pulseController;
-  
+
   bool _isPlaying = false;
   double _progress = 0.0;
   int _elapsed = 0;
@@ -92,23 +93,25 @@ class _MeditationPlayerPageState extends ConsumerState<MeditationPlayerPage>
     });
   }
 
-  String _formatTime(int seconds) {
-    final m = (seconds ~/ 60).toString().padLeft(2, '0');
-    final s = (seconds % 60).toString().padLeft(2, '0');
-    return '$m:$s';
-  }
-
   @override
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
-    
+
     return Scaffold(
       body: Container(
         decoration: BoxDecoration(
           gradient: LinearGradient(
             colors: isDark
-                ? [const Color(0xFF12101E), const Color(0xFF1A1530), const Color(0xFF1C1930)]
-                : [const Color(0xFFF8F7FC), const Color(0xFFF5F2FF), const Color(0xFFE0DBF0)],
+                ? [
+                    const Color(0xFF12101E),
+                    const Color(0xFF1A1530),
+                    const Color(0xFF1C1930)
+                  ]
+                : [
+                    const Color(0xFFF8F7FC),
+                    const Color(0xFFF5F2FF),
+                    const Color(0xFFE0DBF0)
+                  ],
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
           ),
@@ -118,7 +121,8 @@ class _MeditationPlayerPageState extends ConsumerState<MeditationPlayerPage>
             children: [
               // Top Custom Bar
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
@@ -145,7 +149,8 @@ class _MeditationPlayerPageState extends ConsumerState<MeditationPlayerPage>
                         color: isDark ? Colors.white70 : Colors.black87,
                       ),
                       onPressed: () {
-                        triggerHaptic(HapticType.selection, enabled: _hapticsEnabled);
+                        triggerHaptic(HapticType.selection,
+                            enabled: _hapticsEnabled);
                       },
                     ),
                   ],
@@ -173,7 +178,10 @@ class _MeditationPlayerPageState extends ConsumerState<MeditationPlayerPage>
                             decoration: BoxDecoration(
                               shape: BoxShape.circle,
                               border: Border.all(
-                                color: isDark ? Colors.white30 : AppTheme.primaryColor.withValues(alpha: 0.3),
+                                color: isDark
+                                    ? Colors.white30
+                                    : AppTheme.primaryColor
+                                        .withValues(alpha: 0.3),
                                 width: 2,
                               ),
                             ),
@@ -186,7 +194,9 @@ class _MeditationPlayerPageState extends ConsumerState<MeditationPlayerPage>
                         height: 220 * scale,
                         decoration: BoxDecoration(
                           shape: BoxShape.circle,
-                          color: isDark ? Colors.white.withValues(alpha: 0.04) : AppTheme.primaryColor.withValues(alpha: 0.06),
+                          color: isDark
+                              ? Colors.white.withValues(alpha: 0.04)
+                              : AppTheme.primaryColor.withValues(alpha: 0.06),
                         ),
                       ),
                       // Inner breathing circle
@@ -195,10 +205,13 @@ class _MeditationPlayerPageState extends ConsumerState<MeditationPlayerPage>
                         height: 160 * scale,
                         decoration: BoxDecoration(
                           shape: BoxShape.circle,
-                          gradient: isDark ? AppTheme.nightGradient : AppTheme.primaryGradient,
+                          gradient: isDark
+                              ? AppTheme.nightGradient
+                              : AppTheme.primaryGradient,
                           boxShadow: [
                             BoxShadow(
-                              color: AppTheme.primaryColor.withValues(alpha: isDark ? 0.3 : 0.2),
+                              color: AppTheme.primaryColor
+                                  .withValues(alpha: isDark ? 0.3 : 0.2),
                               blurRadius: 30,
                               spreadRadius: 10,
                             ),
@@ -207,10 +220,13 @@ class _MeditationPlayerPageState extends ConsumerState<MeditationPlayerPage>
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            const Icon(Icons.self_improvement, color: Colors.white, size: 48),
+                            const Icon(Icons.self_improvement,
+                                color: Colors.white, size: 48),
                             const SizedBox(height: 12),
                             Text(
-                              _breathController.value > 0.5 ? 'Breathe In' : 'Breathe Out',
+                              _breathController.value > 0.5
+                                  ? 'Breathe In'
+                                  : 'Breathe Out',
                               style: const TextStyle(
                                 fontFamily: 'Outfit',
                                 color: Colors.white,
@@ -277,11 +293,16 @@ class _MeditationPlayerPageState extends ConsumerState<MeditationPlayerPage>
                     SliderTheme(
                       data: SliderThemeData(
                         trackHeight: 3.5,
-                        thumbShape: const RoundSliderThumbShape(enabledThumbRadius: 6),
-                        activeTrackColor: isDark ? Colors.white : AppTheme.primaryColor,
-                        inactiveTrackColor: isDark ? Colors.white24 : Colors.black12,
-                        thumbColor: isDark ? Colors.white : AppTheme.primaryColor,
-                        overlayColor: AppTheme.primaryColor.withValues(alpha: 0.12),
+                        thumbShape:
+                            const RoundSliderThumbShape(enabledThumbRadius: 6),
+                        activeTrackColor:
+                            isDark ? Colors.white : AppTheme.primaryColor,
+                        inactiveTrackColor:
+                            isDark ? Colors.white24 : Colors.black12,
+                        thumbColor:
+                            isDark ? Colors.white : AppTheme.primaryColor,
+                        overlayColor:
+                            AppTheme.primaryColor.withValues(alpha: 0.12),
                       ),
                       child: Slider(
                         value: _progress.clamp(0.0, 1.0),
@@ -299,7 +320,7 @@ class _MeditationPlayerPageState extends ConsumerState<MeditationPlayerPage>
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text(
-                            _formatTime(_elapsed),
+                            formatDuration(_elapsed),
                             style: TextStyle(
                               fontFamily: 'Outfit',
                               color: isDark ? Colors.white60 : Colors.black54,
@@ -307,7 +328,7 @@ class _MeditationPlayerPageState extends ConsumerState<MeditationPlayerPage>
                             ),
                           ),
                           Text(
-                            _formatTime(_total),
+                            formatDuration(_total),
                             style: TextStyle(
                               fontFamily: 'Outfit',
                               color: isDark ? Colors.white60 : Colors.black54,
@@ -327,13 +348,16 @@ class _MeditationPlayerPageState extends ConsumerState<MeditationPlayerPage>
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   IconButton(
-                    icon: Icon(Icons.replay_10_rounded, color: isDark ? Colors.white70 : Colors.black87, size: 32),
+                    icon: Icon(Icons.replay_10_rounded,
+                        color: isDark ? Colors.white70 : Colors.black87,
+                        size: 32),
                     onPressed: () {
                       setState(() {
                         _elapsed = max(0, _elapsed - 10);
                         _progress = _elapsed / _total;
                       });
-                      triggerHaptic(HapticType.selection, enabled: _hapticsEnabled);
+                      triggerHaptic(HapticType.selection,
+                          enabled: _hapticsEnabled);
                     },
                   ),
                   const SizedBox(width: 32),
@@ -343,15 +367,21 @@ class _MeditationPlayerPageState extends ConsumerState<MeditationPlayerPage>
                       width: 72,
                       height: 72,
                       decoration: BoxDecoration(
-                        color: isDark ? Colors.white12 : AppTheme.primaryColor.withValues(alpha: 0.15),
+                        color: isDark
+                            ? Colors.white12
+                            : AppTheme.primaryColor.withValues(alpha: 0.15),
                         shape: BoxShape.circle,
                         border: Border.all(
-                          color: isDark ? Colors.white24 : AppTheme.primaryColor.withValues(alpha: 0.3),
+                          color: isDark
+                              ? Colors.white24
+                              : AppTheme.primaryColor.withValues(alpha: 0.3),
                           width: 1.5,
                         ),
                       ),
                       child: Icon(
-                        _isPlaying ? Icons.pause_rounded : Icons.play_arrow_rounded,
+                        _isPlaying
+                            ? Icons.pause_rounded
+                            : Icons.play_arrow_rounded,
                         color: isDark ? Colors.white : AppTheme.primaryColor,
                         size: 42,
                       ),
@@ -359,13 +389,16 @@ class _MeditationPlayerPageState extends ConsumerState<MeditationPlayerPage>
                   ),
                   const SizedBox(width: 32),
                   IconButton(
-                    icon: Icon(Icons.forward_10_rounded, color: isDark ? Colors.white70 : Colors.black87, size: 32),
+                    icon: Icon(Icons.forward_10_rounded,
+                        color: isDark ? Colors.white70 : Colors.black87,
+                        size: 32),
                     onPressed: () {
                       setState(() {
                         _elapsed = min(_total, _elapsed + 10);
                         _progress = _elapsed / _total;
                       });
-                      triggerHaptic(HapticType.selection, enabled: _hapticsEnabled);
+                      triggerHaptic(HapticType.selection,
+                          enabled: _hapticsEnabled);
                     },
                   ),
                 ],
@@ -442,13 +475,15 @@ class _ControlChip extends StatelessWidget {
 class EqualizerVisualizer extends StatefulWidget {
   final bool isPlaying;
   final Color color;
-  const EqualizerVisualizer({super.key, required this.isPlaying, required this.color});
+  const EqualizerVisualizer(
+      {super.key, required this.isPlaying, required this.color});
 
   @override
   State<EqualizerVisualizer> createState() => _EqualizerVisualizerState();
 }
 
-class _EqualizerVisualizerState extends State<EqualizerVisualizer> with SingleTickerProviderStateMixin {
+class _EqualizerVisualizerState extends State<EqualizerVisualizer>
+    with SingleTickerProviderStateMixin {
   late AnimationController _controller;
 
   @override
@@ -504,7 +539,10 @@ class WavePainter extends CustomPainter {
   final bool isPlaying;
   final Color color;
 
-  WavePainter({required this.animationValue, required this.isPlaying, required this.color});
+  WavePainter(
+      {required this.animationValue,
+      required this.isPlaying,
+      required this.color});
 
   @override
   void paint(Canvas canvas, Size size) {
@@ -525,7 +563,8 @@ class WavePainter extends CustomPainter {
 
       path.reset();
       for (double x = 0; x <= width; x += 3) {
-        final y = midY + sin(x * frequency + phase) * amplitude * sin(x * pi / width);
+        final y =
+            midY + sin(x * frequency + phase) * amplitude * sin(x * pi / width);
         if (x == 0) {
           path.moveTo(x, y);
         } else {
@@ -539,8 +578,7 @@ class WavePainter extends CustomPainter {
 
   @override
   bool shouldRepaint(covariant WavePainter oldDelegate) {
-    return oldDelegate.animationValue != animationValue || oldDelegate.isPlaying != isPlaying;
+    return oldDelegate.animationValue != animationValue ||
+        oldDelegate.isPlaying != isPlaying;
   }
 }
-
-

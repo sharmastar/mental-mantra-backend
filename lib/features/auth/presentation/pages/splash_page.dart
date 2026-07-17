@@ -1,11 +1,10 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:go_router/go_router.dart';
 import '../../providers/auth_provider.dart';
 import '../../../../core/router/app_router.dart';
-import '../../../../core/theme/app_theme.dart';
-import '../../../../core/widgets/skeleton_loader.dart';
 import '../../../../shared/widgets/app_logo.dart';
 
 class SplashPage extends ConsumerStatefulWidget {
@@ -24,25 +23,33 @@ class _SplashPageState extends ConsumerState<SplashPage>
   @override
   void initState() {
     super.initState();
+    // 2500ms animation duration for calming entrance
     _controller = AnimationController(
       vsync: this,
-      duration: const Duration(milliseconds: 1500),
+      duration: const Duration(milliseconds: 2500),
     );
-    _fadeAnim = CurvedAnimation(parent: _controller, curve: Curves.easeIn);
-    _scaleAnim = Tween<double>(begin: 0.8, end: 1.0).animate(
-      CurvedAnimation(parent: _controller, curve: Curves.elasticOut),
+    
+    _fadeAnim = CurvedAnimation(
+      parent: _controller,
+      curve: const Interval(0.0, 0.85, curve: Curves.easeIn),
     );
+    
+    _scaleAnim = Tween<double>(begin: 0.94, end: 1.0).animate(
+      CurvedAnimation(
+        parent: _controller,
+        curve: const Interval(0.0, 1.0, curve: Curves.easeOutCubic),
+      ),
+    );
+
     _controller.forward();
     _initAndNavigate();
   }
 
   Future<void> _initAndNavigate() async {
-    // Minimum splash duration for animation to play
-    await Future.delayed(const Duration(milliseconds: 1800));
-    if (!mounted) return;
-
-    // Wait for auth to finish loading with timeout
-    await _waitForAuth();
+    await Future.wait([
+      Future.delayed(const Duration(milliseconds: 3200)),
+      _waitForAuth(),
+    ]);
     if (!mounted) return;
 
     final state = ref.read(authStateProvider);
@@ -59,12 +66,19 @@ class _SplashPageState extends ConsumerState<SplashPage>
   Future<void> _waitForAuth() async {
     if (!ref.read(authStateProvider).isLoading) return;
     final completer = Completer<void>();
-    ref.listen(authStateProvider, (prev, next) {
+    final sub = ref.listenManual(authStateProvider, (prev, next) {
       if (!next.isLoading && !completer.isCompleted) {
         completer.complete();
       }
     });
-    await completer.future.timeout(const Duration(seconds: 3));
+    try {
+      await completer.future.timeout(const Duration(milliseconds: 1500));
+    } catch (e) {
+      debugPrint('[SplashPage] Auth wait timed out: $e');
+      if (!completer.isCompleted) completer.complete();
+    } finally {
+      sub.close();
+    }
   }
 
   @override
@@ -75,9 +89,22 @@ class _SplashPageState extends ConsumerState<SplashPage>
 
   @override
   Widget build(BuildContext context) {
+    const splashGradient = LinearGradient(
+      colors: [
+        Color(0xFF071415), // Deep dark teal
+        Color(0xFF176E65), // Mid teal
+        Color(0xFF1E9B8E), // Vibrant therapeutic teal
+      ],
+      begin: Alignment.topLeft,
+      end: Alignment.bottomRight,
+    );
+
+    const brandingColor = Color(0xFFE2F3F2); // Soft mint/white typography
+    final subtitleColor = Colors.white.withValues(alpha: 0.7);
+
     return Scaffold(
       body: Container(
-        decoration: const BoxDecoration(gradient: AppTheme.nightGradient),
+        decoration: const BoxDecoration(gradient: splashGradient),
         child: Center(
           child: FadeTransition(
             opacity: _fadeAnim,
@@ -86,46 +113,19 @@ class _SplashPageState extends ConsumerState<SplashPage>
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  const AppLogo.hero(),
-                  const SizedBox(height: 16),
+                  const AppLogo.hero(
+                    color: brandingColor,
+                  ),
+                  const SizedBox(height: 32),
                   Text(
-                    'Your AI Wellness Companion',
-                    style: TextStyle(
+                    'Your Mindful Wellness Companion',
+                    style: GoogleFonts.outfit(
                       fontSize: 16,
-                      color: Colors.white.withValues(alpha: 0.7),
+                      color: subtitleColor,
                       fontWeight: FontWeight.w400,
+                      letterSpacing: 0.5,
                     ),
                   ),
-                  const SizedBox(height: 40),
-                  const Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 40),
-                    child: SkeletonLoader(height: 14, borderRadius: 4),
-                  ),
-                  const SizedBox(height: 12),
-                  const Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 80),
-                    child: SkeletonLoader(height: 10, borderRadius: 4),
-                  ),
-                  const SizedBox(height: 24),
-                  ...List.generate(3, (i) => const Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 32, vertical: 6),
-                    child: Row(
-                      children: [
-                        SkeletonLoader(width: 48, height: 48, borderRadius: 12),
-                        SizedBox(width: 12),
-                        Expanded(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              SkeletonLoader(width: double.infinity, height: 14),
-                              SizedBox(height: 6),
-                              SkeletonLoader(width: 100, height: 10),
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
-                  )),
                 ],
               ),
             ),

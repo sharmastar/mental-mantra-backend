@@ -10,7 +10,8 @@ class MeditationTimerPage extends ConsumerStatefulWidget {
   const MeditationTimerPage({super.key});
 
   @override
-  ConsumerState<MeditationTimerPage> createState() => _MeditationTimerPageState();
+  ConsumerState<MeditationTimerPage> createState() =>
+      _MeditationTimerPageState();
 }
 
 class _MeditationTimerPageState extends ConsumerState<MeditationTimerPage>
@@ -27,7 +28,8 @@ class _MeditationTimerPageState extends ConsumerState<MeditationTimerPage>
   @override
   void initState() {
     super.initState();
-    _animController = AnimationController(vsync: this, duration: const Duration(milliseconds: 2500))
+    _animController = AnimationController(
+        vsync: this, duration: const Duration(milliseconds: 2500))
       ..repeat(reverse: true);
     _pulseAnim = Tween(begin: 0.96, end: 1.04).animate(
       CurvedAnimation(parent: _animController, curve: Curves.easeInOutCubic),
@@ -69,6 +71,10 @@ class _MeditationTimerPageState extends ConsumerState<MeditationTimerPage>
     _animController.repeat(reverse: true);
     setState(() => _isRunning = true);
     _timer = Timer.periodic(const Duration(seconds: 1), (_) {
+      if (!mounted) {
+        _timer?.cancel();
+        return;
+      }
       if (_seconds <= 1) {
         _timer?.cancel();
         _animController.stop();
@@ -91,24 +97,30 @@ class _MeditationTimerPageState extends ConsumerState<MeditationTimerPage>
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(28)),
         title: const Row(
           children: [
-            Icon(Icons.self_improvement, color: AppTheme.primaryColor, size: 28),
+            Icon(Icons.self_improvement,
+                color: AppTheme.primaryColor, size: 28),
             SizedBox(width: 12),
             Text(
               'Session Complete',
-              style: TextStyle(fontFamily: 'Playfair Display', fontWeight: FontWeight.bold),
+              style: TextStyle(
+                  fontFamily: 'Playfair Display', fontWeight: FontWeight.bold),
             ),
           ],
         ),
         content: const Text(
           'Well done. Take a deep breath and notice how you feel right now.',
-          style: TextStyle(fontFamily: 'Outfit', fontSize: 15, color: Colors.grey),
+          style:
+              TextStyle(fontFamily: 'Outfit', fontSize: 15, color: Colors.grey),
         ),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(ctx),
             child: const Text(
               'Finish',
-              style: TextStyle(fontFamily: 'Outfit', fontWeight: FontWeight.w600, color: AppTheme.primaryColor),
+              style: TextStyle(
+                  fontFamily: 'Outfit',
+                  fontWeight: FontWeight.w600,
+                  color: AppTheme.primaryColor),
             ),
           ),
         ],
@@ -146,13 +158,31 @@ class _MeditationTimerPageState extends ConsumerState<MeditationTimerPage>
       appBar: AppBar(
         title: const Text(
           'Silent Timer',
-          style: TextStyle(fontFamily: 'Playfair Display', fontWeight: FontWeight.bold),
+          style: TextStyle(
+              fontFamily: 'Playfair Display', fontWeight: FontWeight.bold),
         ),
         backgroundColor: Colors.transparent,
         elevation: 0,
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios_new, size: 18),
-          onPressed: () => Navigator.maybePop(context),
+        leading: Center(
+          child: Container(
+            margin: const EdgeInsets.only(left: 12),
+            decoration: BoxDecoration(
+              color: isDark
+                  ? Colors.white.withValues(alpha: 0.08)
+                  : Colors.black.withValues(alpha: 0.04),
+              shape: BoxShape.circle,
+            ),
+            child: IconButton(
+              icon: const Icon(Icons.arrow_back_ios_new, size: 16),
+              color: isDark ? Colors.white : const Color(0xFF0E1A1B),
+              onPressed: () => Navigator.maybePop(context),
+              padding: EdgeInsets.zero,
+              constraints: const BoxConstraints(
+                minWidth: 36,
+                minHeight: 36,
+              ),
+            ),
+          ),
         ),
       ),
       body: Column(
@@ -171,10 +201,13 @@ class _MeditationTimerPageState extends ConsumerState<MeditationTimerPage>
                         height: 270,
                         decoration: BoxDecoration(
                           shape: BoxShape.circle,
-                          gradient: isDark ? AppTheme.nightGradient : AppTheme.primaryGradient,
+                          gradient: isDark
+                              ? AppTheme.nightGradient
+                              : AppTheme.primaryGradient,
                           boxShadow: [
                             BoxShadow(
-                              color: AppTheme.primaryColor.withValues(alpha: _isRunning ? 0.35 : 0.15),
+                              color: AppTheme.primaryColor
+                                  .withValues(alpha: _isRunning ? 0.35 : 0.15),
                               blurRadius: 40,
                               spreadRadius: 5,
                             ),
@@ -190,7 +223,8 @@ class _MeditationTimerPageState extends ConsumerState<MeditationTimerPage>
                                 value: progress,
                                 strokeWidth: 3.5,
                                 backgroundColor: Colors.white12,
-                                valueColor: const AlwaysStoppedAnimation(Colors.white),
+                                valueColor:
+                                    const AlwaysStoppedAnimation(Colors.white),
                               ),
                             ),
                             Column(
@@ -251,21 +285,30 @@ class _MeditationTimerPageState extends ConsumerState<MeditationTimerPage>
                                 fontFamily: 'Outfit',
                                 color: isSelected
                                     ? AppTheme.primaryColor
-                                    : (isDark ? Colors.white70 : Colors.black87),
-                                fontWeight: isSelected ? FontWeight.w600 : FontWeight.normal,
+                                    : (isDark
+                                        ? Colors.white70
+                                        : Colors.black87),
+                                fontWeight: isSelected
+                                    ? FontWeight.w600
+                                    : FontWeight.normal,
                               ),
                             ),
                             selected: isSelected,
                             onSelected: (_) => _setDuration(secs),
-                            selectedColor: AppTheme.primaryColor.withValues(alpha: 0.15),
-                            backgroundColor: isDark ? AppTheme.darkCard : Colors.white,
+                            selectedColor:
+                                AppTheme.primaryColor.withValues(alpha: 0.15),
+                            backgroundColor:
+                                isDark ? AppTheme.darkCard : Colors.white,
                             side: BorderSide(
                               color: isSelected
                                   ? AppTheme.primaryColor
-                                  : (isDark ? AppTheme.darkBorder : AppTheme.lightBorder),
+                                  : (isDark
+                                      ? AppTheme.darkBorder
+                                      : AppTheme.lightBorder),
                               width: 1,
                             ),
-                            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(16)),
                           ),
                         );
                       },
@@ -289,7 +332,9 @@ class _MeditationTimerPageState extends ConsumerState<MeditationTimerPage>
                         color: isDark ? AppTheme.darkCard : Colors.white,
                         borderRadius: BorderRadius.circular(20),
                         border: Border.all(
-                          color: isDark ? AppTheme.darkBorder : AppTheme.lightBorder,
+                          color: isDark
+                              ? AppTheme.darkBorder
+                              : AppTheme.lightBorder,
                         ),
                       ),
                       child: Row(
@@ -326,7 +371,8 @@ class _MeditationTimerPageState extends ConsumerState<MeditationTimerPage>
                         borderRadius: BorderRadius.circular(24),
                         boxShadow: [
                           BoxShadow(
-                            color: AppTheme.primaryColor.withValues(alpha: 0.25),
+                            color:
+                                AppTheme.primaryColor.withValues(alpha: 0.25),
                             blurRadius: 16,
                             offset: const Offset(0, 4),
                           )
@@ -336,7 +382,9 @@ class _MeditationTimerPageState extends ConsumerState<MeditationTimerPage>
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Icon(
-                            _isRunning ? Icons.pause_rounded : Icons.play_arrow_rounded,
+                            _isRunning
+                                ? Icons.pause_rounded
+                                : Icons.play_arrow_rounded,
                             color: Colors.white,
                             size: 22,
                           ),
@@ -365,7 +413,9 @@ class _MeditationTimerPageState extends ConsumerState<MeditationTimerPage>
                         color: isDark ? AppTheme.darkCard : Colors.white,
                         borderRadius: BorderRadius.circular(20),
                         border: Border.all(
-                          color: isDark ? AppTheme.darkBorder : AppTheme.lightBorder,
+                          color: isDark
+                              ? AppTheme.darkBorder
+                              : AppTheme.lightBorder,
                         ),
                       ),
                       child: Row(

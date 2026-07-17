@@ -92,11 +92,25 @@ class QuickAction {
 }
 
 enum IconType {
-  chat, journal, meditate, therapy, breathing, music,
-  sleep, goals, habits, achievements, streak, timer,
-  detox, discover, spiritual, water, walk, read,
+  chat,
+  journal,
+  meditate,
+  therapy,
+  breathing,
+  music,
+  sleep,
+  goals,
+  habits,
+  achievements,
+  streak,
+  timer,
+  detox,
+  discover,
+  spiritual,
+  water,
+  walk,
+  read,
 }
-
 
 class MeditationRecommendation {
   final String title;
@@ -138,7 +152,13 @@ class JournalPromptSuggestion {
   });
 }
 
-enum JournalPromptType { reflection, gratitude, emotionalCheckin, goalSetting, freeform }
+enum JournalPromptType {
+  reflection,
+  gratitude,
+  emotionalCheckin,
+  goalSetting,
+  freeform
+}
 
 class SleepRecommendation {
   final String tip;

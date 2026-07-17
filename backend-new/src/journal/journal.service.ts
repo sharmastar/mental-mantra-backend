@@ -1,5 +1,7 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from '../common/prisma.service';
+import { CreateJournalDto } from './dto/create-journal.dto';
+import { UpdateJournalDto } from './dto/update-journal.dto';
 
 @Injectable()
 export class JournalService {
@@ -28,23 +30,38 @@ export class JournalService {
     return this.parseTags(entry);
   }
 
-  async create(userId: string, data: { title?: string; content: string; mood?: number; moodEmoji?: string; tags?: string[] }) {
-    if (!data.content?.trim()) throw new NotFoundException('Content is required');
-    const wordCount = data.content.trim().split(/\s+/).length;
+  async create(userId: string, dto: CreateJournalDto) {
+    if (!dto.content?.trim()) throw new NotFoundException('Content is required');
+    const wordCount = dto.content.trim().split(/\s+/).length;
     const entry = await this.prisma.journalEntry.create({
-      data: { userId, title: data.title, content: data.content.trim(), mood: data.mood, moodEmoji: data.moodEmoji, tags: data.tags ? JSON.stringify(data.tags) : '[]', wordCount },
+      data: {
+        userId,
+        title: dto.title,
+        content: dto.content.trim(),
+        mood: dto.mood,
+        moodEmoji: dto.moodEmoji,
+        tags: dto.tags ? JSON.stringify(dto.tags) : '[]',
+        wordCount,
+      },
     });
     await this.prisma.user.update({ where: { id: userId }, data: { totalPoints: { increment: 20 } } });
     return this.parseTags(entry);
   }
 
-  async update(userId: string, id: string, data: any) {
+  async update(userId: string, id: string, dto: UpdateJournalDto) {
     const entry = await this.prisma.journalEntry.findFirst({ where: { id, userId } });
     if (!entry) throw new NotFoundException('Journal entry not found');
-    const tags = data.tags !== undefined ? JSON.stringify(data.tags) : entry.tags;
+    const tags = dto.tags !== undefined ? JSON.stringify(dto.tags) : entry.tags;
     const updated = await this.prisma.journalEntry.update({
       where: { id },
-      data: { ...data, tags, wordCount: data.content ? data.content.trim().split(/\s+/).length : entry.wordCount },
+      data: {
+        title: dto.title !== undefined ? dto.title : entry.title,
+        content: dto.content !== undefined ? dto.content.trim() : entry.content,
+        mood: dto.mood !== undefined ? dto.mood : entry.mood,
+        moodEmoji: dto.moodEmoji !== undefined ? dto.moodEmoji : entry.moodEmoji,
+        tags,
+        wordCount: dto.content ? dto.content.trim().split(/\s+/).length : entry.wordCount,
+      },
     });
     return this.parseTags(updated);
   }

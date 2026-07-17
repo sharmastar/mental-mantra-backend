@@ -15,7 +15,8 @@ void main() {
       final entry = JournalEntry(
         id: '1',
         title: 'Great Day',
-        content: 'I feel so happy and grateful today. I had a great workout and achieved my health goal.',
+        content:
+            'I feel so happy and grateful today. I had a great workout and achieved my health goal.',
         mood: 5,
         createdAt: DateTime.now(),
         updatedAt: DateTime.now(),
@@ -23,7 +24,8 @@ void main() {
 
       final insight = engine.analyzeEntry(entry);
       expect(insight.emotions.sentimentScore, greaterThan(0));
-      expect(insight.emotions.sentimentLabel, equals(SentimentLabel.veryPositive));
+      expect(
+          insight.emotions.sentimentLabel, equals(SentimentLabel.veryPositive));
       expect(insight.dominantThemes, contains('health'));
       expect(insight.dominantThemes, contains('gratitude'));
     });
@@ -32,7 +34,8 @@ void main() {
       final entry = JournalEntry(
         id: '2',
         title: 'Rough Day',
-        content: 'Work was awful today. My boss gave me so much pressure and deadline stress.',
+        content:
+            'Work was awful today. My boss gave me so much pressure and deadline stress.',
         mood: 1,
         createdAt: DateTime.now(),
         updatedAt: DateTime.now(),
@@ -40,7 +43,8 @@ void main() {
 
       final insight = engine.analyzeEntry(entry);
       expect(insight.emotions.sentimentScore, lessThan(0));
-      expect(insight.emotions.sentimentLabel, equals(SentimentLabel.veryNegative));
+      expect(
+          insight.emotions.sentimentLabel, equals(SentimentLabel.veryNegative));
       expect(insight.dominantThemes, contains('work_stress'));
     });
   });

@@ -16,10 +16,11 @@ void main() {
       );
 
       expect(find.byType(AppLogo), findsOneWidget);
-      expect(find.byType(Image), findsOneWidget);
+      expect(find.byType(MentalMantraLogo), findsOneWidget);
     });
 
-    testWidgets('OfflineBanner renders wrapped child correctly', (WidgetTester tester) async {
+    testWidgets('OfflineBanner renders wrapped child correctly',
+        (WidgetTester tester) async {
       await tester.pumpWidget(
         const ProviderScope(
           child: MaterialApp(

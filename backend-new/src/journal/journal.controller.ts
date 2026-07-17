@@ -3,6 +3,8 @@ import { ApiTags, ApiOperation, ApiBearerAuth } from '@nestjs/swagger';
 import { JournalService } from './journal.service';
 import { JwtAuthGuard } from '../common/guards/jwt-auth.guard';
 import { CurrentUser } from '../common/decorators/current-user.decorator';
+import { CreateJournalDto } from './dto/create-journal.dto';
+import { UpdateJournalDto } from './dto/update-journal.dto';
 
 @ApiTags('Journal')
 @ApiBearerAuth()
@@ -19,8 +21,8 @@ export class JournalController {
 
   @Post()
   @ApiOperation({ summary: 'Create journal entry' })
-  async create(@CurrentUser('id') userId: string, @Body() data: any) {
-    return { success: true, data: await this.journalService.create(userId, data) };
+  async create(@CurrentUser('id') userId: string, @Body() dto: CreateJournalDto) {
+    return { success: true, data: await this.journalService.create(userId, dto) };
   }
 
   @Get(':id')
@@ -31,8 +33,8 @@ export class JournalController {
 
   @Put(':id')
   @ApiOperation({ summary: 'Update journal entry' })
-  async update(@CurrentUser('id') userId: string, @Param('id') id: string, @Body() data: any) {
-    return { success: true, data: await this.journalService.update(userId, id, data) };
+  async update(@CurrentUser('id') userId: string, @Param('id') id: string, @Body() dto: UpdateJournalDto) {
+    return { success: true, data: await this.journalService.update(userId, id, dto) };
   }
 
   @Delete(':id')

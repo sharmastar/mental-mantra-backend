@@ -61,16 +61,23 @@ enum OnboardingSection {
   final String sectionLabel;
   const OnboardingSection(this.step, this.sectionLabel);
 
-  bool get isSymptomQuestion =>
-      step >= 10 && step <= 21;
+  bool get isSymptomQuestion => step >= 10 && step <= 21;
 
   String get symptomId {
     if (!isSymptomQuestion) return '';
     const symptoms = [
-      'feeling_overwhelmed', 'nervous_anxious', 'difficulty_concentrating',
-      'loss_of_interest', 'irritable_angry', 'low_energy',
-      'restless', 'hopeless', 'physical_tension',
-      'avoiding_people', 'intrusive_thoughts', 'emotional_numbness',
+      'feeling_overwhelmed',
+      'nervous_anxious',
+      'difficulty_concentrating',
+      'loss_of_interest',
+      'irritable_angry',
+      'low_energy',
+      'restless',
+      'hopeless',
+      'physical_tension',
+      'avoiding_people',
+      'intrusive_thoughts',
+      'emotional_numbness',
     ];
     return symptoms[step - 10];
   }
@@ -372,8 +379,9 @@ class OnboardingFlowNotifier extends StateNotifier<OnboardingFlowState> {
   }
 
   void setSymptom(String symptomId, String frequency) {
-    final updated = Map<String, String>.from(state.data.emotionalCheckin.symptoms)
-      ..[symptomId] = frequency;
+    final updated =
+        Map<String, String>.from(state.data.emotionalCheckin.symptoms)
+          ..[symptomId] = frequency;
     state = state.copyWith(
       data: state.data.copyWith(
         emotionalCheckin:

@@ -14,13 +14,13 @@ android {
     compileSdk = flutter.compileSdkVersion
     ndkVersion = flutter.ndkVersion
 
-    // splits {
-    //     abi {
-    //         isUniversalApk = true
-    //         reset()
-    //         include("arm64-v8a", "armeabi-v7a", "x86_64")
-    //     }
-    // }
+    splits {
+        abi {
+            isUniversalApk = false
+            reset()
+            include("arm64-v8a", "armeabi-v7a", "x86_64")
+        }
+    }
 
     kotlinOptions {
         jvmTarget = JavaVersion.VERSION_11.toString()

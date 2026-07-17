@@ -7,6 +7,7 @@ import '../../data/music_catalog.dart';
 import '../../providers/audio_player_provider.dart';
 import '../../../../core/theme/app_theme.dart';
 import '../../../../core/config/sound_haptic_provider.dart';
+import '../../../../core/utils/meditation_utils.dart';
 import '../../../../core/widgets/premium_bounce_interaction.dart';
 
 class FullScreenPlayer extends ConsumerStatefulWidget {
@@ -274,7 +275,8 @@ class _FullScreenPlayerState extends ConsumerState<FullScreenPlayer>
             child: Slider(
               value: progress.clamp(0.0, 1.0),
               onChanged: (v) {
-                final pos = Duration(milliseconds: (state.duration.inMilliseconds * v).round());
+                final pos = Duration(
+                    milliseconds: (state.duration.inMilliseconds * v).round());
                 ref.read(audioPlayerProvider.notifier).seek(pos);
               },
             ),
@@ -285,7 +287,7 @@ class _FullScreenPlayerState extends ConsumerState<FullScreenPlayer>
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  _formatDuration(state.position),
+                  formatDurationFromDuration(state.position),
                   style: TextStyle(
                     fontFamily: 'Outfit',
                     color: isDark ? Colors.white60 : Colors.black54,
@@ -293,7 +295,7 @@ class _FullScreenPlayerState extends ConsumerState<FullScreenPlayer>
                   ),
                 ),
                 Text(
-                  _formatDuration(state.duration),
+                  formatDurationFromDuration(state.duration),
                   style: TextStyle(
                     fontFamily: 'Outfit',
                     color: isDark ? Colors.white60 : Colors.black54,
@@ -320,7 +322,9 @@ class _FullScreenPlayerState extends ConsumerState<FullScreenPlayer>
               _triggerHaptic(HapticFeedbackType.selection);
             },
             child: Icon(
-              state.isShuffled ? Icons.shuffle_on_rounded : Icons.shuffle_rounded,
+              state.isShuffled
+                  ? Icons.shuffle_on_rounded
+                  : Icons.shuffle_rounded,
               color: state.isShuffled ? AppTheme.primaryColor : Colors.grey,
               size: 24,
             ),
@@ -339,7 +343,9 @@ class _FullScreenPlayerState extends ConsumerState<FullScreenPlayer>
           PremiumBounceInteraction(
             onTap: () {
               ref.read(audioPlayerProvider.notifier).togglePlayPause();
-              _triggerHaptic(isPlaying ? HapticFeedbackType.medium : HapticFeedbackType.light);
+              _triggerHaptic(isPlaying
+                  ? HapticFeedbackType.medium
+                  : HapticFeedbackType.light);
             },
             child: Container(
               width: 72,
@@ -379,7 +385,9 @@ class _FullScreenPlayerState extends ConsumerState<FullScreenPlayer>
               _triggerHaptic(HapticFeedbackType.selection);
             },
             child: Icon(
-              state.isLooping ? Icons.repeat_one_on_rounded : Icons.repeat_rounded,
+              state.isLooping
+                  ? Icons.repeat_one_on_rounded
+                  : Icons.repeat_rounded,
               color: state.isLooping ? AppTheme.primaryColor : Colors.grey,
               size: 24,
             ),
@@ -404,13 +412,18 @@ class _FullScreenPlayerState extends ConsumerState<FullScreenPlayer>
               data: SliderThemeData(
                 trackHeight: 2,
                 thumbShape: const RoundSliderThumbShape(enabledThumbRadius: 5),
-                activeTrackColor: isDark ? Colors.white54 : AppTheme.primaryColor.withValues(alpha: 0.6),
-                inactiveTrackColor: isDark ? Colors.white12 : Colors.black.withValues(alpha: 0.06),
+                activeTrackColor: isDark
+                    ? Colors.white54
+                    : AppTheme.primaryColor.withValues(alpha: 0.6),
+                inactiveTrackColor: isDark
+                    ? Colors.white12
+                    : Colors.black.withValues(alpha: 0.06),
                 thumbColor: isDark ? Colors.white70 : AppTheme.primaryColor,
               ),
               child: Slider(
                 value: state.volume,
-                onChanged: (v) => ref.read(audioPlayerProvider.notifier).setVolume(v),
+                onChanged: (v) =>
+                    ref.read(audioPlayerProvider.notifier).setVolume(v),
               ),
             ),
           ),
@@ -446,29 +459,41 @@ class _FullScreenPlayerState extends ConsumerState<FullScreenPlayer>
               },
               child: AnimatedContainer(
                 duration: 200.ms,
-                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                 decoration: BoxDecoration(
                   gradient: isSelected
-                      ? LinearGradient(colors: [cat.color, cat.color.withValues(alpha: 0.6)])
+                      ? LinearGradient(
+                          colors: [cat.color, cat.color.withValues(alpha: 0.6)])
                       : null,
-                  color: isSelected ? null : (isDark ? Colors.white.withValues(alpha: 0.08) : Colors.black.withValues(alpha: 0.03)),
+                  color: isSelected
+                      ? null
+                      : (isDark
+                          ? Colors.white.withValues(alpha: 0.08)
+                          : Colors.black.withValues(alpha: 0.03)),
                   borderRadius: BorderRadius.circular(20),
                   border: Border.all(
-                    color: isSelected ? Colors.transparent : (isDark ? Colors.white12 : Colors.black12),
+                    color: isSelected
+                        ? Colors.transparent
+                        : (isDark ? Colors.white12 : Colors.black12),
                   ),
                 ),
                 child: Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    Icon(cat.icon, color: isSelected ? Colors.white : cat.color, size: 16),
+                    Icon(cat.icon,
+                        color: isSelected ? Colors.white : cat.color, size: 16),
                     const SizedBox(width: 6),
                     Text(
                       cat.name,
                       style: TextStyle(
                         fontFamily: 'Outfit',
-                        color: isSelected ? Colors.white : (isDark ? Colors.white70 : Colors.black87),
+                        color: isSelected
+                            ? Colors.white
+                            : (isDark ? Colors.white70 : Colors.black87),
                         fontSize: 13,
-                        fontWeight: isSelected ? FontWeight.w600 : FontWeight.w400,
+                        fontWeight:
+                            isSelected ? FontWeight.w600 : FontWeight.w400,
                       ),
                     ),
                   ],
@@ -488,7 +513,8 @@ class _FullScreenPlayerState extends ConsumerState<FullScreenPlayer>
       context: context,
       backgroundColor: isDark ? AppTheme.darkSurface : Colors.white,
       shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(top: Radius.circular(28)), // V4 organic curves
+        borderRadius: BorderRadius.vertical(
+            top: Radius.circular(28)), // V4 organic curves
       ),
       builder: (ctx) => Padding(
         padding: const EdgeInsets.all(24),
@@ -550,7 +576,8 @@ class _FullScreenPlayerState extends ConsumerState<FullScreenPlayer>
                           borderRadius: BorderRadius.circular(20),
                         ),
                         child: ListTile(
-                          contentPadding: const EdgeInsets.symmetric(horizontal: 12),
+                          contentPadding:
+                              const EdgeInsets.symmetric(horizontal: 12),
                           leading: Container(
                             width: 38,
                             height: 38,
@@ -564,18 +591,27 @@ class _FullScreenPlayerState extends ConsumerState<FullScreenPlayer>
                             t.title,
                             style: TextStyle(
                               fontFamily: 'Outfit',
-                              color: isCurrent ? AppTheme.primaryColor : (isDark ? Colors.white : Colors.black87),
-                              fontWeight: isCurrent ? FontWeight.w600 : FontWeight.w500,
+                              color: isCurrent
+                                  ? AppTheme.primaryColor
+                                  : (isDark ? Colors.white : Colors.black87),
+                              fontWeight:
+                                  isCurrent ? FontWeight.w600 : FontWeight.w500,
                               fontSize: 14,
                             ),
                           ),
                           subtitle: Text(
                             t.artist,
-                            style: const TextStyle(fontFamily: 'Outfit', color: Colors.grey, fontSize: 11),
+                            style: const TextStyle(
+                                fontFamily: 'Outfit',
+                                color: Colors.grey,
+                                fontSize: 11),
                           ),
                           trailing: Text(
                             t.formattedDuration,
-                            style: const TextStyle(fontFamily: 'Outfit', color: Colors.grey, fontSize: 11),
+                            style: const TextStyle(
+                                fontFamily: 'Outfit',
+                                color: Colors.grey,
+                                fontSize: 11),
                           ),
                         ),
                       ),
@@ -588,24 +624,20 @@ class _FullScreenPlayerState extends ConsumerState<FullScreenPlayer>
       ),
     );
   }
-
-  String _formatDuration(Duration d) {
-    final m = d.inMinutes.remainder(60).toString().padLeft(2, '0');
-    final s = d.inSeconds.remainder(60).toString().padLeft(2, '0');
-    return '${d.inHours > 0 ? '${d.inHours}:' : ''}$m:$s';
-  }
 }
 
 class EqualizerVisualizer extends StatefulWidget {
   final bool isPlaying;
   final Color color;
-  const EqualizerVisualizer({super.key, required this.isPlaying, required this.color});
+  const EqualizerVisualizer(
+      {super.key, required this.isPlaying, required this.color});
 
   @override
   State<EqualizerVisualizer> createState() => _EqualizerVisualizerState();
 }
 
-class _EqualizerVisualizerState extends State<EqualizerVisualizer> with SingleTickerProviderStateMixin {
+class _EqualizerVisualizerState extends State<EqualizerVisualizer>
+    with SingleTickerProviderStateMixin {
   late AnimationController _controller;
 
   @override
@@ -661,7 +693,10 @@ class WavePainter extends CustomPainter {
   final bool isPlaying;
   final Color color;
 
-  WavePainter({required this.animationValue, required this.isPlaying, required this.color});
+  WavePainter(
+      {required this.animationValue,
+      required this.isPlaying,
+      required this.color});
 
   @override
   void paint(Canvas canvas, Size size) {
@@ -682,7 +717,8 @@ class WavePainter extends CustomPainter {
 
       path.reset();
       for (double x = 0; x <= width; x += 3) {
-        final y = midY + sin(x * frequency + phase) * amplitude * sin(x * pi / width);
+        final y =
+            midY + sin(x * frequency + phase) * amplitude * sin(x * pi / width);
         if (x == 0) {
           path.moveTo(x, y);
         } else {
@@ -696,7 +732,8 @@ class WavePainter extends CustomPainter {
 
   @override
   bool shouldRepaint(covariant WavePainter oldDelegate) {
-    return oldDelegate.animationValue != animationValue || oldDelegate.isPlaying != isPlaying;
+    return oldDelegate.animationValue != animationValue ||
+        oldDelegate.isPlaying != isPlaying;
   }
 }
 

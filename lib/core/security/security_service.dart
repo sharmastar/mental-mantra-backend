@@ -55,7 +55,8 @@ class SecurityService {
       return DeviceIntegrityResult(isRooted: false, isEmulator: false);
     }
     try {
-      final dynamic result = await _channel.invokeMethod('checkDeviceIntegrity');
+      final dynamic result =
+          await _channel.invokeMethod('checkDeviceIntegrity');
       if (result is Map) {
         return DeviceIntegrityResult(
           isRooted: result['isRooted'] ?? false,

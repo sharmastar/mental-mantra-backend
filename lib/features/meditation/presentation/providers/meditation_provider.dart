@@ -1,8 +1,10 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../data/models/meditation_session.dart';
 import '../../data/repositories/meditation_repository.dart';
 
-final meditationRepositoryProvider = Provider<MeditationRepository>((ref) => MeditationRepository());
+final meditationRepositoryProvider =
+    Provider<MeditationRepository>((ref) => MeditationRepository());
 
 class MeditationState {
   final List<MeditationCategory> categories;
@@ -46,7 +48,8 @@ class MeditationState {
     return MeditationState(
       categories: categories ?? this.categories,
       sessions: sessions ?? this.sessions,
-      currentSession: clearCurrentSession ? null : (currentSession ?? this.currentSession),
+      currentSession:
+          clearCurrentSession ? null : (currentSession ?? this.currentSession),
       isPlaying: isPlaying ?? this.isPlaying,
       isLoading: isLoading ?? this.isLoading,
       error: clearError ? null : (error ?? this.error),
@@ -60,11 +63,13 @@ class MeditationState {
   List<MeditationSession> get filteredSessions {
     var result = sessions;
     if (searchQuery.isNotEmpty) {
-      result = result.where((s) =>
-        s.title.toLowerCase().contains(searchQuery.toLowerCase()) ||
-        s.description.toLowerCase().contains(searchQuery.toLowerCase()) ||
-        s.tags.any((t) => t.toLowerCase().contains(searchQuery.toLowerCase()))
-      ).toList();
+      result = result
+          .where((s) =>
+              s.title.toLowerCase().contains(searchQuery.toLowerCase()) ||
+              s.description.toLowerCase().contains(searchQuery.toLowerCase()) ||
+              s.tags.any(
+                  (t) => t.toLowerCase().contains(searchQuery.toLowerCase())))
+          .toList();
     }
     if (isFavoriteOnly) {
       result = result.where((s) => s.isFavorite).toList();
@@ -89,7 +94,8 @@ class MeditationNotifier extends StateNotifier<MeditationState> {
         isLoading: false,
       );
     } catch (e) {
-      state = state.copyWith(isLoading: false, error: 'Failed to load meditations');
+      state =
+          state.copyWith(isLoading: false, error: 'Failed to load meditations');
     }
   }
 
@@ -137,7 +143,9 @@ class MeditationNotifier extends StateNotifier<MeditationState> {
     );
     try {
       await _repository.toggleFavorite(sessionId, newValue);
-    } catch (_) {}
+    } catch (e) {
+      debugPrint('MeditationNotifier.toggleFavorite: $e');
+    }
   }
 
   Future<void> markCompleted() async {
@@ -145,7 +153,9 @@ class MeditationNotifier extends StateNotifier<MeditationState> {
     if (session == null) return;
     try {
       await _repository.markCompleted(session.id);
-    } catch (_) {}
+    } catch (e) {
+      debugPrint('MeditationNotifier.markCompleted: $e');
+    }
   }
 
   void clearError() => state = state.copyWith(clearError: true);
@@ -153,7 +163,8 @@ class MeditationNotifier extends StateNotifier<MeditationState> {
   List<MeditationSession> get sessions => state.sessions;
 }
 
-final meditationProvider = StateNotifierProvider<MeditationNotifier, MeditationState>((ref) {
+final meditationProvider =
+    StateNotifierProvider<MeditationNotifier, MeditationState>((ref) {
   final repository = ref.watch(meditationRepositoryProvider);
   return MeditationNotifier(repository);
 });

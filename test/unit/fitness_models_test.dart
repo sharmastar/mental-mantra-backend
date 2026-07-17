@@ -43,10 +43,34 @@ void main() {
 
   group('WorkoutSession', () {
     test('typeLabel returns correct labels', () {
-      expect(WorkoutSession(type: WorkoutType.walking, durationMinutes: 30, startedAt: DateTime.now()).typeLabel, 'Walking');
-      expect(WorkoutSession(type: WorkoutType.running, durationMinutes: 30, startedAt: DateTime.now()).typeLabel, 'Running');
-      expect(WorkoutSession(type: WorkoutType.yoga, durationMinutes: 30, startedAt: DateTime.now()).typeLabel, 'Yoga');
-      expect(WorkoutSession(type: WorkoutType.meditation, durationMinutes: 30, startedAt: DateTime.now()).typeLabel, 'Meditation');
+      expect(
+          WorkoutSession(
+                  type: WorkoutType.walking,
+                  durationMinutes: 30,
+                  startedAt: DateTime.now())
+              .typeLabel,
+          'Walking');
+      expect(
+          WorkoutSession(
+                  type: WorkoutType.running,
+                  durationMinutes: 30,
+                  startedAt: DateTime.now())
+              .typeLabel,
+          'Running');
+      expect(
+          WorkoutSession(
+                  type: WorkoutType.yoga,
+                  durationMinutes: 30,
+                  startedAt: DateTime.now())
+              .typeLabel,
+          'Yoga');
+      expect(
+          WorkoutSession(
+                  type: WorkoutType.meditation,
+                  durationMinutes: 30,
+                  startedAt: DateTime.now())
+              .typeLabel,
+          'Meditation');
     });
 
     test('fromJson and toJson round-trip', () {

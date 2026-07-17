@@ -18,14 +18,14 @@ class Evidence {
   }
 
   Map<String, dynamic> toJson() => {
-    'source': source,
-    'description': description,
-    'weight': weight,
-  };
+        'source': source,
+        'description': description,
+        'weight': weight,
+      };
 
   factory Evidence.fromJson(Map<String, dynamic> json) => Evidence(
-    source: json['source'] as String? ?? '',
-    description: json['description'] as String? ?? '',
-    weight: (json['weight'] as num?)?.toDouble() ?? 0.0,
-  );
+        source: json['source'] as String? ?? '',
+        description: json['description'] as String? ?? '',
+        weight: (json['weight'] as num?)?.toDouble() ?? 0.0,
+      );
 }

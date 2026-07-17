@@ -5,30 +5,48 @@ import '../../../../core/theme/app_theme.dart';
 import '../../../../core/router/app_router.dart';
 import '../../../auth/providers/auth_provider.dart';
 import '../../../../services/wellness/providers/wellness_provider.dart';
+import '../../../../shared/widgets/app_logo.dart';
 
 class WellnessDashboardPage extends ConsumerStatefulWidget {
   const WellnessDashboardPage({super.key});
 
   @override
-  ConsumerState<WellnessDashboardPage> createState() => _WellnessDashboardPageState();
+  ConsumerState<WellnessDashboardPage> createState() =>
+      _WellnessDashboardPageState();
 }
 
 class _WellnessDashboardPageState extends ConsumerState<WellnessDashboardPage> {
-  bool _loadAttempted = false;
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final authState = ref.read(authStateProvider);
+      final wellnessState = ref.read(wellnessPlanProvider);
+      if (authState.user != null &&
+          wellnessState.plan == null &&
+          !wellnessState.isLoading) {
+        ref.read(wellnessPlanLoaderProvider(authState.user!.uid));
+      }
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
+    ref.listen(authStateProvider, (previous, next) {
+      final wellnessState = ref.read(wellnessPlanProvider);
+      if (next.user != null &&
+          previous?.user?.uid != next.user?.uid &&
+          wellnessState.plan == null &&
+          !wellnessState.isLoading) {
+        ref.read(wellnessPlanLoaderProvider(next.user!.uid));
+      }
+    });
+
     final authState = ref.watch(authStateProvider);
     final isLoggedIn = authState.user != null;
     final wellnessState = ref.watch(wellnessPlanProvider);
     final plan = wellnessState.plan;
     final score = plan?.wellnessScore.overall ?? (isLoggedIn ? 84 : 76);
-
-    if (isLoggedIn && !_loadAttempted && plan == null && !wellnessState.isLoading) {
-      _loadAttempted = true;
-      final uid = authState.user!.uid;
-      ref.read(wellnessPlanLoaderProvider(uid));
-    }
 
     final emotionalSummary = plan?.briefing.summary ??
         (isLoggedIn
@@ -50,7 +68,8 @@ class _WellnessDashboardPageState extends ConsumerState<WellnessDashboardPage> {
         backgroundColor: Colors.transparent,
         elevation: 0,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios_new_rounded, color: Colors.white70, size: 18),
+          icon: const Icon(Icons.arrow_back_ios_new_rounded,
+              color: Colors.white70, size: 18),
           onPressed: () => context.go(AppRoutes.landing),
         ),
       ),
@@ -60,7 +79,11 @@ class _WellnessDashboardPageState extends ConsumerState<WellnessDashboardPage> {
           gradient: AppTheme.nightGradient,
         ),
         child: wellnessState.isLoading
-            ? const Center(child: CircularProgressIndicator(color: AppTheme.primaryColor))
+            ? const Center(
+                child: AppLogo.medium(
+                  animateBreathing: true,
+                ),
+              )
             : SingleChildScrollView(
                 padding: const EdgeInsets.all(24.0),
                 child: Column(
@@ -68,10 +91,11 @@ class _WellnessDashboardPageState extends ConsumerState<WellnessDashboardPage> {
                   children: [
                     Text(
                       'Your Wellness Dashboard',
-                      style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-                            fontWeight: FontWeight.w800,
-                            color: Colors.white,
-                          ),
+                      style:
+                          Theme.of(context).textTheme.headlineMedium?.copyWith(
+                                fontWeight: FontWeight.w800,
+                                color: Colors.white,
+                              ),
                     ),
                     const SizedBox(height: 24),
 
@@ -84,7 +108,8 @@ class _WellnessDashboardPageState extends ConsumerState<WellnessDashboardPage> {
                             isLoggedIn: isLoggedIn,
                             icon: Icons.assignment_turned_in_outlined,
                             title: 'Start onboarding',
-                            subtitle: 'Answer 10 adaptive questions to shape your wellness plan.',
+                            subtitle:
+                                'Answer 10 adaptive questions to shape your wellness plan.',
                             route: AppRoutes.onboarding,
                           ),
                         ),
@@ -95,7 +120,8 @@ class _WellnessDashboardPageState extends ConsumerState<WellnessDashboardPage> {
                             isLoggedIn: isLoggedIn,
                             icon: Icons.person_outline,
                             title: 'Open profile',
-                            subtitle: 'Review your preferences, routines, and personal details.',
+                            subtitle:
+                                'Review your preferences, routines, and personal details.',
                             route: AppRoutes.profile,
                           ),
                         ),
@@ -106,7 +132,8 @@ class _WellnessDashboardPageState extends ConsumerState<WellnessDashboardPage> {
                             isLoggedIn: isLoggedIn,
                             icon: Icons.settings_outlined,
                             title: 'Adjust settings',
-                            subtitle: 'Manage reminders, privacy expectations, and app preferences.',
+                            subtitle:
+                                'Manage reminders, privacy expectations, and app preferences.',
                             route: AppRoutes.settings,
                           ),
                         ),
@@ -120,7 +147,8 @@ class _WellnessDashboardPageState extends ConsumerState<WellnessDashboardPage> {
                       decoration: BoxDecoration(
                         color: Colors.white.withValues(alpha: 0.05),
                         borderRadius: BorderRadius.circular(24),
-                        border: Border.all(color: Colors.white.withValues(alpha: 0.1)),
+                        border: Border.all(
+                            color: Colors.white.withValues(alpha: 0.1)),
                       ),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -133,7 +161,8 @@ class _WellnessDashboardPageState extends ConsumerState<WellnessDashboardPage> {
                                 height: 80,
                                 decoration: BoxDecoration(
                                   shape: BoxShape.circle,
-                                  border: Border.all(color: AppTheme.primaryColor, width: 4),
+                                  border: Border.all(
+                                      color: AppTheme.primaryColor, width: 4),
                                 ),
                                 alignment: Alignment.center,
                                 child: Text(
@@ -153,7 +182,8 @@ class _WellnessDashboardPageState extends ConsumerState<WellnessDashboardPage> {
                                     Text(
                                       'Wellness Score',
                                       style: TextStyle(
-                                        color: Colors.white.withValues(alpha: 0.5),
+                                        color:
+                                            Colors.white.withValues(alpha: 0.5),
                                         fontSize: 13,
                                       ),
                                     ),
@@ -234,12 +264,54 @@ class _WellnessDashboardPageState extends ConsumerState<WellnessDashboardPage> {
                       mainAxisSpacing: 16,
                       childAspectRatio: 1.3,
                       children: [
-                        _buildToolCard(context, isLoggedIn: isLoggedIn, icon: Icons.mood, title: 'Mood tracker', description: 'Log how you feel and review patterns over time.', route: AppRoutes.mood, color: AppTheme.warningColor),
-                        _buildToolCard(context, isLoggedIn: isLoggedIn, icon: Icons.book, title: 'Journal', description: 'Capture thoughts, gratitude, and grounded next steps.', route: AppRoutes.journal, color: AppTheme.accentColor),
-                        _buildToolCard(context, isLoggedIn: isLoggedIn, icon: Icons.self_improvement, title: 'Meditation', description: 'Guided sessions for stress, sleep, and focus.', route: AppRoutes.meditation, color: AppTheme.secondaryColor),
-                        _buildToolCard(context, isLoggedIn: isLoggedIn, icon: Icons.music_note, title: 'Music therapy', description: 'Play calming soundscapes for rest or focus.', route: AppRoutes.music, color: AppTheme.primaryColor),
-                        _buildToolCard(context, isLoggedIn: isLoggedIn, icon: Icons.check_circle_outline, title: 'Habit tracker', description: 'Stay consistent with daily healthy habits.', route: AppRoutes.habits, color: AppTheme.successColor),
-                        _buildToolCard(context, isLoggedIn: isLoggedIn, icon: Icons.track_changes, title: 'Goals', description: 'Measure daily and weekly wellness goals.', route: AppRoutes.goals, color: Colors.orangeAccent),
+                        _buildToolCard(context,
+                            isLoggedIn: isLoggedIn,
+                            icon: Icons.mood,
+                            title: 'Mood tracker',
+                            description:
+                                'Log how you feel and review patterns over time.',
+                            route: AppRoutes.mood,
+                            color: AppTheme.warningColor),
+                        _buildToolCard(context,
+                            isLoggedIn: isLoggedIn,
+                            icon: Icons.book,
+                            title: 'Journal',
+                            description:
+                                'Capture thoughts, gratitude, and grounded next steps.',
+                            route: AppRoutes.journal,
+                            color: AppTheme.accentColor),
+                        _buildToolCard(context,
+                            isLoggedIn: isLoggedIn,
+                            icon: Icons.self_improvement,
+                            title: 'Meditation',
+                            description:
+                                'Guided sessions for stress, sleep, and focus.',
+                            route: AppRoutes.meditation,
+                            color: AppTheme.secondaryColor),
+                        _buildToolCard(context,
+                            isLoggedIn: isLoggedIn,
+                            icon: Icons.music_note,
+                            title: 'Music therapy',
+                            description:
+                                'Play calming soundscapes for rest or focus.',
+                            route: AppRoutes.music,
+                            color: AppTheme.primaryColor),
+                        _buildToolCard(context,
+                            isLoggedIn: isLoggedIn,
+                            icon: Icons.check_circle_outline,
+                            title: 'Daily Rituals',
+                            description:
+                                'Stay consistent with daily mindful rituals.',
+                            route: AppRoutes.habits,
+                            color: AppTheme.successColor),
+                        _buildToolCard(context,
+                            isLoggedIn: isLoggedIn,
+                            icon: Icons.track_changes,
+                            title: 'Intentions',
+                            description:
+                                'Nurture your daily focus and intentions.',
+                            route: AppRoutes.goals,
+                            color: Colors.orangeAccent),
                       ],
                     ),
                     const SizedBox(height: 40),
@@ -282,9 +354,22 @@ class _WellnessDashboardPageState extends ConsumerState<WellnessDashboardPage> {
           children: [
             Icon(icon, color: AppTheme.primaryColor, size: 24),
             const SizedBox(height: 8),
-            Text(title, maxLines: 1, overflow: TextOverflow.ellipsis, style: const TextStyle(fontSize: 13, fontWeight: FontWeight.bold, color: Colors.white)),
+            Text(title,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                style: const TextStyle(
+                    fontSize: 13,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white)),
             const SizedBox(height: 4),
-            Expanded(child: Text(subtitle, style: TextStyle(fontSize: 11, color: Colors.white.withValues(alpha: 0.4), height: 1.3), maxLines: 3, overflow: TextOverflow.ellipsis)),
+            Expanded(
+                child: Text(subtitle,
+                    style: TextStyle(
+                        fontSize: 11,
+                        color: Colors.white.withValues(alpha: 0.4),
+                        height: 1.3),
+                    maxLines: 3,
+                    overflow: TextOverflow.ellipsis)),
           ],
         ),
       ),
@@ -317,12 +402,24 @@ class _WellnessDashboardPageState extends ConsumerState<WellnessDashboardPage> {
             Row(children: [
               Icon(icon, color: color, size: 24),
               const Spacer(),
-              Icon(Icons.arrow_forward_ios, color: Colors.white.withValues(alpha: 0.2), size: 14),
+              Icon(Icons.arrow_forward_ios,
+                  color: Colors.white.withValues(alpha: 0.2), size: 14),
             ]),
             const SizedBox(height: 12),
-            Text(title, style: const TextStyle(fontSize: 15, fontWeight: FontWeight.bold, color: Colors.white)),
+            Text(title,
+                style: const TextStyle(
+                    fontSize: 15,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white)),
             const SizedBox(height: 6),
-            Expanded(child: Text(description, style: TextStyle(fontSize: 11, color: Colors.white.withValues(alpha: 0.5), height: 1.3), maxLines: 2, overflow: TextOverflow.ellipsis)),
+            Expanded(
+                child: Text(description,
+                    style: TextStyle(
+                        fontSize: 11,
+                        color: Colors.white.withValues(alpha: 0.5),
+                        height: 1.3),
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis)),
           ],
         ),
       ),

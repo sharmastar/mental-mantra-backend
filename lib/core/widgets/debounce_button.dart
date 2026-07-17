@@ -45,7 +45,9 @@ class _DebounceButtonState extends State<DebounceButton> {
       button: true,
       child: GestureDetector(
         onTap: _handleTap,
-        behavior: widget.absorptive ? HitTestBehavior.opaque : HitTestBehavior.translucent,
+        behavior: widget.absorptive
+            ? HitTestBehavior.opaque
+            : HitTestBehavior.translucent,
         child: Opacity(
           opacity: _isProcessing ? 0.6 : 1.0,
           child: widget.child,

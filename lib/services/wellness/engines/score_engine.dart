@@ -5,7 +5,8 @@ import '../../../core/personalization/personalization_context.dart';
 class ScoreEngine {
   static const _targetWaterGlasses = 8;
 
-  WellnessScore compute(PersonalizationContext ctx, {
+  WellnessScore compute(
+    PersonalizationContext ctx, {
     required List<journal.JournalEntry> recentEntries,
     required int todayMood,
     required int sleepHours,
@@ -29,15 +30,28 @@ class ScoreEngine {
     final screenScore = _scoreScreenTime(screenTimeHours);
     final engagementScore = _scoreAiEngagement(aiChatCount);
 
-    final components = [moodScore, sleepScore, sentimentScore, activityScore,
-      meditationScore, hydrationScore, habitsScore, streaksScore,
-      screenScore, engagementScore];
-    final overall = (components.fold(0.0, (a, b) => a + b) / components.length).round().clamp(0, 100);
+    final components = [
+      moodScore,
+      sleepScore,
+      sentimentScore,
+      activityScore,
+      meditationScore,
+      hydrationScore,
+      habitsScore,
+      streaksScore,
+      screenScore,
+      engagementScore
+    ];
+    final overall = (components.fold(0.0, (a, b) => a + b) / components.length)
+        .round()
+        .clamp(0, 100);
 
     final improvements = <String>[];
     final needsAttention = <String>[];
     if (sleepScore < 60) needsAttention.add('Sleep');
-    if (sleepScore >= 60 && sleepScore < 80) improvements.add('Sleep improving');
+    if (sleepScore >= 60 && sleepScore < 80) {
+      improvements.add('Sleep improving');
+    }
     if (moodScore < 60) needsAttention.add('Mood');
     if (moodScore >= 60) improvements.add('Mood stable');
     if (streaksScore >= 70) improvements.add('Meditation streak +$streakDays');
@@ -66,7 +80,8 @@ class ScoreEngine {
   double _scoreMood(int todayMood, List<journal.JournalEntry> recent) {
     final recentAvg = recent.isEmpty
         ? todayMood.toDouble()
-        : recent.map((e) => e.mood.toDouble()).reduce((a, b) => a + b) / recent.length;
+        : recent.map((e) => e.mood.toDouble()).reduce((a, b) => a + b) /
+            recent.length;
     final weighted = (todayMood * 0.6 + recentAvg * 0.4);
     return ((weighted - 1) / 4 * 100).clamp(0, 100);
   }

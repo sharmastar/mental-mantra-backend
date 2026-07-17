@@ -3,6 +3,7 @@ import { ApiTags, ApiOperation, ApiBearerAuth } from '@nestjs/swagger';
 import { FitnessService } from './fitness.service';
 import { JwtAuthGuard } from '../common/guards/jwt-auth.guard';
 import { CurrentUser } from '../common/decorators/current-user.decorator';
+import { CreateFitnessDto } from './dto/create-fitness.dto';
 
 @ApiTags('Fitness')
 @ApiBearerAuth()
@@ -19,7 +20,7 @@ export class FitnessController {
 
   @Post()
   @ApiOperation({ summary: 'Log fitness activity' })
-  async create(@CurrentUser('id') userId: string, @Body() data: any) {
-    return { success: true, data: await this.fitnessService.create(userId, data) };
+  async create(@CurrentUser('id') userId: string, @Body() dto: CreateFitnessDto) {
+    return { success: true, data: await this.fitnessService.create(userId, dto) };
   }
 }

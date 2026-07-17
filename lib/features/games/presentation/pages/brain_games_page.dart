@@ -6,12 +6,18 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../../../../core/theme/app_theme.dart';
 
 enum GameType {
-  memory('Memory Match', 'Sharpen your focus', Icons.psychology_outlined, Color(0xFF6C63FF)),
-  focus('Focus Grid', 'Train your attention', Icons.center_focus_strong_outlined, Color(0xFF00BCD4)),
-  breathing('Breathing Bubble', 'Calm your mind', Icons.air_outlined, Color(0xFF00BFA5)),
-  pattern('Pattern Recall', 'Boost concentration', Icons.grid_view_outlined, Color(0xFFFF6B9D)),
-  zen('Zen Garden', 'Grow your mindfulness plant', Icons.local_florist_outlined, Color(0xFF4CAF50)),
-  wheel('Wellness Wheel', 'Spin for daily mindfulness', Icons.color_lens_outlined, Color(0xFFFF9800));
+  memory('Memory Match', 'Sharpen your focus', Icons.psychology_outlined,
+      AppTheme.primaryColor),
+  focus('Focus Grid', 'Train your attention',
+      Icons.center_focus_strong_outlined, AppTheme.secondaryColor),
+  breathing('Breathing Bubble', 'Calm your mind', Icons.air_outlined,
+      AppTheme.secondaryColor),
+  pattern('Pattern Recall', 'Boost concentration', Icons.grid_view_outlined,
+      AppTheme.errorColor),
+  zen('Zen Garden', 'Grow your mindfulness plant', Icons.local_florist_outlined,
+      AppTheme.successColor),
+  wheel('Wellness Wheel', 'Spin for daily mindfulness',
+      Icons.color_lens_outlined, AppTheme.warningColor);
 
   final String label;
   final String subtitle;
@@ -78,7 +84,12 @@ class _BrainGamesPageState extends State<BrainGamesPage> {
   int _plantStage = 0; // 0: Seed, 1: Sprout, 2: Sapling, 3: Bud, 4: Bloom
   double _plantGrowth = 0.0; // 0.0 to 1.0
   String _selectedPlant = 'Lotus';
-  final List<String> _plants = ['Lotus', 'Lavender', 'Sunflower', 'Banyan Tree'];
+  final List<String> _plants = [
+    'Lotus',
+    'Lavender',
+    'Sunflower',
+    'Banyan Tree'
+  ];
   bool _isWatering = false;
 
   // Wellness Wheel state
@@ -87,14 +98,54 @@ class _BrainGamesPageState extends State<BrainGamesPage> {
   double _wheelTurns = 0.0;
   int _lastWinningIndex = 0;
   final List<Map<String, dynamic>> _wheelRewards = [
-    {'label': '+3 Water', 'type': 'water', 'value': 3, 'color': const Color(0xFF4CAF50)},
-    {'label': '+10 XP', 'type': 'xp', 'value': 10, 'color': const Color(0xFF2196F3)},
-    {'label': 'Zen Quote', 'type': 'quote', 'value': 0, 'color': const Color(0xFF9C27B0)},
-    {'label': '+1 Water', 'type': 'water', 'value': 1, 'color': const Color(0xFF8BC34A)},
-    {'label': '+20 XP', 'type': 'xp', 'value': 20, 'color': const Color(0xFFFF9800)},
-    {'label': 'Deep Breath', 'type': 'task', 'value': 0, 'color': const Color(0xFF00BCD4)},
-    {'label': '+2 Water', 'type': 'water', 'value': 2, 'color': const Color(0xFFE91E63)},
-    {'label': '+5 XP', 'type': 'xp', 'value': 5, 'color': const Color(0xFFFFC107)},
+    {
+      'label': '+3 Water',
+      'type': 'water',
+      'value': 3,
+      'color': AppTheme.successColor
+    },
+    {
+      'label': '+10 XP',
+      'type': 'xp',
+      'value': 10,
+      'color': AppTheme.primaryColor
+    },
+    {
+      'label': 'Zen Quote',
+      'type': 'quote',
+      'value': 0,
+      'color': AppTheme.primaryLight
+    },
+    {
+      'label': '+1 Water',
+      'type': 'water',
+      'value': 1,
+      'color': AppTheme.successColor
+    },
+    {
+      'label': '+20 XP',
+      'type': 'xp',
+      'value': 20,
+      'color': AppTheme.warningColor
+    },
+    {
+      'label': 'Deep Breath',
+      'type': 'task',
+      'value': 0,
+      'color': AppTheme.secondaryColor
+    },
+    {
+      'label': '+2 Water',
+      'type': 'water',
+      'value': 2,
+      'color': AppTheme.errorColor
+    },
+    {
+      'label': '+5 XP',
+      'type': 'xp',
+      'value': 5,
+      'color': AppTheme.warningColor
+    },
   ];
 
   @override
@@ -127,7 +178,8 @@ class _BrainGamesPageState extends State<BrainGamesPage> {
     await prefs.setDouble('zen_plant_growth', _plantGrowth);
     await prefs.setString('zen_selected_plant', _selectedPlant);
     if (_lastSpinTime != null) {
-      await prefs.setInt('wheel_last_spin_time', _lastSpinTime!.millisecondsSinceEpoch);
+      await prefs.setInt(
+          'wheel_last_spin_time', _lastSpinTime!.millisecondsSinceEpoch);
     }
   }
 
@@ -168,7 +220,8 @@ class _BrainGamesPageState extends State<BrainGamesPage> {
         _waterDrops += value;
       });
       _saveGamificationData();
-      message = 'You won $value Water Drops! Use them to grow your Zen Garden 💧';
+      message =
+          'You won $value Water Drops! Use them to grow your Zen Garden 💧';
     } else if (type == 'xp') {
       setState(() {
         _score += value; // Adds to brain game score
@@ -183,7 +236,8 @@ class _BrainGamesPageState extends State<BrainGamesPage> {
       ];
       message = quotes[Random().nextInt(quotes.length)];
     } else if (type == 'task') {
-      message = 'Daily Task: Take 5 deep breaths right now to calm your nervous system. 🌬️';
+      message =
+          'Daily Task: Take 5 deep breaths right now to calm your nervous system. 🌬️';
     }
 
     showDialog(
@@ -226,7 +280,8 @@ class _BrainGamesPageState extends State<BrainGamesPage> {
             onPressed: () => Navigator.pop(ctx),
             style: FilledButton.styleFrom(
               backgroundColor: reward['color'],
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12)),
             ),
             child: const Text('Great!'),
           ),
@@ -268,7 +323,8 @@ class _BrainGamesPageState extends State<BrainGamesPage> {
       context: context,
       builder: (ctx) => AlertDialog(
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-        title: const Text('Plant Harvested! 🌸', style: TextStyle(fontWeight: FontWeight.bold)),
+        title: const Text('Plant Harvested! 🌸',
+            style: TextStyle(fontWeight: FontWeight.bold)),
         content: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
@@ -358,8 +414,9 @@ class _BrainGamesPageState extends State<BrainGamesPage> {
               background: Container(
                 decoration: const BoxDecoration(
                   gradient: LinearGradient(
-                    colors: [Color(0xFF6C63FF), Color(0xFF3F51B5)],
-                    begin: Alignment.topLeft, end: Alignment.bottomRight,
+                    colors: [AppTheme.primaryColor, AppTheme.primaryDark],
+                    begin: Alignment.topLeft,
+                    end: Alignment.bottomRight,
                   ),
                 ),
                 child: SafeArea(
@@ -369,17 +426,25 @@ class _BrainGamesPageState extends State<BrainGamesPage> {
                       mainAxisAlignment: MainAxisAlignment.end,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        const Icon(Icons.games_outlined, color: Colors.white, size: 36),
+                        const Icon(Icons.games_outlined,
+                            color: Colors.white, size: 36),
                         const SizedBox(height: 8),
                         const Text(
                           'Brain Games',
-                          style: TextStyle(fontSize: 26, fontWeight: FontWeight.w700, color: Colors.white),
+                          style: TextStyle(
+                              fontSize: 26,
+                              fontWeight: FontWeight.w700,
+                              color: Colors.white),
                         ),
                         Row(
                           children: [
-                            Text('Score: $_score', style: const TextStyle(color: Colors.white70, fontSize: 14)),
+                            Text('Score: $_score',
+                                style: const TextStyle(
+                                    color: Colors.white70, fontSize: 14)),
                             const SizedBox(width: 16),
-                            Text('Streak: $_streak days', style: const TextStyle(color: Colors.white70, fontSize: 14)),
+                            Text('Streak: $_streak days',
+                                style: const TextStyle(
+                                    color: Colors.white70, fontSize: 14)),
                           ],
                         ),
                       ],
@@ -393,7 +458,10 @@ class _BrainGamesPageState extends State<BrainGamesPage> {
             padding: const EdgeInsets.all(20),
             sliver: SliverList(
               delegate: SliverChildListDelegate([
-                if (_activeGame == null) _buildGameGrid(isDark) else _buildActiveGame(isDark),
+                if (_activeGame == null)
+                  _buildGameGrid(isDark)
+                else
+                  _buildActiveGame(isDark),
               ]),
             ),
           ),
@@ -406,10 +474,12 @@ class _BrainGamesPageState extends State<BrainGamesPage> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text('Choose a game to train your mind', style: TextStyle(
-          fontSize: 16, fontWeight: FontWeight.w600,
-          color: isDark ? Colors.white : Colors.black87,
-        )),
+        Text('Choose a game to train your mind',
+            style: TextStyle(
+              fontSize: 16,
+              fontWeight: FontWeight.w600,
+              color: isDark ? Colors.white : Colors.black87,
+            )),
         const SizedBox(height: 16),
         ...GameType.values.map((game) {
           return GestureDetector(
@@ -419,7 +489,10 @@ class _BrainGamesPageState extends State<BrainGamesPage> {
               padding: const EdgeInsets.all(18),
               decoration: BoxDecoration(
                 gradient: LinearGradient(
-                  colors: [game.color.withValues(alpha: 0.1), game.color.withValues(alpha: 0.02)],
+                  colors: [
+                    game.color.withValues(alpha: 0.1),
+                    game.color.withValues(alpha: 0.02)
+                  ],
                 ),
                 borderRadius: BorderRadius.circular(20),
                 border: Border.all(color: game.color.withValues(alpha: 0.2)),
@@ -439,18 +512,23 @@ class _BrainGamesPageState extends State<BrainGamesPage> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(game.label, style: TextStyle(
-                          fontSize: 16, fontWeight: FontWeight.w700,
-                          color: game.color,
-                        )),
+                        Text(game.label,
+                            style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.w700,
+                              color: game.color,
+                            )),
                         const SizedBox(height: 2),
-                        Text(game.subtitle, style: TextStyle(
-                          fontSize: 12, color: isDark ? Colors.white60 : Colors.black54,
-                        )),
+                        Text(game.subtitle,
+                            style: TextStyle(
+                              fontSize: 12,
+                              color: isDark ? Colors.white60 : Colors.black54,
+                            )),
                       ],
                     ),
                   ),
-                  Icon(Icons.play_circle_fill_rounded, color: game.color, size: 32),
+                  Icon(Icons.play_circle_fill_rounded,
+                      color: game.color, size: 32),
                 ],
               ),
             ).animate().fadeIn(duration: 400.ms).slideX(begin: 0.05, end: 0),
@@ -490,9 +568,12 @@ class _BrainGamesPageState extends State<BrainGamesPage> {
               }),
             ),
             const SizedBox(width: 8),
-            const Text('Memory Match', style: TextStyle(fontSize: 20, fontWeight: FontWeight.w700)),
+            const Text('Memory Match',
+                style: TextStyle(fontSize: 20, fontWeight: FontWeight.w700)),
             const Spacer(),
-            Text('Tap pairs to match', style: TextStyle(color: isDark ? Colors.white60 : Colors.black54)),
+            Text('Tap pairs to match',
+                style:
+                    TextStyle(color: isDark ? Colors.white60 : Colors.black54)),
           ],
         ),
         const SizedBox(height: 20),
@@ -500,7 +581,9 @@ class _BrainGamesPageState extends State<BrainGamesPage> {
           shrinkWrap: true,
           physics: const NeverScrollableScrollPhysics(),
           gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: 3, mainAxisSpacing: 10, crossAxisSpacing: 10,
+            crossAxisCount: 3,
+            mainAxisSpacing: 10,
+            crossAxisSpacing: 10,
           ),
           itemCount: _memoryCards.length,
           itemBuilder: (ctx, i) {
@@ -510,17 +593,26 @@ class _BrainGamesPageState extends State<BrainGamesPage> {
               child: AnimatedContainer(
                 duration: const Duration(milliseconds: 300),
                 decoration: BoxDecoration(
-                  color: revealed ? const Color(0xFF6C63FF).withValues(alpha: 0.15) : const Color(0xFF6C63FF),
+                  color: revealed
+                      ? AppTheme.primaryColor.withValues(alpha: 0.15)
+                      : AppTheme.primaryColor,
                   borderRadius: BorderRadius.circular(16),
-                  border: revealed ? Border.all(color: const Color(0xFF6C63FF).withValues(alpha: 0.4)) : null,
+                  border: revealed
+                      ? Border.all(
+                          color: AppTheme.primaryColor.withValues(alpha: 0.4))
+                      : null,
                 ),
                 child: Center(
                   child: revealed
                       ? Text(
-                          _memoryRevealed.where((r) => r).length == _memoryCards.length ? '🎉' : '${_memoryCards[i]}',
+                          _memoryRevealed.where((r) => r).length ==
+                                  _memoryCards.length
+                              ? '🎉'
+                              : '${_memoryCards[i]}',
                           style: const TextStyle(fontSize: 32),
                         )
-                      : const Icon(Icons.help_outline, color: Colors.white, size: 28),
+                      : const Icon(Icons.help_outline,
+                          color: Colors.white, size: 28),
                 ),
               ),
             );
@@ -538,7 +630,11 @@ class _BrainGamesPageState extends State<BrainGamesPage> {
               children: [
                 const Text('🎉', style: TextStyle(fontSize: 48)),
                 const SizedBox(height: 8),
-                const Text('All matched! +10 points', style: TextStyle(fontSize: 18, fontWeight: FontWeight.w700, color: AppTheme.successColor)),
+                const Text('All matched! +10 points',
+                    style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.w700,
+                        color: AppTheme.successColor)),
                 const SizedBox(height: 12),
                 FilledButton.icon(
                   onPressed: () {
@@ -550,7 +646,8 @@ class _BrainGamesPageState extends State<BrainGamesPage> {
                   },
                   icon: const Icon(Icons.replay),
                   label: const Text('Play Again'),
-                  style: FilledButton.styleFrom(backgroundColor: AppTheme.successColor),
+                  style: FilledButton.styleFrom(
+                      backgroundColor: AppTheme.successColor),
                 ),
               ],
             ),
@@ -593,12 +690,18 @@ class _BrainGamesPageState extends State<BrainGamesPage> {
           children: [
             IconButton(
               icon: const Icon(Icons.close),
-              onPressed: () => setState(() { _activeGame = null; _initFocusGrid(); }),
+              onPressed: () => setState(() {
+                _activeGame = null;
+                _initFocusGrid();
+              }),
             ),
             const SizedBox(width: 8),
-            const Text('Focus Grid', style: TextStyle(fontSize: 20, fontWeight: FontWeight.w700)),
+            const Text('Focus Grid',
+                style: TextStyle(fontSize: 20, fontWeight: FontWeight.w700)),
             const Spacer(),
-            Text('Hits: $_focusHits', style: const TextStyle(color: AppTheme.successColor, fontWeight: FontWeight.w600)),
+            Text('Hits: $_focusHits',
+                style: const TextStyle(
+                    color: AppTheme.successColor, fontWeight: FontWeight.w600)),
           ],
         ),
         const SizedBox(height: 12),
@@ -611,7 +714,9 @@ class _BrainGamesPageState extends State<BrainGamesPage> {
           shrinkWrap: true,
           physics: const NeverScrollableScrollPhysics(),
           gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: 4, mainAxisSpacing: 8, crossAxisSpacing: 8,
+            crossAxisCount: 4,
+            mainAxisSpacing: 8,
+            crossAxisSpacing: 8,
           ),
           itemCount: _focusGrid.length,
           itemBuilder: (ctx, i) {
@@ -636,16 +741,26 @@ class _BrainGamesPageState extends State<BrainGamesPage> {
               child: AnimatedContainer(
                 duration: const Duration(milliseconds: 200),
                 decoration: BoxDecoration(
-                  color: isTarget ? const Color(0xFF00BCD4) : (isDark ? AppTheme.darkCard : AppTheme.lightSurface),
+                  color: isTarget
+                      ? AppTheme.secondaryColor
+                      : (isDark ? AppTheme.darkCard : AppTheme.lightSurface),
                   borderRadius: BorderRadius.circular(12),
-                  border: isTarget ? null : Border.all(color: isDark ? AppTheme.darkBorder : AppTheme.lightBorder),
+                  border: isTarget
+                      ? null
+                      : Border.all(
+                          color: isDark
+                              ? AppTheme.darkBorder
+                              : AppTheme.lightBorder),
                 ),
                 child: Center(
                   child: Text(
                     '${_focusGrid[i]}',
                     style: TextStyle(
-                      fontSize: 18, fontWeight: FontWeight.w700,
-                      color: isTarget ? Colors.white : (isDark ? Colors.white60 : Colors.black54),
+                      fontSize: 18,
+                      fontWeight: FontWeight.w700,
+                      color: isTarget
+                          ? Colors.white
+                          : (isDark ? Colors.white60 : Colors.black54),
                     ),
                   ),
                 ),
@@ -675,10 +790,12 @@ class _BrainGamesPageState extends State<BrainGamesPage> {
               onPressed: () => setState(() => _activeGame = null),
             ),
             const SizedBox(width: 8),
-            const Text('Breathing Bubble', style: TextStyle(fontSize: 20, fontWeight: FontWeight.w700)),
+            const Text('Breathing Bubble',
+                style: TextStyle(fontSize: 20, fontWeight: FontWeight.w700)),
             const Spacer(),
             IconButton(
-              icon: const Icon(Icons.check_circle_outline, color: AppTheme.successColor),
+              icon: const Icon(Icons.check_circle_outline,
+                  color: AppTheme.successColor),
               onPressed: () {
                 setState(() {
                   _score += 5;
@@ -703,17 +820,20 @@ class _BrainGamesPageState extends State<BrainGamesPage> {
               shape: BoxShape.circle,
               gradient: RadialGradient(
                 colors: [
-                  const Color(0xFF00BFA5).withValues(alpha: isInhale ? 0.4 : 0.2),
-                  const Color(0xFF00BFA5).withValues(alpha: 0.05),
+                  AppTheme.secondaryColor
+                      .withValues(alpha: isInhale ? 0.4 : 0.2),
+                  AppTheme.secondaryColor.withValues(alpha: 0.05),
                 ],
               ),
               border: Border.all(
-                color: const Color(0xFF00BFA5).withValues(alpha: isInhale ? 0.5 : 0.3),
+                color: AppTheme.secondaryColor
+                    .withValues(alpha: isInhale ? 0.5 : 0.3),
                 width: isInhale ? 3 : 1,
               ),
               boxShadow: [
                 BoxShadow(
-                  color: const Color(0xFF00BFA5).withValues(alpha: isInhale ? 0.2 : 0.05),
+                  color: AppTheme.secondaryColor
+                      .withValues(alpha: isInhale ? 0.2 : 0.05),
                   blurRadius: isInhale ? 30 : 10,
                 ),
               ],
@@ -722,8 +842,9 @@ class _BrainGamesPageState extends State<BrainGamesPage> {
               child: Text(
                 isInhale ? 'Breathe In' : 'Breathe Out',
                 style: TextStyle(
-                  fontSize: 18, fontWeight: FontWeight.w700,
-                  color: isInhale ? const Color(0xFF00BFA5) : Colors.white60,
+                  fontSize: 18,
+                  fontWeight: FontWeight.w700,
+                  color: isInhale ? AppTheme.secondaryColor : Colors.white60,
                 ),
               ),
             ),
@@ -739,7 +860,8 @@ class _BrainGamesPageState extends State<BrainGamesPage> {
         Text(
           'Complete 5 cycles, then tap ✓ to earn points',
           style: TextStyle(
-            fontSize: 12, color: isDark ? Colors.white38 : Colors.black38,
+            fontSize: 12,
+            color: isDark ? Colors.white38 : Colors.black38,
           ),
         ),
       ],
@@ -753,14 +875,21 @@ class _BrainGamesPageState extends State<BrainGamesPage> {
           children: [
             IconButton(
               icon: const Icon(Icons.close),
-              onPressed: () => setState(() { _activeGame = null; _initPatternGame(); }),
+              onPressed: () => setState(() {
+                _activeGame = null;
+                _initPatternGame();
+              }),
             ),
             const SizedBox(width: 8),
-            const Text('Pattern Recall', style: TextStyle(fontSize: 20, fontWeight: FontWeight.w700)),
+            const Text('Pattern Recall',
+                style: TextStyle(fontSize: 20, fontWeight: FontWeight.w700)),
             const Spacer(),
-            Text('Round $_patternRound', style: const TextStyle(
-              fontSize: 16, fontWeight: FontWeight.w700, color: Color(0xFFFF6B9D),
-            )),
+            Text('Round $_patternRound',
+                style: const TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.w700,
+                  color: AppTheme.errorColor,
+                )),
           ],
         ),
         const SizedBox(height: 12),
@@ -773,14 +902,19 @@ class _BrainGamesPageState extends State<BrainGamesPage> {
           shrinkWrap: true,
           physics: const NeverScrollableScrollPhysics(),
           gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: 2, mainAxisSpacing: 12, crossAxisSpacing: 12, childAspectRatio: 1,
+            crossAxisCount: 2,
+            mainAxisSpacing: 12,
+            crossAxisSpacing: 12,
+            childAspectRatio: 1,
           ),
           itemCount: 4,
           itemBuilder: (ctx, i) {
-            final isHighlighted = _patternShowing && _patternShowIndex > 0 &&
+            final isHighlighted = _patternShowing &&
+                _patternShowIndex > 0 &&
                 _patternSequence.length > _patternShowIndex - 1 &&
                 _patternSequence[_patternShowIndex - 1] == i;
-            final isPlayerStep = !_patternShowing && _playerSequence.contains(i);
+            final isPlayerStep =
+                !_patternShowing && _playerSequence.contains(i);
 
             return GestureDetector(
               onTap: _patternShowing ? null : () => _onPatternTap(i),
@@ -788,22 +922,31 @@ class _BrainGamesPageState extends State<BrainGamesPage> {
                 duration: const Duration(milliseconds: 200),
                 decoration: BoxDecoration(
                   color: isHighlighted
-                      ? const Color(0xFFFF6B9D)
+                      ? AppTheme.errorColor
                       : (isPlayerStep
-                          ? const Color(0xFFFF6B9D).withValues(alpha: 0.2)
-                          : (isDark ? AppTheme.darkCard : AppTheme.lightSurface)),
+                          ? AppTheme.errorColor.withValues(alpha: 0.2)
+                          : (isDark
+                              ? AppTheme.darkCard
+                              : AppTheme.lightSurface)),
                   borderRadius: BorderRadius.circular(20),
                   border: Border.all(
                     color: isHighlighted
-                        ? const Color(0xFFFF6B9D)
+                        ? AppTheme.errorColor
                         : (isDark ? AppTheme.darkBorder : AppTheme.lightBorder),
                   ),
                 ),
                 child: Center(
                   child: Icon(
-                    [Icons.circle_outlined, Icons.square_outlined, Icons.star_outline, Icons.diamond_outlined][i],
+                    [
+                      Icons.circle_outlined,
+                      Icons.square_outlined,
+                      Icons.star_outline,
+                      Icons.diamond_outlined
+                    ][i],
                     size: 48,
-                    color: isHighlighted ? Colors.white : const Color(0xFFFF6B9D).withValues(alpha: 0.5),
+                    color: isHighlighted
+                        ? Colors.white
+                        : AppTheme.errorColor.withValues(alpha: 0.5),
                   ),
                 ),
               ),
@@ -826,11 +969,11 @@ class _BrainGamesPageState extends State<BrainGamesPage> {
       Future.delayed(const Duration(milliseconds: 300), () {
         if (mounted) {
           setState(() {
-          _playerSequence = [];
-          _patternShowing = true;
-          _patternShowIndex = 0;
-          _showPatternStep();
-        });
+            _playerSequence = [];
+            _patternShowing = true;
+            _patternShowIndex = 0;
+            _showPatternStep();
+          });
         }
       });
     } else if (_playerSequence.length == _patternSequence.length) {
@@ -845,7 +988,8 @@ class _BrainGamesPageState extends State<BrainGamesPage> {
       if (_patternRound >= 5) {
         _score += 20 + (_patternRound * 5);
         _streak += 1;
-        _showGameComplete('Pattern Genius! +${20 + _patternRound * 5} points 🧠');
+        _showGameComplete(
+            'Pattern Genius! +${20 + _patternRound * 5} points 🧠');
       }
     }
   }
@@ -859,7 +1003,10 @@ class _BrainGamesPageState extends State<BrainGamesPage> {
           children: [
             const Text('🧠', style: TextStyle(fontSize: 48)),
             const SizedBox(height: 12),
-            Text(message, textAlign: TextAlign.center, style: const TextStyle(fontWeight: FontWeight.w700, fontSize: 16)),
+            Text(message,
+                textAlign: TextAlign.center,
+                style:
+                    const TextStyle(fontWeight: FontWeight.w700, fontSize: 16)),
           ],
         ),
         actions: [
@@ -902,19 +1049,21 @@ class _BrainGamesPageState extends State<BrainGamesPage> {
               onPressed: () => setState(() => _activeGame = null),
             ),
             const SizedBox(width: 8),
-            const Text('Wellness Wheel', style: TextStyle(fontSize: 20, fontWeight: FontWeight.w700)),
+            const Text('Wellness Wheel',
+                style: TextStyle(fontSize: 20, fontWeight: FontWeight.w700)),
             const Spacer(),
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
               decoration: BoxDecoration(
-                color: const Color(0xFFFF9800).withValues(alpha: 0.15),
+                color: AppTheme.warningColor.withValues(alpha: 0.15),
                 borderRadius: BorderRadius.circular(12),
               ),
               child: Row(
                 children: [
                   const Icon(Icons.water_drop, color: Colors.blue, size: 16),
                   const SizedBox(width: 4),
-                  Text('$_waterDrops Drops', style: const TextStyle(fontWeight: FontWeight.bold)),
+                  Text('$_waterDrops Drops',
+                      style: const TextStyle(fontWeight: FontWeight.bold)),
                 ],
               ),
             ),
@@ -922,14 +1071,20 @@ class _BrainGamesPageState extends State<BrainGamesPage> {
         ),
         const SizedBox(height: 24),
         Text(
-          canSpin ? 'Spin the wheel for your daily reward!' : 'Next daily spin available in:',
-          style: TextStyle(color: isDark ? Colors.white70 : Colors.black87, fontSize: 16),
+          canSpin
+              ? 'Spin the wheel for your daily reward!'
+              : 'Next daily spin available in:',
+          style: TextStyle(
+              color: isDark ? Colors.white70 : Colors.black87, fontSize: 16),
         ),
         if (!canSpin) ...[
           const SizedBox(height: 8),
           Text(
             formatCooldown(),
-            style: const TextStyle(fontSize: 28, fontWeight: FontWeight.bold, color: Color(0xFFFF9800)),
+            style: const TextStyle(
+                fontSize: 28,
+                fontWeight: FontWeight.bold,
+                color: AppTheme.warningColor),
           ),
         ],
         const SizedBox(height: 32),
@@ -970,9 +1125,12 @@ class _BrainGamesPageState extends State<BrainGamesPage> {
                   decoration: const BoxDecoration(
                     color: Colors.white,
                     shape: BoxShape.circle,
-                    boxShadow: [BoxShadow(color: Colors.black12, blurRadius: 4)],
+                    boxShadow: [
+                      BoxShadow(color: Colors.black12, blurRadius: 4)
+                    ],
                   ),
-                  child: const Icon(Icons.arrow_downward, color: Colors.red, size: 16),
+                  child: const Icon(Icons.arrow_downward,
+                      color: Colors.red, size: 16),
                 ),
               ),
               // Center spin button
@@ -982,10 +1140,14 @@ class _BrainGamesPageState extends State<BrainGamesPage> {
                   height: 70,
                   width: 70,
                   decoration: BoxDecoration(
-                    color: (canSpin && !_isSpinning) ? const Color(0xFFFF9800) : Colors.grey,
+                    color: (canSpin && !_isSpinning)
+                        ? AppTheme.warningColor
+                        : Colors.grey,
                     shape: BoxShape.circle,
                     border: Border.all(color: Colors.white, width: 4),
-                    boxShadow: const [BoxShadow(color: Colors.black26, blurRadius: 8)],
+                    boxShadow: const [
+                      BoxShadow(color: Colors.black26, blurRadius: 8)
+                    ],
                   ),
                   child: Center(
                     child: Text(
@@ -1009,14 +1171,20 @@ class _BrainGamesPageState extends State<BrainGamesPage> {
 
   Widget _buildZenGarden(bool isDark) {
     // Current stage labels
-    final List<String> stageNames = ['Seed', 'Sprout', 'Young Plant', 'Budding', 'Full Bloom'];
+    final List<String> stageNames = [
+      'Seed',
+      'Sprout',
+      'Young Plant',
+      'Budding',
+      'Full Bloom'
+    ];
     final List<String> stageEmojis = ['🌱', '🌿', '🪴', '🌸', '💐'];
 
     final potColors = {
-      'Lotus': const Color(0xFFFF80AB),
-      'Lavender': const Color(0xFFB39DDB),
-      'Sunflower': const Color(0xFFFFD54F),
-      'Banyan Tree': const Color(0xFF8D6E63),
+      'Lotus': AppTheme.errorColor,
+      'Lavender': AppTheme.primaryLight,
+      'Sunflower': AppTheme.warningColor,
+      'Banyan Tree': AppTheme.successColor,
     };
 
     final isFullyGrown = _plantStage == 4 && _plantGrowth >= 1.0;
@@ -1030,7 +1198,8 @@ class _BrainGamesPageState extends State<BrainGamesPage> {
               onPressed: () => setState(() => _activeGame = null),
             ),
             const SizedBox(width: 8),
-            const Text('Zen Garden', style: TextStyle(fontSize: 20, fontWeight: FontWeight.w700)),
+            const Text('Zen Garden',
+                style: TextStyle(fontSize: 20, fontWeight: FontWeight.w700)),
             const Spacer(),
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
@@ -1042,14 +1211,16 @@ class _BrainGamesPageState extends State<BrainGamesPage> {
                 children: [
                   const Icon(Icons.water_drop, color: Colors.blue, size: 16),
                   const SizedBox(width: 4),
-                  Text('$_waterDrops Drops', style: const TextStyle(fontWeight: FontWeight.bold, color: Colors.blue)),
+                  Text('$_waterDrops Drops',
+                      style: const TextStyle(
+                          fontWeight: FontWeight.bold, color: Colors.blue)),
                 ],
               ),
             ),
           ],
         ),
         const SizedBox(height: 16),
-        
+
         // Plant Type Selector (only if stage is 0 and progress is 0)
         if (_plantStage == 0 && _plantGrowth == 0.0) ...[
           Container(
@@ -1057,12 +1228,15 @@ class _BrainGamesPageState extends State<BrainGamesPage> {
             decoration: BoxDecoration(
               color: isDark ? AppTheme.darkCard : Colors.white,
               borderRadius: BorderRadius.circular(16),
-              border: Border.all(color: isDark ? AppTheme.darkBorder : AppTheme.lightBorder),
+              border: Border.all(
+                  color: isDark ? AppTheme.darkBorder : AppTheme.lightBorder),
             ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Text('Choose a seed to plant:', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14)),
+                const Text('Choose a seed to plant:',
+                    style:
+                        TextStyle(fontWeight: FontWeight.bold, fontSize: 14)),
                 const SizedBox(height: 12),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -1078,9 +1252,13 @@ class _BrainGamesPageState extends State<BrainGamesPage> {
                           margin: const EdgeInsets.symmetric(horizontal: 4),
                           padding: const EdgeInsets.symmetric(vertical: 10),
                           decoration: BoxDecoration(
-                            color: isSelected ? Colors.green.withValues(alpha: 0.1) : Colors.transparent,
+                            color: isSelected
+                                ? Colors.green.withValues(alpha: 0.1)
+                                : Colors.transparent,
                             border: Border.all(
-                              color: isSelected ? Colors.green : Colors.grey.shade300,
+                              color: isSelected
+                                  ? Colors.green
+                                  : Colors.grey.shade300,
                               width: isSelected ? 1.5 : 1,
                             ),
                             borderRadius: BorderRadius.circular(12),
@@ -1091,7 +1269,11 @@ class _BrainGamesPageState extends State<BrainGamesPage> {
                               style: TextStyle(
                                 fontSize: 11,
                                 fontWeight: FontWeight.bold,
-                                color: isSelected ? Colors.green : (isDark ? Colors.white70 : Colors.black87),
+                                color: isSelected
+                                    ? Colors.green
+                                    : (isDark
+                                        ? Colors.white70
+                                        : Colors.black87),
                               ),
                             ),
                           ),
@@ -1114,18 +1296,22 @@ class _BrainGamesPageState extends State<BrainGamesPage> {
             color: isDark ? AppTheme.darkCard : Colors.white,
             borderRadius: BorderRadius.circular(24),
             boxShadow: const [BoxShadow(color: Colors.black12, blurRadius: 10)],
-            border: Border.all(color: isDark ? AppTheme.darkBorder : AppTheme.lightBorder),
+            border: Border.all(
+                color: isDark ? AppTheme.darkBorder : AppTheme.lightBorder),
           ),
           child: Column(
             children: [
               Text(
                 'Growing: $_selectedPlant',
-                style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                style:
+                    const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
               ),
               const SizedBox(height: 8),
               Text(
                 'Stage: ${stageNames[_plantStage]}',
-                style: TextStyle(color: potColors[_selectedPlant], fontWeight: FontWeight.w600),
+                style: TextStyle(
+                    color: potColors[_selectedPlant],
+                    fontWeight: FontWeight.w600),
               ),
               const SizedBox(height: 32),
 
@@ -1140,23 +1326,25 @@ class _BrainGamesPageState extends State<BrainGamesPage> {
                     child: Text(
                       isFullyGrown ? '💐' : stageEmojis[_plantStage],
                       style: const TextStyle(fontSize: 72),
-                    ).animate(target: _isWatering ? 1.0 : 0.0)
-                     .scale(duration: 400.ms, curve: Curves.elasticOut)
-                     .shimmer(duration: 800.ms, color: Colors.greenAccent),
+                    )
+                        .animate(target: _isWatering ? 1.0 : 0.0)
+                        .scale(duration: 400.ms, curve: Curves.elasticOut)
+                        .shimmer(duration: 800.ms, color: Colors.greenAccent),
                   ),
-                  
+
                   // Watering drops animation
                   if (_isWatering)
                     Positioned(
                       top: 10,
-                      child: const Icon(Icons.water_drop, color: Colors.blue, size: 24)
+                      child: const Icon(Icons.water_drop,
+                              color: Colors.blue, size: 24)
                           .animate()
                           .slideY(begin: -0.5, end: 1.5, duration: 600.ms)
                           .fadeOut(duration: 600.ms),
                     ),
                 ],
               ),
-              
+
               // Pot
               Container(
                 width: 90,
@@ -1167,14 +1355,24 @@ class _BrainGamesPageState extends State<BrainGamesPage> {
                     bottomLeft: Radius.circular(16),
                     bottomRight: Radius.circular(16),
                   ),
-                  boxShadow: const [BoxShadow(color: Colors.black12, blurRadius: 4, offset: Offset(0, 2))],
+                  boxShadow: const [
+                    BoxShadow(
+                        color: Colors.black12,
+                        blurRadius: 4,
+                        offset: Offset(0, 2))
+                  ],
                 ),
                 child: const Center(
-                  child: Text('ZEN', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 10, letterSpacing: 2)),
+                  child: Text('ZEN',
+                      style: TextStyle(
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 10,
+                          letterSpacing: 2)),
                 ),
               ),
               const SizedBox(height: 32),
-              
+
               // Progress Bar
               Row(
                 children: [
@@ -1185,12 +1383,14 @@ class _BrainGamesPageState extends State<BrainGamesPage> {
                         value: _plantGrowth,
                         minHeight: 10,
                         backgroundColor: Colors.grey.shade200,
-                        valueColor: AlwaysStoppedAnimation<Color>(potColors[_selectedPlant] ?? Colors.green),
+                        valueColor: AlwaysStoppedAnimation<Color>(
+                            potColors[_selectedPlant] ?? Colors.green),
                       ),
                     ),
                   ),
                   const SizedBox(width: 12),
-                  Text('${(_plantGrowth * 100).round()}%', style: const TextStyle(fontWeight: FontWeight.bold)),
+                  Text('${(_plantGrowth * 100).round()}%',
+                      style: const TextStyle(fontWeight: FontWeight.bold)),
                 ],
               ),
             ],
@@ -1205,9 +1405,10 @@ class _BrainGamesPageState extends State<BrainGamesPage> {
             icon: const Icon(Icons.star),
             label: const Text('Harvest Plant (+100 XP)'),
             style: FilledButton.styleFrom(
-              backgroundColor: const Color(0xFF4CAF50),
+              backgroundColor: AppTheme.successColor,
               minimumSize: const Size(double.infinity, 50),
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(16)),
             ),
           ).animate().scale(duration: 400.ms),
         ] else ...[
@@ -1218,7 +1419,8 @@ class _BrainGamesPageState extends State<BrainGamesPage> {
             style: FilledButton.styleFrom(
               backgroundColor: Colors.blue,
               minimumSize: const Size(double.infinity, 50),
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(16)),
             ),
           ),
         ],
@@ -1248,7 +1450,8 @@ class _WheelPainter extends CustomPainter {
     for (int i = 0; i < rewards.length; i++) {
       paint.color = rewards[i]['color'] as Color;
       // Draw segment slice
-      canvas.drawArc(rect, i * angleStep - pi / 2 - angleStep / 2, angleStep, true, paint);
+      canvas.drawArc(
+          rect, i * angleStep - pi / 2 - angleStep / 2, angleStep, true, paint);
 
       // Draw text label on the slice
       canvas.save();
@@ -1268,7 +1471,8 @@ class _WheelPainter extends CustomPainter {
         ),
       );
       textPainter.layout();
-      textPainter.paint(canvas, Offset(-textPainter.width / 2, -textPainter.height / 2));
+      textPainter.paint(
+          canvas, Offset(-textPainter.width / 2, -textPainter.height / 2));
       canvas.restore();
     }
 

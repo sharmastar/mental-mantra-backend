@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:mental_mantra/core/network/api_client.dart';
 
 import '../models/meditation_session.dart';
@@ -26,29 +27,39 @@ class MeditationRepository {
           );
         }).toList();
       }
-    } catch (_) {}
+    } catch (e) {
+      debugPrint('MeditationRepository.getSessions: $e');
+    }
     return MeditationCatalog.allSessions;
   }
 
-  Future<void> logSession(String sessionName, String category, int durationMin) async {
+  Future<void> logSession(
+      String sessionName, String category, int durationMin) async {
     try {
       await ApiClient.post('/meditation/session', data: {
         'sessionName': sessionName,
         'category': category,
         'durationMin': durationMin,
       });
-    } catch (_) {}
+    } catch (e) {
+      debugPrint('MeditationRepository.logSession: $e');
+    }
   }
 
   Future<void> toggleFavorite(String sessionId, bool isFavorite) async {
     try {
-      await ApiClient.put('/meditation/$sessionId/favorite', data: {'isFavorite': isFavorite});
-    } catch (_) {}
+      await ApiClient.put('/meditation/$sessionId/favorite',
+          data: {'isFavorite': isFavorite});
+    } catch (e) {
+      debugPrint('MeditationRepository.toggleFavorite: $e');
+    }
   }
 
   Future<void> markCompleted(String sessionId) async {
     try {
       await ApiClient.post('/meditation/$sessionId/complete');
-    } catch (_) {}
+    } catch (e) {
+      debugPrint('MeditationRepository.markCompleted: $e');
+    }
   }
 }

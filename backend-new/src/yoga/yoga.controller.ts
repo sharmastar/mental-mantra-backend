@@ -3,6 +3,7 @@ import { ApiTags, ApiOperation, ApiBearerAuth } from '@nestjs/swagger';
 import { YogaService } from './yoga.service';
 import { JwtAuthGuard } from '../common/guards/jwt-auth.guard';
 import { CurrentUser } from '../common/decorators/current-user.decorator';
+import { CreateYogaDto } from './dto/create-yoga.dto';
 
 @ApiTags('Yoga')
 @ApiBearerAuth()
@@ -19,7 +20,7 @@ export class YogaController {
 
   @Post()
   @ApiOperation({ summary: 'Log yoga session' })
-  async create(@CurrentUser('id') userId: string, @Body() data: any) {
-    return { success: true, data: await this.yogaService.create(userId, data) };
+  async create(@CurrentUser('id') userId: string, @Body() dto: CreateYogaDto) {
+    return { success: true, data: await this.yogaService.create(userId, dto) };
   }
 }

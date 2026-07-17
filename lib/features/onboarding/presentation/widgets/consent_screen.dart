@@ -55,10 +55,14 @@ class _ConsentScreenState extends State<ConsentScreen> {
             Container(
               padding: const EdgeInsets.all(20),
               decoration: BoxDecoration(
-                color: isDark ? AppTheme.darkCard : Colors.white.withValues(alpha: 0.05),
+                color: isDark
+                    ? AppTheme.darkCard
+                    : Colors.white.withValues(alpha: 0.05),
                 borderRadius: BorderRadius.circular(24),
                 border: Border.all(
-                  color: isDark ? AppTheme.darkBorder : Colors.white.withValues(alpha: 0.1),
+                  color: isDark
+                      ? AppTheme.darkBorder
+                      : Colors.white.withValues(alpha: 0.1),
                 ),
               ),
               child: Column(
@@ -76,19 +80,22 @@ class _ConsentScreenState extends State<ConsentScreen> {
                   _buildPrivacyBullet(
                     icon: Icons.lock_outline_rounded,
                     title: 'Secure & Encrypted',
-                    description: 'All answers are fully encrypted and kept private.',
+                    description:
+                        'All answers are fully encrypted and kept private.',
                   ),
                   const SizedBox(height: 14),
                   _buildPrivacyBullet(
                     icon: Icons.person_outline_rounded,
                     title: 'Tailored Just For You',
-                    description: 'Data is used solely to generate your personalized wellness plans.',
+                    description:
+                        'Data is used solely to generate your personalized wellness plans.',
                   ),
                   const SizedBox(height: 14),
                   _buildPrivacyBullet(
                     icon: Icons.delete_outline_rounded,
                     title: 'Full Data Control',
-                    description: 'You can request deletion of all data at any time from your settings.',
+                    description:
+                        'You can request deletion of all data at any time from your settings.',
                   ),
                 ],
               ),
@@ -103,7 +110,8 @@ class _ConsentScreenState extends State<ConsentScreen> {
               },
               borderRadius: BorderRadius.circular(12),
               child: Padding(
-                padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 4.0),
+                padding:
+                    const EdgeInsets.symmetric(vertical: 8.0, horizontal: 4.0),
                 child: Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -153,7 +161,8 @@ class _ConsentScreenState extends State<ConsentScreen> {
                 if (!_isConsented) {
                   ScaffoldMessenger.of(context).showSnackBar(
                     const SnackBar(
-                      content: Text('Please accept the consent agreement to proceed.'),
+                      content: Text(
+                          'Please accept the consent agreement to proceed.'),
                       backgroundColor: Colors.redAccent,
                       behavior: SnackBarBehavior.floating,
                     ),
@@ -247,4 +256,3 @@ class _ConsentScreenState extends State<ConsentScreen> {
     );
   }
 }
-

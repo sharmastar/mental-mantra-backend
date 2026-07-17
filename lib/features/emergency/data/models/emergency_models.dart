@@ -12,11 +12,11 @@ class CrisisResource {
   });
 
   factory CrisisResource.fromJson(Map<String, dynamic> json) => CrisisResource(
-    name: json['name'] ?? '',
-    number: json['number'] ?? '',
-    description: json['description'] ?? '',
-    isAvailable247: json['isAvailable247'] ?? true,
-  );
+        name: json['name'] ?? '',
+        number: json['number'] ?? '',
+        description: json['description'] ?? '',
+        isAvailable247: json['isAvailable247'] ?? true,
+      );
 }
 
 class EmergencyContact {
@@ -32,7 +32,12 @@ class EmergencyContact {
     this.isProfessional = false,
   });
 
-  Map<String, dynamic> toJson() => {'name': name, 'phone': phone, 'relationship': relationship, 'isProfessional': isProfessional};
+  Map<String, dynamic> toJson() => {
+        'name': name,
+        'phone': phone,
+        'relationship': relationship,
+        'isProfessional': isProfessional
+      };
 }
 
 class SafetyPlan {
@@ -51,18 +56,32 @@ class SafetyPlan {
   });
 
   Map<String, dynamic> toJson() => {
-    'warningSigns': warningSigns,
-    'copingStrategies': copingStrategies,
-    'socialSupports': socialSupports.map((e) => e.toJson()).toList(),
-    'professionalContacts': professionalContacts.map((e) => e.toJson()).toList(),
-    'safeEnvironments': safeEnvironments,
-  };
+        'warningSigns': warningSigns,
+        'copingStrategies': copingStrategies,
+        'socialSupports': socialSupports.map((e) => e.toJson()).toList(),
+        'professionalContacts':
+            professionalContacts.map((e) => e.toJson()).toList(),
+        'safeEnvironments': safeEnvironments,
+      };
 
   factory SafetyPlan.fromJson(Map<String, dynamic> json) => SafetyPlan(
-    warningSigns: List<String>.from(json['warningSigns'] ?? []),
-    copingStrategies: List<String>.from(json['copingStrategies'] ?? []),
-    socialSupports: (json['socialSupports'] as List?)?.map((e) => EmergencyContact(name: e['name'] ?? '', phone: e['phone'] ?? '', relationship: e['relationship'] ?? '')).toList() ?? [],
-    professionalContacts: (json['professionalContacts'] as List?)?.map((e) => EmergencyContact(name: e['name'] ?? '', phone: e['phone'] ?? '', relationship: e['role'] ?? e['relationship'] ?? '', isProfessional: true)).toList() ?? [],
-    safeEnvironments: List<String>.from(json['safeEnvironments'] ?? []),
-  );
+        warningSigns: List<String>.from(json['warningSigns'] ?? []),
+        copingStrategies: List<String>.from(json['copingStrategies'] ?? []),
+        socialSupports: (json['socialSupports'] as List?)
+                ?.map((e) => EmergencyContact(
+                    name: e['name'] ?? '',
+                    phone: e['phone'] ?? '',
+                    relationship: e['relationship'] ?? ''))
+                .toList() ??
+            [],
+        professionalContacts: (json['professionalContacts'] as List?)
+                ?.map((e) => EmergencyContact(
+                    name: e['name'] ?? '',
+                    phone: e['phone'] ?? '',
+                    relationship: e['role'] ?? e['relationship'] ?? '',
+                    isProfessional: true))
+                .toList() ??
+            [],
+        safeEnvironments: List<String>.from(json['safeEnvironments'] ?? []),
+      );
 }

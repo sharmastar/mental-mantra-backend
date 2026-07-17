@@ -33,7 +33,8 @@ Return valid JSON only with these exact fields:
 ''';
   }
 
-  static String dailyRecommendationPrompt(Map<String, dynamic> profile, Map<String, dynamic>? lastCheckin) {
+  static String dailyRecommendationPrompt(
+      Map<String, dynamic> profile, Map<String, dynamic>? lastCheckin) {
     return '''
 You are an AI wellness coach for Mental Mantra. Generate a personalized daily wellness plan.
 
@@ -103,7 +104,8 @@ Return valid JSON:
 ''';
   }
 
-  static String addictionRecoveryPrompt(String message, {List<Map<String, dynamic>>? recentUrges}) {
+  static String addictionRecoveryPrompt(String message,
+      {List<Map<String, dynamic>>? recentUrges}) {
     return '''
 You are an AI addiction recovery coach for Mental Mantra app. The user is working on reducing or quitting addictive behaviors (gaming, social media, app browsing, etc.).
 
@@ -151,7 +153,8 @@ Be conservative - only flag genuine crisis signals. Do not flag general sadness 
 ''';
   }
 
-  static String moodAnalysisPrompt(List<Map<String, dynamic>> recentMoods, int days) {
+  static String moodAnalysisPrompt(
+      List<Map<String, dynamic>> recentMoods, int days) {
     return '''
 Analyze this $days-day mood history from Mental Mantra.
 

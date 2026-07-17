@@ -43,13 +43,17 @@ class AdminUser {
   });
 
   factory AdminUser.fromJson(Map<String, dynamic> json) => AdminUser(
-    uid: json['id'] as String? ?? json['uid'] as String? ?? '',
-    name: json['displayName'] as String? ?? json['name'] as String? ?? 'Unknown',
-    email: json['email'] as String? ?? '',
-    role: json['role'] as String? ?? 'user',
-    isActive: json['isActive'] as bool? ?? true,
-    lastActive: json['lastActive'] != null ? DateTime.parse(json['lastActive'] as String) : null,
-  );
+        uid: json['id'] as String? ?? json['uid'] as String? ?? '',
+        name: json['displayName'] as String? ??
+            json['name'] as String? ??
+            'Unknown',
+        email: json['email'] as String? ?? '',
+        role: json['role'] as String? ?? 'user',
+        isActive: json['isActive'] as bool? ?? true,
+        lastActive: json['lastActive'] != null
+            ? DateTime.parse(json['lastActive'] as String)
+            : null,
+      );
 }
 
 class AdminState {
@@ -84,7 +88,8 @@ class AdminState {
       isLoading: isLoading ?? this.isLoading,
       error: clearError ? null : (error ?? this.error),
       dailyUserSpots: dailyUserSpots ?? this.dailyUserSpots,
-      sessionsCompletedSpots: sessionsCompletedSpots ?? this.sessionsCompletedSpots,
+      sessionsCompletedSpots:
+          sessionsCompletedSpots ?? this.sessionsCompletedSpots,
     );
   }
 }
@@ -96,7 +101,9 @@ class AdminNotifier extends StateNotifier<AdminState> {
     state = state.copyWith(isLoading: true, clearError: true);
     try {
       final adminResponse = await ApiClient.get('/admin/dashboard');
-      final adminData = (adminResponse.data as Map<String, dynamic>)['data'] as Map<String, dynamic>? ?? {};
+      final adminData = (adminResponse.data as Map<String, dynamic>)['data']
+              as Map<String, dynamic>? ??
+          {};
 
       final usersList = (adminData['users'] as List<dynamic>? ?? [])
           .map((e) => AdminUser.fromJson(e as Map<String, dynamic>))
@@ -104,8 +111,12 @@ class AdminNotifier extends StateNotifier<AdminState> {
 
       final now = DateTime.now();
       final monthAgo = now.subtract(const Duration(days: 30));
-      final activeUsers = usersList.where((u) => u.lastActive != null && u.lastActive!.isAfter(monthAgo)).length;
-      final newUsers = usersList.where((u) => u.lastActive != null && u.lastActive!.isAfter(monthAgo)).length;
+      final activeUsers = usersList
+          .where((u) => u.lastActive != null && u.lastActive!.isAfter(monthAgo))
+          .length;
+      final newUsers = usersList
+          .where((u) => u.lastActive != null && u.lastActive!.isAfter(monthAgo))
+          .length;
 
       state = state.copyWith(
         stats: AdminDashboardStats(
@@ -118,19 +129,38 @@ class AdminNotifier extends StateNotifier<AdminState> {
         ),
         users: usersList,
         dailyUserSpots: [
-          const FlSpot(1, 320), const FlSpot(2, 380), const FlSpot(3, 410), const FlSpot(4, 390),
-          const FlSpot(5, 450), const FlSpot(6, 520), const FlSpot(7, 490), const FlSpot(8, 510),
-          const FlSpot(9, 480), const FlSpot(10, 540), const FlSpot(11, 560), const FlSpot(12, 530),
+          const FlSpot(1, 320),
+          const FlSpot(2, 380),
+          const FlSpot(3, 410),
+          const FlSpot(4, 390),
+          const FlSpot(5, 450),
+          const FlSpot(6, 520),
+          const FlSpot(7, 490),
+          const FlSpot(8, 510),
+          const FlSpot(9, 480),
+          const FlSpot(10, 540),
+          const FlSpot(11, 560),
+          const FlSpot(12, 530),
         ],
         sessionsCompletedSpots: [
-          const FlSpot(1, 1200), const FlSpot(2, 1350), const FlSpot(3, 1100), const FlSpot(4, 1450),
-          const FlSpot(5, 1600), const FlSpot(6, 1500), const FlSpot(7, 1700), const FlSpot(8, 1650),
-          const FlSpot(9, 1800), const FlSpot(10, 1900), const FlSpot(11, 1750), const FlSpot(12, 2100),
+          const FlSpot(1, 1200),
+          const FlSpot(2, 1350),
+          const FlSpot(3, 1100),
+          const FlSpot(4, 1450),
+          const FlSpot(5, 1600),
+          const FlSpot(6, 1500),
+          const FlSpot(7, 1700),
+          const FlSpot(8, 1650),
+          const FlSpot(9, 1800),
+          const FlSpot(10, 1900),
+          const FlSpot(11, 1750),
+          const FlSpot(12, 2100),
         ],
         isLoading: false,
       );
     } catch (e) {
-      state = state.copyWith(isLoading: false, error: 'Failed to load admin data: $e');
+      state = state.copyWith(
+          isLoading: false, error: 'Failed to load admin data: $e');
     }
   }
 
@@ -139,7 +169,13 @@ class AdminNotifier extends StateNotifier<AdminState> {
       await ApiClient.put('/admin/users/$uid/role', data: {'role': newRole});
       final updatedUsers = state.users.map((u) {
         if (u.uid == uid) {
-          return AdminUser(uid: u.uid, name: u.name, email: u.email, role: newRole, isActive: u.isActive, lastActive: u.lastActive);
+          return AdminUser(
+              uid: u.uid,
+              name: u.name,
+              email: u.email,
+              role: newRole,
+              isActive: u.isActive,
+              lastActive: u.lastActive);
         }
         return u;
       }).toList();
@@ -153,10 +189,17 @@ class AdminNotifier extends StateNotifier<AdminState> {
     try {
       final user = state.users.firstWhere((u) => u.uid == uid);
       final newStatus = !user.isActive;
-      await ApiClient.put('/admin/users/$uid/status', data: {'isActive': newStatus});
+      await ApiClient.put('/admin/users/$uid/status',
+          data: {'isActive': newStatus});
       final updatedUsers = state.users.map((u) {
         if (u.uid == uid) {
-          return AdminUser(uid: u.uid, name: u.name, email: u.email, role: u.role, isActive: newStatus, lastActive: u.lastActive);
+          return AdminUser(
+              uid: u.uid,
+              name: u.name,
+              email: u.email,
+              role: u.role,
+              isActive: newStatus,
+              lastActive: u.lastActive);
         }
         return u;
       }).toList();

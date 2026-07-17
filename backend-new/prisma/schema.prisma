@@ -58,10 +58,8 @@ model User {
   journalEntries         JournalEntry[]
   journalImages          JournalImage[]
   journalVoiceNotes      JournalVoiceNote[]
-  meditationHistory      MeditationHistory[]
   meditationSessions     MeditationSession[]
   moodEntries            MoodEntry[]
-  moodHistory            MoodHistory[]
   musicHistory           MusicHistory[]
   notifications          Notification[]
   payments               Payment[]
@@ -183,20 +181,6 @@ model MoodEntry {
   @@map("mood_entries")
 }
 
-model MoodHistory {
-  id     String   @id @default(uuid()) @db.Uuid
-  userId String   @db.Uuid
-  mood   Int
-  emoji  String
-  label  String
-  date   DateTime @db.Timestamptz(6)
-  note   String?
-  user   User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-
-  @@unique([userId, date])
-  @@index([userId, date])
-  @@map("mood_history")
-}
 
 model JournalEntry {
   id          String             @id @default(uuid()) @db.Uuid
@@ -232,6 +216,7 @@ model JournalImage {
   user      User         @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@index([journalId])
+  @@index([userId])
   @@map("journal_images")
 }
 
@@ -246,6 +231,7 @@ model JournalVoiceNote {
   user        User         @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@index([journalId])
+  @@index([userId])
   @@map("journal_voice_notes")
 }
 
@@ -300,22 +286,6 @@ model MeditationSession {
   @@map("meditation_sessions")
 }
 
-model MeditationHistory {
-  id            String    @id @default(uuid()) @db.Uuid
-  userId        String    @db.Uuid
-  sessionName   String
-  category      String
-  durationMin   Int
-  totalSessions Int       @default(1)
-  totalMinutes  Int       @default(0)
-  lastPracticed DateTime? @db.Timestamptz(6)
-  createdAt     DateTime  @default(now()) @db.Timestamptz(6)
-  updatedAt     DateTime  @updatedAt @db.Timestamptz(6)
-  user          User      @relation(fields: [userId], references: [id], onDelete: Cascade)
-
-  @@unique([userId, sessionName])
-  @@map("meditation_history")
-}
 
 model Goal {
   id           String         @id @default(uuid()) @db.Uuid
@@ -666,6 +636,18 @@ model YogaSession {
 
   @@index([userId])
   @@map("yoga_sessions")
+}
+
+model Otp {
+  id        String   @id @default(uuid()) @db.Uuid
+  email     String
+  code      String
+  expiresAt DateTime @db.Timestamptz(6)
+  attempts  Int      @default(0)
+  createdAt DateTime @default(now()) @db.Timestamptz(6)
+
+  @@index([email])
+  @@map("otps")
 }
 
 model SystemSetting {

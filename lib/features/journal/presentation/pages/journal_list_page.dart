@@ -21,19 +21,24 @@ class JournalListPage extends ConsumerWidget {
         content: TextField(
           controller: controller,
           autofocus: true,
-          decoration: const InputDecoration(hintText: 'Search entries...', prefixIcon: Icon(Icons.search)),
+          decoration: const InputDecoration(
+              hintText: 'Search entries...', prefixIcon: Icon(Icons.search)),
         ),
         actions: [
-          TextButton(onPressed: () {
-            controller.dispose();
-            Navigator.pop(ctx);
-          }, child: const Text('Cancel')),
+          TextButton(
+              onPressed: () {
+                controller.dispose();
+                Navigator.pop(ctx);
+              },
+              child: const Text('Cancel')),
           TextButton(
             onPressed: () {
               final query = controller.text.trim();
               controller.dispose();
               Navigator.pop(ctx);
-              ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Searching for "$query"...'), behavior: SnackBarBehavior.floating));
+              ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                  content: Text('Searching for "$query"...'),
+                  behavior: SnackBarBehavior.floating));
             },
             child: const Text('Search'),
           ),
@@ -49,7 +54,9 @@ class JournalListPage extends ConsumerWidget {
 
     return Scaffold(
       appBar: AppBar(title: const Text('My Journal'), actions: [
-        IconButton(icon: const Icon(Icons.search), onPressed: () => _showSearchDialog(context, userId)),
+        IconButton(
+            icon: const Icon(Icons.search),
+            onPressed: () => _showSearchDialog(context, userId)),
       ]),
       body: entriesAsync.when(
         loading: () => const Center(child: CircularProgressIndicator()),
@@ -57,7 +64,8 @@ class JournalListPage extends ConsumerWidget {
         data: (entries) {
           if (entries.isEmpty) return _buildEmptyState(context);
           return RefreshIndicator(
-            onRefresh: () async => ref.refresh(journalListProvider(userId).future),
+            onRefresh: () async =>
+                ref.refresh(journalListProvider(userId).future),
             child: ListView.builder(
               padding: const EdgeInsets.all(16),
               itemCount: entries.length + 1,
@@ -86,7 +94,7 @@ class JournalListPage extends ConsumerWidget {
           children: [
             _buildStat(context, '${entries.length}', 'Entries'),
             _buildStat(context, _avgMood(entries), 'Avg Mood'),
-            _buildStat(context, _streak(entries), 'Day Streak'),
+            _buildStat(context, _streak(entries), 'Showing Up'),
           ],
         ),
         const SizedBox(height: 16),
@@ -103,7 +111,12 @@ class JournalListPage extends ConsumerWidget {
       child: Card(
         child: Padding(
           padding: const EdgeInsets.all(12),
-          child: Column(children: [Text(value, style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 18)), Text(label, style: Theme.of(context).textTheme.bodySmall)]),
+          child: Column(children: [
+            Text(value,
+                style:
+                    const TextStyle(fontWeight: FontWeight.bold, fontSize: 18)),
+            Text(label, style: Theme.of(context).textTheme.bodySmall)
+          ]),
         ),
       ),
     );
@@ -122,19 +135,39 @@ class JournalListPage extends ConsumerWidget {
             children: [
               Row(
                 children: [
-                  Text(moodEmoji(entry.mood), style: const TextStyle(fontSize: 20)),
+                  Text(moodEmoji(entry.mood),
+                      style: const TextStyle(fontSize: 20)),
                   const SizedBox(width: 8),
-                  Expanded(child: Text(entry.title, style: const TextStyle(fontWeight: FontWeight.w600))),
-                  Text(DateFormatUtils.formatTimestamp(entry.createdAt), style: Theme.of(context).textTheme.bodySmall),
+                  Expanded(
+                      child: Text(entry.title,
+                          style: const TextStyle(fontWeight: FontWeight.w600))),
+                  Text(DateFormatUtils.formatTimestamp(entry.createdAt),
+                      style: Theme.of(context).textTheme.bodySmall),
                 ],
               ),
               if (entry.content.isNotEmpty) ...[
                 const SizedBox(height: 8),
-                Text(entry.content, maxLines: 2, overflow: TextOverflow.ellipsis, style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: Colors.grey[600])),
+                Text(entry.content,
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                    style: Theme.of(context)
+                        .textTheme
+                        .bodyMedium
+                        ?.copyWith(color: Colors.grey[600])),
               ],
               if (entry.emotions.isNotEmpty) ...[
                 const SizedBox(height: 8),
-                Wrap(spacing: 4, children: entry.emotions.take(3).map((e) => Chip(label: Text(e, style: const TextStyle(fontSize: 10)), materialTapTargetSize: MaterialTapTargetSize.shrinkWrap, visualDensity: VisualDensity.compact)).toList()),
+                Wrap(
+                    spacing: 4,
+                    children: entry.emotions
+                        .take(3)
+                        .map((e) => Chip(
+                            label:
+                                Text(e, style: const TextStyle(fontSize: 10)),
+                            materialTapTargetSize:
+                                MaterialTapTargetSize.shrinkWrap,
+                            visualDensity: VisualDensity.compact))
+                        .toList()),
               ],
             ],
           ),
@@ -143,18 +176,28 @@ class JournalListPage extends ConsumerWidget {
     );
   }
 
-  Widget _buildErrorState(BuildContext context, WidgetRef ref, Object error, String userId) {
+  Widget _buildErrorState(
+      BuildContext context, WidgetRef ref, Object error, String userId) {
     return Center(
       child: Padding(
         padding: const EdgeInsets.all(40),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Icon(Icons.cloud_off_rounded, size: 64, color: Colors.grey.shade400),
+            Icon(Icons.cloud_off_rounded,
+                size: 64, color: Colors.grey.shade400),
             const SizedBox(height: 16),
-            Text('Could not load entries', style: Theme.of(context).textTheme.titleLarge),
+            Text('Could not load entries',
+                style: Theme.of(context).textTheme.titleLarge),
             const SizedBox(height: 8),
-            Text(error.toString(), style: Theme.of(context).textTheme.bodySmall?.copyWith(color: Colors.grey), textAlign: TextAlign.center, maxLines: 3, overflow: TextOverflow.ellipsis),
+            Text(error.toString(),
+                style: Theme.of(context)
+                    .textTheme
+                    .bodySmall
+                    ?.copyWith(color: Colors.grey),
+                textAlign: TextAlign.center,
+                maxLines: 3,
+                overflow: TextOverflow.ellipsis),
             const SizedBox(height: 24),
             FilledButton.icon(
               icon: const Icon(Icons.refresh),
@@ -171,7 +214,8 @@ class JournalListPage extends ConsumerWidget {
     return PremiumEmptyState(
       icon: Icons.book_outlined,
       title: 'Your Thoughts Await',
-      description: 'Start writing to document your moments and allow Nova to help you reflect on your patterns.',
+      description:
+          'Start writing to document your moments and allow Nova to help you reflect on your patterns.',
       actionLabel: 'Write First Entry',
       onAction: () => context.push(AppRoutes.journalNew),
     );
@@ -179,12 +223,14 @@ class JournalListPage extends ConsumerWidget {
 
   String _avgMood(List<JournalEntry> entries) {
     if (entries.isEmpty) return '-';
-    return (entries.fold(0.0, (s, e) => s + e.mood) / entries.length).toStringAsFixed(1);
+    return (entries.fold(0.0, (s, e) => s + e.mood) / entries.length)
+        .toStringAsFixed(1);
   }
 
   String _streak(List<JournalEntry> entries) {
     if (entries.isEmpty) return '0';
-    final sorted = List<JournalEntry>.from(entries)..sort((a, b) => b.createdAt.compareTo(a.createdAt));
+    final sorted = List<JournalEntry>.from(entries)
+      ..sort((a, b) => b.createdAt.compareTo(a.createdAt));
     int streak = 0;
     final now = DateTime.now();
     for (int i = 0; i < sorted.length; i++) {
@@ -197,6 +243,4 @@ class JournalListPage extends ConsumerWidget {
     }
     return streak.toString();
   }
-
-
 }

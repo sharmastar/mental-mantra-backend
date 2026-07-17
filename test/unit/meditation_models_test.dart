@@ -45,22 +45,26 @@ void main() {
     });
 
     test('durationLabel formats minutes', () {
-      const s = MeditationSession(id: 's1', title: 'Test', description: 'Test', durationSeconds: 300);
+      const s = MeditationSession(
+          id: 's1', title: 'Test', description: 'Test', durationSeconds: 300);
       expect(s.durationLabel, '5min');
     });
 
     test('durationLabel formats hours and minutes', () {
-      const s = MeditationSession(id: 's1', title: 'Test', description: 'Test', durationSeconds: 5400);
+      const s = MeditationSession(
+          id: 's1', title: 'Test', description: 'Test', durationSeconds: 5400);
       expect(s.durationLabel, '1h 30min');
     });
 
     test('durationLabel shows only hours when no remainder', () {
-      const s = MeditationSession(id: 's1', title: 'Test', description: 'Test', durationSeconds: 7200);
+      const s = MeditationSession(
+          id: 's1', title: 'Test', description: 'Test', durationSeconds: 7200);
       expect(s.durationLabel, '2h');
     });
 
     test('copyWith does not modify original', () {
-      const original = MeditationSession(id: 's1', title: 'Test', description: 'Test');
+      const original =
+          MeditationSession(id: 's1', title: 'Test', description: 'Test');
       final copy = original.copyWith(isFavorite: true, timesCompleted: 1);
       expect(original.isFavorite, false);
       expect(original.timesCompleted, 0);

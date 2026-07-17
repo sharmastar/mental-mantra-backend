@@ -94,7 +94,8 @@ class BreathingExercisesPage extends ConsumerStatefulWidget {
   const BreathingExercisesPage({super.key});
 
   @override
-  ConsumerState<BreathingExercisesPage> createState() => _BreathingExercisesPageState();
+  ConsumerState<BreathingExercisesPage> createState() =>
+      _BreathingExercisesPageState();
 }
 
 class _BreathingExercisesPageState extends ConsumerState<BreathingExercisesPage>
@@ -117,9 +118,11 @@ class _BreathingExercisesPageState extends ConsumerState<BreathingExercisesPage>
   @override
   void initState() {
     super.initState();
-    _breathController = AnimationController(vsync: this, duration: const Duration(seconds: 4));
-    _glowController = AnimationController(vsync: this, duration: const Duration(seconds: 3))
-      ..repeat(reverse: true);
+    _breathController =
+        AnimationController(vsync: this, duration: const Duration(seconds: 4));
+    _glowController =
+        AnimationController(vsync: this, duration: const Duration(seconds: 3))
+          ..repeat(reverse: true);
     _glowAnim = Tween(begin: 0.3, end: 0.7).animate(
       CurvedAnimation(parent: _glowController, curve: Curves.easeInOut),
     );
@@ -296,13 +299,31 @@ class _BreathingExercisesPageState extends ConsumerState<BreathingExercisesPage>
       appBar: AppBar(
         title: const Text(
           'Breathing Exercises',
-          style: TextStyle(fontFamily: 'Playfair Display', fontWeight: FontWeight.bold),
+          style: TextStyle(
+              fontFamily: 'Playfair Display', fontWeight: FontWeight.bold),
         ),
         backgroundColor: Colors.transparent,
         elevation: 0,
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios_new, size: 18),
-          onPressed: () => Navigator.maybePop(context),
+        leading: Center(
+          child: Container(
+            margin: const EdgeInsets.only(left: 12),
+            decoration: BoxDecoration(
+              color: isDark
+                  ? Colors.white.withValues(alpha: 0.08)
+                  : Colors.black.withValues(alpha: 0.04),
+              shape: BoxShape.circle,
+            ),
+            child: IconButton(
+              icon: const Icon(Icons.arrow_back_ios_new, size: 16),
+              color: isDark ? Colors.white : const Color(0xFF0E1A1B),
+              onPressed: () => Navigator.maybePop(context),
+              padding: EdgeInsets.zero,
+              constraints: const BoxConstraints(
+                minWidth: 36,
+                minHeight: 36,
+              ),
+            ),
+          ),
         ),
         actions: [
           if (_isRunning)
@@ -310,17 +331,23 @@ class _BreathingExercisesPageState extends ConsumerState<BreathingExercisesPage>
               padding: const EdgeInsets.symmetric(horizontal: 8.0),
               child: TextButton.icon(
                 onPressed: _stopSession,
-                icon: const Icon(Icons.stop_rounded, size: 18, color: AppTheme.errorColor),
+                icon: const Icon(Icons.stop_rounded,
+                    size: 18, color: AppTheme.errorColor),
                 label: const Text(
                   'End',
-                  style: TextStyle(fontFamily: 'Outfit', color: AppTheme.errorColor, fontWeight: FontWeight.w600),
+                  style: TextStyle(
+                      fontFamily: 'Outfit',
+                      color: AppTheme.errorColor,
+                      fontWeight: FontWeight.w600),
                 ),
               ),
             ),
         ],
       ),
       body: SafeArea(
-        child: _showPatternPicker ? _buildPatternPicker(isDark) : _buildSession(isDark, p),
+        child: _showPatternPicker
+            ? _buildPatternPicker(isDark)
+            : _buildSession(isDark, p),
       ),
     );
   }
@@ -367,7 +394,11 @@ class _BreathingExercisesPageState extends ConsumerState<BreathingExercisesPage>
                           : (isDark ? AppTheme.darkCard : Colors.white),
                       borderRadius: BorderRadius.circular(28),
                       border: Border.all(
-                        color: isSelected ? p.color : (isDark ? AppTheme.darkBorder : AppTheme.lightBorder),
+                        color: isSelected
+                            ? p.color
+                            : (isDark
+                                ? AppTheme.darkBorder
+                                : AppTheme.lightBorder),
                         width: isSelected ? 2 : 1,
                       ),
                       boxShadow: isSelected
@@ -397,7 +428,8 @@ class _BreathingExercisesPageState extends ConsumerState<BreathingExercisesPage>
                             borderRadius: BorderRadius.circular(18),
                           ),
                           child: Center(
-                            child: Text(p.icon, style: const TextStyle(fontSize: 24)),
+                            child: Text(p.icon,
+                                style: const TextStyle(fontSize: 24)),
                           ),
                         ),
                         const SizedBox(width: 16),
@@ -418,7 +450,8 @@ class _BreathingExercisesPageState extends ConsumerState<BreathingExercisesPage>
                                 p.description,
                                 style: TextStyle(
                                   fontFamily: 'Outfit',
-                                  color: isDark ? Colors.white60 : Colors.black54,
+                                  color:
+                                      isDark ? Colors.white60 : Colors.black54,
                                   fontSize: 13,
                                 ),
                               ),
@@ -426,9 +459,12 @@ class _BreathingExercisesPageState extends ConsumerState<BreathingExercisesPage>
                           ),
                         ),
                         Container(
-                          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 10, vertical: 4),
                           decoration: BoxDecoration(
-                            color: isDark ? Colors.white10 : Colors.black.withValues(alpha: 0.04),
+                            color: isDark
+                                ? Colors.white10
+                                : Colors.black.withValues(alpha: 0.04),
                             borderRadius: BorderRadius.circular(12),
                           ),
                           child: Text(
@@ -506,8 +542,10 @@ class _BreathingExercisesPageState extends ConsumerState<BreathingExercisesPage>
   }
 
   Widget _buildBreathCircle(bool isDark, BreathingPattern p) {
-    final isInhaling = _currentPhase == BreathingPhase.inhale || _currentPhase == BreathingPhase.holdInhale;
-    final scale = 0.5 + (isInhaling ? _scaleAnim.value * 0.5 : (1.0 - _scaleAnim.value) * 0.5);
+    final isInhaling = _currentPhase == BreathingPhase.inhale ||
+        _currentPhase == BreathingPhase.holdInhale;
+    final scale = 0.5 +
+        (isInhaling ? _scaleAnim.value * 0.5 : (1.0 - _scaleAnim.value) * 0.5);
     final glowOpacity = _glowAnim.value;
 
     return Column(
@@ -558,11 +596,13 @@ class _BreathingExercisesPageState extends ConsumerState<BreathingExercisesPage>
                             p.color.withValues(alpha: 0.6),
                           ],
                           stops: const [0.0, 0.25, 0.5, 0.75, 1.0],
-                          transform: GradientRotation(_breathController.value * 2 * pi),
+                          transform: GradientRotation(
+                              _breathController.value * 2 * pi),
                         ),
                         boxShadow: [
                           BoxShadow(
-                            color: p.color.withValues(alpha: glowOpacity * 0.35),
+                            color:
+                                p.color.withValues(alpha: glowOpacity * 0.35),
                             blurRadius: 40 + glowOpacity * 20,
                             spreadRadius: 5 + glowOpacity * 10,
                           ),
@@ -572,7 +612,9 @@ class _BreathingExercisesPageState extends ConsumerState<BreathingExercisesPage>
                         margin: const EdgeInsets.all(4),
                         decoration: BoxDecoration(
                           shape: BoxShape.circle,
-                          color: isDark ? const Color(0xFF16132A) : const Color(0xFFF8F7FC),
+                          color: isDark
+                              ? const Color(0xFF16132A)
+                              : const Color(0xFFF8F7FC),
                         ),
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.center,
@@ -618,9 +660,11 @@ class _BreathingExercisesPageState extends ConsumerState<BreathingExercisesPage>
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             _buildPhaseDot(BreathingPhase.inhale, p),
-            if (pattern.holdInhale > 0) _buildPhaseDot(BreathingPhase.holdInhale, p),
+            if (pattern.holdInhale > 0)
+              _buildPhaseDot(BreathingPhase.holdInhale, p),
             _buildPhaseDot(BreathingPhase.exhale, p),
-            if (pattern.holdExhale > 0) _buildPhaseDot(BreathingPhase.holdExhale, p),
+            if (pattern.holdExhale > 0)
+              _buildPhaseDot(BreathingPhase.holdExhale, p),
           ],
         ),
         const SizedBox(height: 16),
@@ -646,10 +690,15 @@ class _BreathingExercisesPageState extends ConsumerState<BreathingExercisesPage>
         duration: const Duration(milliseconds: 300),
         padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
         decoration: BoxDecoration(
-          color: isActive ? p.color.withValues(alpha: 0.15) : Colors.transparent,
+          color:
+              isActive ? p.color.withValues(alpha: 0.15) : Colors.transparent,
           borderRadius: BorderRadius.circular(16),
           border: Border.all(
-            color: isActive ? p.color : (Theme.of(context).brightness == Brightness.dark ? Colors.white12 : Colors.black12),
+            color: isActive
+                ? p.color
+                : (Theme.of(context).brightness == Brightness.dark
+                    ? Colors.white12
+                    : Colors.black12),
             width: isActive ? 1.5 : 1,
           ),
         ),
@@ -657,7 +706,11 @@ class _BreathingExercisesPageState extends ConsumerState<BreathingExercisesPage>
           label,
           style: TextStyle(
             fontFamily: 'Outfit',
-            color: isActive ? p.color : (Theme.of(context).brightness == Brightness.dark ? Colors.white38 : Colors.black38),
+            color: isActive
+                ? p.color
+                : (Theme.of(context).brightness == Brightness.dark
+                    ? Colors.white38
+                    : Colors.black38),
             fontSize: 12,
             fontWeight: isActive ? FontWeight.w600 : FontWeight.normal,
           ),
@@ -726,18 +779,25 @@ class _BreathingExercisesPageState extends ConsumerState<BreathingExercisesPage>
                     _breathController.stop();
                     setState(() {});
                   } else {
-                    final elapsed = p.inhale + p.holdInhale + p.exhale + p.holdExhale - _phaseSecondsRemaining;
+                    final elapsed = p.inhale +
+                        p.holdInhale +
+                        p.exhale +
+                        p.holdExhale -
+                        _phaseSecondsRemaining;
                     final remaining = Duration(seconds: _phaseSecondsRemaining);
                     _breathController.duration = remaining;
                     _breathController.value = _phaseSecondsRemaining > 0
-                        ? (elapsed / (elapsed + _phaseSecondsRemaining)).clamp(0.0, 1.0)
+                        ? (elapsed / (elapsed + _phaseSecondsRemaining))
+                            .clamp(0.0, 1.0)
                         : 0.0;
-                    if (_currentPhase == BreathingPhase.exhale || _currentPhase == BreathingPhase.holdExhale) {
+                    if (_currentPhase == BreathingPhase.exhale ||
+                        _currentPhase == BreathingPhase.holdExhale) {
                       _breathController.reverse(from: _breathController.value);
                     } else {
                       _breathController.forward(from: _breathController.value);
                     }
-                    _countdownTimer = Timer.periodic(const Duration(seconds: 1), (_) {
+                    _countdownTimer =
+                        Timer.periodic(const Duration(seconds: 1), (_) {
                       if (!mounted) return;
                       setState(() {
                         if (_phaseSecondsRemaining > 1) {
@@ -745,7 +805,8 @@ class _BreathingExercisesPageState extends ConsumerState<BreathingExercisesPage>
                         }
                       });
                     });
-                    _phaseTimer = Timer(Duration(seconds: _phaseSecondsRemaining), () {
+                    _phaseTimer =
+                        Timer(Duration(seconds: _phaseSecondsRemaining), () {
                       if (!mounted) return;
                       _nextPhase(_currentPhase);
                     });
@@ -788,9 +849,13 @@ class _BreathingExercisesPageState extends ConsumerState<BreathingExercisesPage>
             width: isPrimary ? 64 : 52,
             height: isPrimary ? 64 : 52,
             decoration: BoxDecoration(
-              color: isPrimary ? color.withValues(alpha: 0.12) : Colors.transparent,
+              color: isPrimary
+                  ? color.withValues(alpha: 0.12)
+                  : Colors.transparent,
               shape: BoxShape.circle,
-              border: isPrimary ? null : Border.all(color: color.withValues(alpha: 0.3), width: 1.5),
+              border: isPrimary
+                  ? null
+                  : Border.all(color: color.withValues(alpha: 0.3), width: 1.5),
             ),
             child: Icon(icon, color: color, size: isPrimary ? 32 : 24),
           ),
@@ -801,7 +866,11 @@ class _BreathingExercisesPageState extends ConsumerState<BreathingExercisesPage>
               fontFamily: 'Outfit',
               fontSize: 12,
               fontWeight: isPrimary ? FontWeight.w600 : FontWeight.normal,
-              color: isPrimary ? color : Theme.of(context).brightness == Brightness.dark ? Colors.white54 : Colors.black54,
+              color: isPrimary
+                  ? color
+                  : Theme.of(context).brightness == Brightness.dark
+                      ? Colors.white54
+                      : Colors.black54,
             ),
           ),
         ],

@@ -19,9 +19,10 @@ void main() {
     });
 
     test('has default timeouts', () {
-      expect(AppConfig.connectTimeout.inSeconds, 4);
-      expect(AppConfig.receiveTimeout.inSeconds, 6);
-      expect(AppConfig.healthCheckTimeout.inSeconds, 2);
+      expect(AppConfig.connectTimeout.inSeconds, 15);
+      expect(AppConfig.receiveTimeout.inSeconds, 30);
+      expect(AppConfig.sendTimeout.inSeconds, 15);
+      expect(AppConfig.healthCheckTimeout.inSeconds, 3);
     });
   });
 }

@@ -1,3 +1,4 @@
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mental_mantra/core/storage/hive_storage.dart';
 import 'personalization_context.dart';
 
@@ -19,20 +20,18 @@ class PersonalizationRepository {
       secondaryDomains: _stringList(classification?['secondaryDomains']),
       domainScores: _stringDoubleMap(classification?['scores']),
       confidence: (classification?['confidence'] as num?)?.toDouble() ?? 0.0,
-      riskLevel: classification?['riskLevel'] as String? ?? profile['riskLevel'] as String? ?? 'low',
+      riskLevel: classification?['riskLevel'] as String? ??
+          profile['riskLevel'] as String? ??
+          'low',
       completedAt: classification?['completedAt'] as String?,
       version: (classification?['version'] as num?)?.toInt() ?? 0,
-
       overallWellnessScore: (profile['overallScore'] as num?)?.toDouble(),
       primaryConcerns: _stringList(profile['primaryConcerns']),
       strengths: _stringList(profile['strengths']),
-
       averageMood: _computeAverageMood(recentMoods),
       moodEntryCount: recentMoods.length,
       moodTrend: _computeMoodTrend(recentMoods),
-
       memorySummary: memory,
-
       spiritualMode: onboardingData['spiritual_mode'] == true,
       language: onboardingData['language'] as String? ?? 'en',
       currentStreak: (user['streakDays'] as num?)?.toInt() ?? 0,
@@ -128,7 +127,12 @@ class PersonalizationRepository {
       'Confidence Building' => 'low_motivation',
       'Social Connection' => 'emotional_isolation',
       'Mindfulness & Inner Peace' => 'spiritual_seeking',
-      _ => name.toLowerCase().replaceAll(' ', '_').replaceAll('&', '').replaceAll('__', '_').trim(),
+      _ => name
+          .toLowerCase()
+          .replaceAll(' ', '_')
+          .replaceAll('&', '')
+          .replaceAll('__', '_')
+          .trim(),
     };
   }
 
@@ -165,3 +169,7 @@ class PersonalizationRepository {
     return {};
   }
 }
+
+final personalizationProvider = FutureProvider<PersonalizationContext>((ref) async {
+  return PersonalizationRepository().build();
+});

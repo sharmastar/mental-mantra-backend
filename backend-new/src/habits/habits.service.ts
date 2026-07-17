@@ -1,5 +1,6 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from '../common/prisma.service';
+import { CreateHabitDto } from './dto/create-habit.dto';
 
 @Injectable()
 export class HabitsService {
@@ -18,9 +19,9 @@ export class HabitsService {
     return habits.map(h => ({ ...h, todayDone: !!logMap[h.id] }));
   }
 
-  async create(userId: string, data: any) {
+  async create(userId: string, dto: CreateHabitDto) {
     return this.prisma.habit.create({
-      data: { userId, name: data.name, description: data.description, icon: data.icon, color: data.color, frequency: data.frequency || 'daily', targetCount: data.targetCount || 1 },
+      data: { userId, name: dto.name, description: dto.description, icon: dto.icon, color: dto.color, frequency: dto.frequency || 'daily', targetCount: dto.targetCount || 1 },
     });
   }
 

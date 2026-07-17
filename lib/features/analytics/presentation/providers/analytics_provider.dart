@@ -12,7 +12,8 @@ class AnalyticsState {
     this.showCharts = false,
   });
 
-  AnalyticsState copyWith({AnalyticsData? data, bool? isLoading, bool? showCharts}) {
+  AnalyticsState copyWith(
+      {AnalyticsData? data, bool? isLoading, bool? showCharts}) {
     return AnalyticsState(
       data: data ?? this.data,
       isLoading: isLoading ?? this.isLoading,
@@ -41,6 +42,7 @@ class AnalyticsNotifier extends StateNotifier<AnalyticsState> {
   }
 }
 
-final analyticsProvider = StateNotifierProvider<AnalyticsNotifier, AnalyticsState>((ref) {
+final analyticsProvider =
+    StateNotifierProvider<AnalyticsNotifier, AnalyticsState>((ref) {
   return AnalyticsNotifier();
 });

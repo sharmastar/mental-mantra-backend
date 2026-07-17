@@ -15,7 +15,12 @@ class OutcomeState {
     this.error,
   });
 
-  OutcomeState copyWith({List<RecommendationOutcome>? recentOutcomes, Map<String, double>? actionSuccessRates, bool? isLoading, String? error, bool clearError = false}) {
+  OutcomeState copyWith(
+      {List<RecommendationOutcome>? recentOutcomes,
+      Map<String, double>? actionSuccessRates,
+      bool? isLoading,
+      String? error,
+      bool clearError = false}) {
     return OutcomeState(
       recentOutcomes: recentOutcomes ?? this.recentOutcomes,
       actionSuccessRates: actionSuccessRates ?? this.actionSuccessRates,
@@ -39,9 +44,13 @@ class OutcomeNotifier extends StateNotifier<OutcomeState> {
     try {
       final outcomes = await _repository.getOutcomesByUser(userId);
       final rates = _computeSuccessRates(outcomes);
-      state = state.copyWith(recentOutcomes: outcomes, actionSuccessRates: rates, isLoading: false);
+      state = state.copyWith(
+          recentOutcomes: outcomes,
+          actionSuccessRates: rates,
+          isLoading: false);
     } catch (e) {
-      state = state.copyWith(isLoading: false, error: 'Failed to load outcomes: $e');
+      state = state.copyWith(
+          isLoading: false, error: 'Failed to load outcomes: $e');
     }
   }
 
@@ -84,21 +93,26 @@ class OutcomeNotifier extends StateNotifier<OutcomeState> {
         afterMetrics: afterMetrics,
         timeTakenSeconds: timeTakenSeconds,
       );
-      final updated = [RecommendationOutcome(
-        recommendationId: recommendationId,
-        userId: userId,
-        action: action,
-        domain: domain,
-        accepted: true,
-        completed: true,
-        acceptedAt: DateTime.now().subtract(Duration(seconds: timeTakenSeconds)),
-        completedAt: DateTime.now(),
-        timeTakenSeconds: timeTakenSeconds,
-        beforeMetrics: beforeMetrics,
-        afterMetrics: afterMetrics,
-      ), ...state.recentOutcomes];
+      final updated = [
+        RecommendationOutcome(
+          recommendationId: recommendationId,
+          userId: userId,
+          action: action,
+          domain: domain,
+          accepted: true,
+          completed: true,
+          acceptedAt:
+              DateTime.now().subtract(Duration(seconds: timeTakenSeconds)),
+          completedAt: DateTime.now(),
+          timeTakenSeconds: timeTakenSeconds,
+          beforeMetrics: beforeMetrics,
+          afterMetrics: afterMetrics,
+        ),
+        ...state.recentOutcomes
+      ];
       final rates = _computeSuccessRates(updated);
-      state = state.copyWith(recentOutcomes: updated, actionSuccessRates: rates);
+      state =
+          state.copyWith(recentOutcomes: updated, actionSuccessRates: rates);
     } catch (e) {
       state = state.copyWith(error: 'Failed to record completion: $e');
     }
@@ -127,7 +141,8 @@ class OutcomeNotifier extends StateNotifier<OutcomeState> {
     return state.actionSuccessRates[action] ?? 0.0;
   }
 
-  Map<String, double> _computeSuccessRates(List<RecommendationOutcome> outcomes) {
+  Map<String, double> _computeSuccessRates(
+      List<RecommendationOutcome> outcomes) {
     final byAction = <String, List<RecommendationOutcome>>{};
     for (final o in outcomes.where((o) => o.completed)) {
       byAction.putIfAbsent(o.action, () => []).add(o);
@@ -139,7 +154,8 @@ class OutcomeNotifier extends StateNotifier<OutcomeState> {
   }
 }
 
-final outcomeProvider = StateNotifierProvider<OutcomeNotifier, OutcomeState>((ref) {
+final outcomeProvider =
+    StateNotifierProvider<OutcomeNotifier, OutcomeState>((ref) {
   final repo = ref.read(outcomeRepositoryProvider);
   return OutcomeNotifier(repo);
 });
